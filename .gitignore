@@ -11,5 +11,14 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# os specific files
+.DS_Store
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Other applications
+vue/node_modules
+vue/dist
+vue/.cache
+build
