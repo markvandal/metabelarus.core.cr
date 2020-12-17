@@ -26,6 +26,9 @@ import (
 	metabelaruscorecrkeeper "github.com/markvandal/metabelaruscorecr/x/metabelaruscorecr/keeper"
 	metabelaruscorecrtypes "github.com/markvandal/metabelaruscorecr/x/metabelaruscorecr/types"
   // this line is used by starport scaffolding # 1
+		"github.com/markvandal/metabelaruscorecr/x/mbgovperm"
+		mbgovpermkeeper "github.com/markvandal/metabelaruscorecr/x/mbgovperm/keeper"
+		mbgovpermtypes "github.com/markvandal/metabelaruscorecr/x/mbgovperm/types"
 )
 
 const appName = "metabelaruscorecr"
@@ -42,6 +45,7 @@ var (
 		supply.AppModuleBasic{},
 		metabelaruscorecr.AppModuleBasic{},
     // this line is used by starport scaffolding # 2
+		mbgovperm.AppModuleBasic{},
 	)
 
 	maccPerms = map[string][]string{
@@ -80,6 +84,7 @@ type NewApp struct {
 	paramsKeeper   params.Keeper
 	metabelaruscorecrKeeper metabelaruscorecrkeeper.Keeper
   // this line is used by starport scaffolding # 3
+		mbgovpermKeeper mbgovpermkeeper.Keeper
 	mm *module.Manager
 
 	sm *module.SimulationManager
@@ -105,6 +110,7 @@ func NewInitApp(
     params.StoreKey,
     metabelaruscorecrtypes.StoreKey,
     // this line is used by starport scaffolding # 5
+		mbgovpermtypes.StoreKey,
   )
 
 	tKeys := sdk.NewTransientStoreKeys(staking.TStoreKey, params.TStoreKey)
@@ -123,6 +129,7 @@ func NewInitApp(
 	app.subspaces[bank.ModuleName] = app.paramsKeeper.Subspace(bank.DefaultParamspace)
 	app.subspaces[staking.ModuleName] = app.paramsKeeper.Subspace(staking.DefaultParamspace)
 	// this line is used by starport scaffolding # 5.1
+		app.subspaces[mbgovpermtypes.ModuleName] = app.paramsKeeper.Subspace(mbgovpermtypes.DefaultParamspace)
 
 	app.accountKeeper = auth.NewAccountKeeper(
 		app.cdc,
@@ -153,6 +160,11 @@ func NewInitApp(
 	)
 
 	// this line is used by starport scaffolding # 5.2
+		app.mbgovpermKeeper = mbgovpermkeeper.NewKeeper(
+			app.cdc,
+			keys[mbgovpermtypes.StoreKey],
+			app.subspaces[mbgovpermtypes.ModuleName],
+		)
 
 	app.stakingKeeper = *stakingKeeper.SetHooks(
 		staking.NewMultiStakingHooks(
@@ -176,6 +188,7 @@ func NewInitApp(
 		metabelaruscorecr.NewAppModule(app.metabelaruscorecrKeeper, app.bankKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
     // this line is used by starport scaffolding # 6
+		mbgovperm.NewAppModule(app.mbgovpermKeeper),
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -192,6 +205,7 @@ func NewInitApp(
 		supply.ModuleName,
 		genutil.ModuleName,
     // this line is used by starport scaffolding # 7
+		mbgovpermtypes.ModuleName,
 	)
 
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter())
