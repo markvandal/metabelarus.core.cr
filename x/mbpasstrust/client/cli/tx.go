@@ -12,12 +12,12 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/x/auth"
 	_ "github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-	"github.com/markvandal/metabelaruscorecr/x/mbgovperm/types"
+	"github.com/markvandal/metabelaruscorecr/x/mbpasstrust/types"
 )
 
 // GetTxCmd returns the transaction commands for this module
 func GetTxCmd(cdc *codec.Codec) *cobra.Command {
-	mbgovpermTxCmd := &cobra.Command{
+	mbpasstrustTxCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      fmt.Sprintf("%s transactions subcommands", types.ModuleName),
 		DisableFlagParsing:         true,
@@ -25,19 +25,16 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	mbgovpermTxCmd.AddCommand(flags.PostCommands(
+	mbpasstrustTxCmd.AddCommand(flags.PostCommands(
 		// this line is used by starport scaffolding # 1
-		GetCmdCreateConsent(cdc),
-		GetCmdSetConsent(cdc),
-		GetCmdDeleteConsent(cdc),
-		GetCmdCreateExtservice(cdc),
-		GetCmdSetExtservice(cdc),
-		GetCmdDeleteExtservice(cdc),
+		GetCmdCreateAllowance(cdc),
+		GetCmdSetAllowance(cdc),
+		GetCmdDeleteAllowance(cdc),
 		// TODO: Add tx based commands
 		// GetCmd<Action>(cdc)
 	)...)
 
-	return mbgovpermTxCmd
+	return mbpasstrustTxCmd
 }
 
 // Example:

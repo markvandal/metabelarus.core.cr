@@ -2,7 +2,7 @@ package types
 
 const (
 	// ModuleName is the name of the module
-	ModuleName = "mbgovperm"
+	ModuleName = "mbpasstrust"
 
 	// StoreKey to be used when creating the KVStore
 	StoreKey = ModuleName
@@ -15,10 +15,6 @@ const (
 )
 
 const (
-	ExtservicePrefix = "extservice-"
-)
-		
-const (
-	ConsentPrefix = "consent-"
+	AllowancePrefix = "allowance-"
 )
 		

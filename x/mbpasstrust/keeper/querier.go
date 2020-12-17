@@ -2,9 +2,7 @@ package keeper
 
 import (
 	// this line is used by starport scaffolding # 1
-	"github.com/markvandal/metabelaruscorecr/x/mbgovperm/types"
-		
-	
+	"github.com/markvandal/metabelaruscorecr/x/mbpasstrust/types"
 		
 	abci "github.com/tendermint/tendermint/abci/types"
 
@@ -14,24 +12,20 @@ import (
 	
 )
 
-// NewQuerier creates a new querier for mbgovperm clients.
+// NewQuerier creates a new querier for mbpasstrust clients.
 func NewQuerier(k Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) ([]byte, error) {
 		switch path[0] {
 		// this line is used by starport scaffolding # 2
-		case types.QueryListConsent:
-			return listConsent(ctx, k)
-		case types.QueryGetConsent:
-			return getConsent(ctx, path[1:], k)
-		case types.QueryListExtservice:
-			return listExtservice(ctx, k)
-		case types.QueryGetExtservice:
-			return getExtservice(ctx, path[1:], k)
+		case types.QueryListAllowance:
+			return listAllowance(ctx, k)
+		case types.QueryGetAllowance:
+			return getAllowance(ctx, path[1:], k)
 		case types.QueryParams:
 			return queryParams(ctx, k)
 			// TODO: Put the modules query routes
 		default:
-			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown mbgovperm query endpoint")
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown mbpasstrust query endpoint")
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package types
 
-// Query endpoints supported by the mbgovperm querier
+// Query endpoints supported by the mbpasstrust querier
 const (
 	// TODO: Describe query parameters, update <action> with your query
 	// Query<Action>    = "<action>"
@@ -21,9 +21,6 @@ func (n QueryResList) String() string {
 
 */
 
-		const QueryListExtservice = "list-extservice"
-		const QueryGetExtservice = "get-extservice"
-		
-		const QueryListConsent = "list-consent"
-		const QueryGetConsent = "get-consent"
+		const QueryListAllowance = "list-allowance"
+		const QueryGetAllowance = "get-allowance"
 		

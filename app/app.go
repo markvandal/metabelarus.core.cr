@@ -26,6 +26,9 @@ import (
 	metabelaruscorecrkeeper "github.com/markvandal/metabelaruscorecr/x/metabelaruscorecr/keeper"
 	metabelaruscorecrtypes "github.com/markvandal/metabelaruscorecr/x/metabelaruscorecr/types"
   // this line is used by starport scaffolding # 1
+		"github.com/markvandal/metabelaruscorecr/x/mbpasstrust"
+		mbpasstrustkeeper "github.com/markvandal/metabelaruscorecr/x/mbpasstrust/keeper"
+		mbpasstrusttypes "github.com/markvandal/metabelaruscorecr/x/mbpasstrust/types"
 		"github.com/markvandal/metabelaruscorecr/x/mbgovperm"
 		mbgovpermkeeper "github.com/markvandal/metabelaruscorecr/x/mbgovperm/keeper"
 		mbgovpermtypes "github.com/markvandal/metabelaruscorecr/x/mbgovperm/types"
@@ -45,6 +48,7 @@ var (
 		supply.AppModuleBasic{},
 		metabelaruscorecr.AppModuleBasic{},
     // this line is used by starport scaffolding # 2
+		mbpasstrust.AppModuleBasic{},
 		mbgovperm.AppModuleBasic{},
 	)
 
@@ -84,6 +88,7 @@ type NewApp struct {
 	paramsKeeper   params.Keeper
 	metabelaruscorecrKeeper metabelaruscorecrkeeper.Keeper
   // this line is used by starport scaffolding # 3
+		mbpasstrustKeeper mbpasstrustkeeper.Keeper
 		mbgovpermKeeper mbgovpermkeeper.Keeper
 	mm *module.Manager
 
@@ -110,6 +115,7 @@ func NewInitApp(
     params.StoreKey,
     metabelaruscorecrtypes.StoreKey,
     // this line is used by starport scaffolding # 5
+		mbpasstrusttypes.StoreKey,
 		mbgovpermtypes.StoreKey,
   )
 
@@ -129,6 +135,7 @@ func NewInitApp(
 	app.subspaces[bank.ModuleName] = app.paramsKeeper.Subspace(bank.DefaultParamspace)
 	app.subspaces[staking.ModuleName] = app.paramsKeeper.Subspace(staking.DefaultParamspace)
 	// this line is used by starport scaffolding # 5.1
+		app.subspaces[mbpasstrusttypes.ModuleName] = app.paramsKeeper.Subspace(mbpasstrusttypes.DefaultParamspace)
 		app.subspaces[mbgovpermtypes.ModuleName] = app.paramsKeeper.Subspace(mbgovpermtypes.DefaultParamspace)
 
 	app.accountKeeper = auth.NewAccountKeeper(
@@ -160,6 +167,11 @@ func NewInitApp(
 	)
 
 	// this line is used by starport scaffolding # 5.2
+		app.mbpasstrustKeeper = mbpasstrustkeeper.NewKeeper(
+			app.cdc,
+			keys[mbpasstrusttypes.StoreKey],
+			app.subspaces[mbpasstrusttypes.ModuleName],
+		)
 		app.mbgovpermKeeper = mbgovpermkeeper.NewKeeper(
 			app.cdc,
 			keys[mbgovpermtypes.StoreKey],
@@ -188,6 +200,7 @@ func NewInitApp(
 		metabelaruscorecr.NewAppModule(app.metabelaruscorecrKeeper, app.bankKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
     // this line is used by starport scaffolding # 6
+		mbpasstrust.NewAppModule(app.mbpasstrustKeeper),
 		mbgovperm.NewAppModule(app.mbgovpermKeeper),
 	)
 
@@ -205,6 +218,7 @@ func NewInitApp(
 		supply.ModuleName,
 		genutil.ModuleName,
     // this line is used by starport scaffolding # 7
+		mbpasstrusttypes.ModuleName,
 		mbgovpermtypes.ModuleName,
 	)
 
