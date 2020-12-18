@@ -30,6 +30,12 @@ func GetQueryCmd(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	metabelaruscorecrQueryCmd.AddCommand(
 		flags.GetCommands(
       // this line is used by starport scaffolding # 1
+			GetCmdListConfirmation(queryRoute, cdc),
+			GetCmdGetConfirmation(queryRoute, cdc),
+			GetCmdListInvitation(queryRoute, cdc),
+			GetCmdGetInvitation(queryRoute, cdc),
+			GetCmdListIdentity(queryRoute, cdc),
+			GetCmdGetIdentity(queryRoute, cdc),
 		)...,
 	)
 

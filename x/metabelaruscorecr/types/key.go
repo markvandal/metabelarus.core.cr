@@ -13,3 +13,16 @@ const (
 	// QuerierRoute to be used for querier msgs
 	QuerierRoute = ModuleName
 )
+
+const (
+	IdentityPrefix = "Identity-"
+)
+		
+const (
+	InvitationPrefix = "invitation-"
+)
+		
+const (
+	ConfirmationPrefix = "confirmation-"
+)
+		
