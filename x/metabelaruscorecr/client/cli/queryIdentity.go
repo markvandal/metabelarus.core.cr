@@ -5,13 +5,13 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/markvandal/metabelaruscorecr/x/metabelaruscorecr/types"
 	"github.com/spf13/cobra"
-    "github.com/markvandal/metabelaruscorecr/x/metabelaruscorecr/types"
 )
 
 func GetCmdListIdentity(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "list-Identity",
+		Use:   "list-identity",
 		Short: "list all Identity",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
@@ -29,7 +29,7 @@ func GetCmdListIdentity(queryRoute string, cdc *codec.Codec) *cobra.Command {
 
 func GetCmdGetIdentity(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "get-Identity [key]",
+		Use:   "get-identity [key]",
 		Short: "Query a Identity by key",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

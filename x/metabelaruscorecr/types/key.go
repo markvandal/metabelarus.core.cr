@@ -15,14 +15,13 @@ const (
 )
 
 const (
-	IdentityPrefix = "Identity-"
+	IdentityPrefix = "identity-"
 )
-		
+
 const (
 	InvitationPrefix = "invitation-"
 )
-		
+
 const (
 	ConfirmationPrefix = "confirmation-"
 )
-		

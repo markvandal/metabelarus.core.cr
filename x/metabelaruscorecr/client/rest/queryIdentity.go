@@ -7,12 +7,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
-
 )
 
 func listIdentityHandler(cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list-Identity", storeName), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list-identity", storeName), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
@@ -26,7 +25,7 @@ func getIdentityHandler(cliCtx context.CLIContext, storeName string) http.Handle
 		vars := mux.Vars(r)
 		key := vars["key"]
 
-		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get-Identity/%s", storeName, key), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get-identity/%s", storeName, key), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return

@@ -22,7 +22,7 @@ import (
  */
 func GetCmdCreateIdentity(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "create-Identity [details] [idenitityType] [authPubKey]",
+		Use:   "create-identity [details] [idenitityType] [authPubKey]",
 		Short: "Creates a new Identity",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -62,7 +62,7 @@ func GetCmdCreateIdentity(cdc *codec.Codec) *cobra.Command {
  */
 func GetCmdSetIdentity(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "set-Identity [ID] [Details] [IdentityType] [AuthPubKey]",
+		Use:   "set-identity [ID] [Details] [IdentityType] [AuthPubKey]",
 		Short: "Set a new Identity",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
