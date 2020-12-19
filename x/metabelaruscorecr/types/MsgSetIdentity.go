@@ -1,36 +1,28 @@
 package types
 
 import (
-	"time"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/google/uuid"
 )
 
 var _ sdk.Msg = &MsgSetIdentity{}
 
 // MsgSetIdentity — Set Identity Message structure
 type MsgSetIdentity struct {
-	ID            string         `json:"id" yaml:"id"`
-	AccountID     sdk.AccAddress `json:"accountID" yaml:"accountID"`
-	IdenitityType IdentityType   `json:"idenitityType" yaml:"idenitityType"`
-	Details       string         `json:"details" yaml:"details"`
-	AuthPubKey    string         `json:"authPubKey" yaml:"authPubKey"`
-	CreationDt    time.Time      `json:"creationDt" yaml:"creationDt"`
+	ID            string       `json:"id" yaml:"id"`
+	IdenitityType IdentityType `json:"idenitityType" yaml:"idenitityType"`
+	Details       string       `json:"details" yaml:"details"`
+	AuthPubKey    string       `json:"authPubKey" yaml:"authPubKey"`
 }
 
 // NewMsgSetIdentity — create new identity message
-func NewMsgSetIdentity(accountID sdk.AccAddress, idenitityType IdentityType, details string, creationDt time.Time) (MsgSetIdentity, error) {
+func NewMsgSetIdentity(ID string, idenitityType IdentityType, details string, authPubKey string) MsgSetIdentity {
 	return MsgSetIdentity{
-		ID:            uuid.New().String(),
-		AccountID:     accountID,
+		ID:            ID,
 		Details:       details,
 		IdenitityType: idenitityType,
-		AuthPubKey:    "",
-		CreationDt:    time.Date(creationDt.Year(), creationDt.Month(), creationDt.Day(), 0, 0, 0, 0, BelarusLocation),
-	}, nil
+		AuthPubKey:    authPubKey,
+		// CreationDt:    time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, BelarusLocation),
+	}
 }
 
 func (msg MsgSetIdentity) Route() string {
@@ -41,8 +33,13 @@ func (msg MsgSetIdentity) Type() string {
 	return "SetIdentity"
 }
 
+// GetSigners - it should return participated signers
+/**
+ * @TODO it looks like it doesn't work without some signer as create-Identity does
+ * We need to find another signer (e.g. the request owner)
+ */
 func (msg MsgSetIdentity) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.AccountID)}
+	return []sdk.AccAddress{} //sdk.AccAddress{sdk.AccAddress(msg.AccountID)}
 }
 
 func (msg MsgSetIdentity) GetSignBytes() []byte {
@@ -52,20 +49,5 @@ func (msg MsgSetIdentity) GetSignBytes() []byte {
 
 // ValidateBasic - validate if message has all data
 func (msg MsgSetIdentity) ValidateBasic() error {
-	if msg.AccountID.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "Identity should be connected to an account")
-	}
-
-	nowTime := time.Now()
-	nowDate := time.Date(nowTime.Year(), nowTime.Month(), nowTime.Day(), 0, 0, 0, 0, BelarusLocation)
-
-	if msg.CreationDt.After(nowDate) {
-		return sdkerrors.Wrap(ErrDateIssue, "Try to create indentity after the current time")
-	}
-
-	if nowDate.Before(msg.CreationDt) && nowTime.After(nowDate.Add(time.Minute*5)) {
-		return sdkerrors.Wrap(ErrDateIssue, "Try to create idenitty that was created long ago")
-	}
-
 	return nil
 }

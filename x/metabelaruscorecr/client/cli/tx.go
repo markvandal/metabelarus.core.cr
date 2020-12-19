@@ -22,7 +22,7 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 	}
 
 	metabelaruscorecrTxCmd.AddCommand(flags.PostCommands(
-    // this line is used by starport scaffolding # 1
+		// this line is used by starport scaffolding # 1
 		GetCmdCreateConfirmation(cdc),
 		GetCmdSetConfirmation(cdc),
 		GetCmdDeleteConfirmation(cdc),
@@ -31,7 +31,6 @@ func GetTxCmd(cdc *codec.Codec) *cobra.Command {
 		GetCmdDeleteInvitation(cdc),
 		GetCmdCreateIdentity(cdc),
 		GetCmdSetIdentity(cdc),
-		GetCmdDeleteIdentity(cdc),
 	)...)
 
 	return metabelaruscorecrTxCmd

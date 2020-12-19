@@ -2,10 +2,8 @@ package types
 
 import "time"
 
-// var loc, err :=
-
 func _createLocation() *time.Location {
-	loc, err := time.LoadLocation("Belarus/Minsk")
+	loc, err := time.LoadLocation("Europe/Minsk")
 	if err != nil {
 		panic(err)
 	}

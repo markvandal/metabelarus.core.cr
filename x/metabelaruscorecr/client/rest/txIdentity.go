@@ -16,10 +16,8 @@ var _ = strconv.Itoa(42)
 
 type createIdentityRequest struct {
 	BaseReq       rest.BaseReq `json:"base_req"`
-	Creator       string       `json:"creator"`
 	AccountID     string       `json:"accountID"`
 	Details       string       `json:"details"`
-	CreationDt    string       `json:"creationDt"`
 	IdenitityType string       `json:"idenitityType"`
 	AuthPubKey    string       `json:"authPubKey"`
 }
@@ -35,28 +33,27 @@ func createIdentityHandler(cliCtx context.CLIContext) http.HandlerFunc {
 		if !baseReq.ValidateBasic(w) {
 			return
 		}
-		creator, err := sdk.AccAddressFromBech32(req.Creator)
+		parsedAccountID, err := sdk.AccAddressFromBech32(req.AccountID)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
-		parsedAccountID := req.AccountID
-
 		parsedDetails := req.Details
 
-		parsedCreationDt := req.CreationDt
+		parsedIdenitityType, err := strconv.Atoi(req.IdenitityType)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 
-		parsedIdenitityType := req.IdenitityType
+			return
+		}
 
 		parsedAuthPubKey := req.AuthPubKey
 
 		msg := types.NewMsgCreateIdentity(
-			creator,
 			parsedAccountID,
+			types.IdentityType(parsedIdenitityType),
 			parsedDetails,
-			parsedCreationDt,
-			parsedIdenitityType,
 			parsedAuthPubKey,
 		)
 
@@ -73,10 +70,7 @@ func createIdentityHandler(cliCtx context.CLIContext) http.HandlerFunc {
 type setIdentityRequest struct { // @TODO Rewrite structure to actual type
 	BaseReq       rest.BaseReq `json:"base_req"`
 	ID            string       `json:"id"`
-	Creator       string       `json:"creator"`
-	AccountID     string       `json:"accountID"`
 	Details       string       `json:"details"`
-	CreationDt    string       `json:"creationDt"`
 	IdenitityType string       `json:"idenitityType"`
 	AuthPubKey    string       `json:"authPubKey"`
 }
@@ -92,65 +86,24 @@ func setIdentityHandler(cliCtx context.CLIContext) http.HandlerFunc {
 		if !baseReq.ValidateBasic(w) {
 			return
 		}
-		creator, err := sdk.AccAddressFromBech32(req.Creator)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
-
-		parsedAccountID := req.AccountID
 
 		parsedDetails := req.Details
 
-		parsedCreationDt := req.CreationDt
+		parsedIdenitityType, err := strconv.Atoi(req.IdenitityType)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 
-		parsedIdenitityType := req.IdenitityType
+			return
+		}
 
 		parsedAuthPubKey := req.AuthPubKey
 
 		msg := types.NewMsgSetIdentity(
-			creator,
 			req.ID,
-			parsedAccountID,
+			types.IdentityType(parsedIdenitityType),
 			parsedDetails,
-			parsedCreationDt,
-			parsedIdenitityType,
 			parsedAuthPubKey,
 		)
-
-		err = msg.ValidateBasic()
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
-
-		utils.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
-	}
-}
-
-type deleteIdentityRequest struct {
-	BaseReq rest.BaseReq `json:"base_req"`
-	Creator string       `json:"creator"`
-	ID      string       `json:"id"`
-}
-
-func deleteIdentityHandler(cliCtx context.CLIContext) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req deleteIdentityRequest
-		if !rest.ReadRESTReq(w, r, cliCtx.Codec, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
-			return
-		}
-		baseReq := req.BaseReq.Sanitize()
-		if !baseReq.ValidateBasic(w) {
-			return
-		}
-		creator, err := sdk.AccAddressFromBech32(req.Creator)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
-		msg := types.NewMsgDeleteIdentity(req.ID, creator)
 
 		err = msg.ValidateBasic()
 		if err != nil {

@@ -4,8 +4,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/markvandal/metabelaruscorecr/x/metabelaruscorecr/types"
-    "github.com/cosmos/cosmos-sdk/codec"
 )
 
 // CreateIdentity creates a Identity
@@ -81,9 +81,8 @@ func (k Keeper) GetIdentityOwner(ctx sdk.Context, key string) sdk.AccAddress {
 	if err != nil {
 		return nil
 	}
-	return Identity.Creator
+	return Identity.AccountID
 }
-
 
 // Check if the key exists in the store
 func (k Keeper) IdentityExists(ctx sdk.Context, key string) bool {
