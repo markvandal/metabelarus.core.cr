@@ -8,16 +8,18 @@ var _ sdk.Msg = &MsgSetIdentity{}
 
 // MsgSetIdentity — Set Identity Message structure
 type MsgSetIdentity struct {
-	ID            string       `json:"id" yaml:"id"`
-	IdenitityType IdentityType `json:"idenitityType" yaml:"idenitityType"`
-	Details       string       `json:"details" yaml:"details"`
-	AuthPubKey    string       `json:"authPubKey" yaml:"authPubKey"`
+	ID            string         `json:"id" yaml:"id"`
+	AccountID     sdk.AccAddress `json:"accountID" yaml:"accountID"`
+	IdenitityType IdentityType   `json:"idenitityType" yaml:"idenitityType"`
+	Details       string         `json:"details" yaml:"details"`
+	AuthPubKey    string         `json:"authPubKey" yaml:"authPubKey"`
 }
 
 // NewMsgSetIdentity — create new identity message
-func NewMsgSetIdentity(ID string, idenitityType IdentityType, details string, authPubKey string) MsgSetIdentity {
+func NewMsgSetIdentity(ID string, accountID sdk.AccAddress, idenitityType IdentityType, details string, authPubKey string) MsgSetIdentity {
 	return MsgSetIdentity{
 		ID:            ID,
+		AccountID:     accountID,
 		Details:       details,
 		IdenitityType: idenitityType,
 		AuthPubKey:    authPubKey,
@@ -39,7 +41,7 @@ func (msg MsgSetIdentity) Type() string {
  * We need to find another signer (e.g. the request owner)
  */
 func (msg MsgSetIdentity) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{} //sdk.AccAddress{sdk.AccAddress(msg.AccountID)}
+	return []sdk.AccAddress{sdk.AccAddress(msg.AccountID)}
 }
 
 func (msg MsgSetIdentity) GetSignBytes() []byte {

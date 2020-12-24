@@ -9,14 +9,18 @@ import (
 
 // Such trunsaction shouldn't exist separetly - it should be part of request confirmation
 func handleMsgSetIdentity(ctx sdk.Context, k keeper.Keeper, msg types.MsgSetIdentity) (*sdk.Result, error) {
-	var Identity = types.Identity{
+	oldIdentity, err := k.GetIdentity(ctx, msg.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	k.SetIdentity(ctx, types.Identity{
 		ID:            msg.ID,
 		Details:       msg.Details,
 		IdenitityType: msg.IdenitityType,
 		AuthPubKey:    msg.AuthPubKey,
-	}
-
-	k.SetIdentity(ctx, Identity)
+		CreationDt:    oldIdentity.CreationDt,
+	})
 
 	return &sdk.Result{Events: ctx.EventManager().Events()}, nil
 }

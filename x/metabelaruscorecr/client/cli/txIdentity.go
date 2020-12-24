@@ -2,6 +2,7 @@ package cli
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -54,7 +55,7 @@ func GetCmdCreateIdentity(cdc *codec.Codec) *cobra.Command {
 	}
 }
 
-// GetCmdCreateIdentity - change identity via command line
+// GetCmdSetIdentity - change identity via command line
 /**
  * @TODO this function is for debug and genesis purposes only.
  * It shouldn't be supported on production.
@@ -76,11 +77,23 @@ func GetCmdSetIdentity(cdc *codec.Codec) *cobra.Command {
 			argsAuthPubKey := string(args[3])
 
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
+
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/%s/%s", types.StoreKey, types.QueryGetIdentity, argsID), nil)
+			if err != nil {
+				return err
+			}
+
+			var identity types.Identity
+			cdc.MustUnmarshalJSON(res, &identity)
+			cliCtx.PrintOutput("Previous state: ")
+			cliCtx.PrintOutput(identity)
+
 			inBuf := bufio.NewReader(cmd.InOrStdin())
 			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			msg := types.NewMsgSetIdentity(
 				argsID,
+				identity.AccountID,
 				types.IdentityType(argsIdenitityType),
 				string(argsDetails),
 				argsAuthPubKey,

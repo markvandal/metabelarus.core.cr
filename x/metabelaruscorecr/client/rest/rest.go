@@ -21,8 +21,8 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router) {
 	r.HandleFunc("/metabelaruscorecr/invitation", setInvitationHandler(cliCtx)).Methods("PUT")
 	r.HandleFunc("/metabelaruscorecr/invitation", deleteInvitationHandler(cliCtx)).Methods("DELETE")
 
-	r.HandleFunc("/metabelaruscorecr/Identity", createIdentityHandler(cliCtx)).Methods("POST")
-	r.HandleFunc("/metabelaruscorecr/Identity", listIdentityHandler(cliCtx, "metabelaruscorecr")).Methods("GET")
-	r.HandleFunc("/metabelaruscorecr/Identity/{key}", getIdentityHandler(cliCtx, "metabelaruscorecr")).Methods("GET")
-	r.HandleFunc("/metabelaruscorecr/Identity", setIdentityHandler(cliCtx)).Methods("PUT")
+	r.HandleFunc("/metabelaruscorecr/identity", createIdentityHandler(cliCtx)).Methods("POST")
+	r.HandleFunc("/metabelaruscorecr/identity", listIdentityHandler(cliCtx, "metabelaruscorecr")).Methods("GET")
+	r.HandleFunc("/metabelaruscorecr/identity/{key}", getIdentityHandler(cliCtx, "metabelaruscorecr")).Methods("GET")
+	r.HandleFunc("/metabelaruscorecr/identity", setIdentityHandler(cliCtx)).Methods("PUT")
 }

@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -87,8 +88,6 @@ func setIdentityHandler(cliCtx context.CLIContext) http.HandlerFunc {
 			return
 		}
 
-		parsedDetails := req.Details
-
 		parsedIdenitityType, err := strconv.Atoi(req.IdenitityType)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -96,13 +95,20 @@ func setIdentityHandler(cliCtx context.CLIContext) http.HandlerFunc {
 			return
 		}
 
-		parsedAuthPubKey := req.AuthPubKey
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/%s/%s", types.StoreKey, types.QueryGetIdentity, req.ID), nil)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+		var identity types.Identity
+		cliCtx.Codec.MustUnmarshalJSON(res, &identity)
 
 		msg := types.NewMsgSetIdentity(
 			req.ID,
+			identity.AccountID,
 			types.IdentityType(parsedIdenitityType),
-			parsedDetails,
-			parsedAuthPubKey,
+			req.Details,
+			req.AuthPubKey,
 		)
 
 		err = msg.ValidateBasic()
