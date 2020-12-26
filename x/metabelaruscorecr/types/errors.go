@@ -5,5 +5,6 @@ import (
 )
 
 var (
-	ErrInvalid = sdkerrors.Register(ModuleName, 1, "custom error message")
+	ErrInvalid   = sdkerrors.Register(ModuleName, 1, "custom error message")
+	ErrDateIssue = sdkerrors.Register(ModuleName, 2, "Issue with a date")
 )
