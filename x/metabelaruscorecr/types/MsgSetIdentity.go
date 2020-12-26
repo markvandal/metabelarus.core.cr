@@ -7,6 +7,12 @@ import (
 var _ sdk.Msg = &MsgSetIdentity{}
 
 // MsgSetIdentity — Set Identity Message structure
+/**
+ * @TODO This won't work in production.
+ * Because the account keys will be stored on the client machine.
+ * The separate signer field should be added. And the transaction
+ * initiator sign should be used separatly from the account ID.
+ */
 type MsgSetIdentity struct {
 	ID            string         `json:"id" yaml:"id"`
 	AccountID     sdk.AccAddress `json:"accountID" yaml:"accountID"`
