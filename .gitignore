@@ -1,9 +1,13 @@
+# Local configs
+secret.yml
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+mbcorecrd
 
 # Test binary, built with `go test -c`
 *.test
@@ -24,4 +28,6 @@
 vue/node_modules
 vue/dist
 vue/.cache
-build
+frontend/node_modules
+frontend/dist
+frontend/.cache
