@@ -7,7 +7,7 @@ secret.yml
 *.dll
 *.so
 *.dylib
-mbcorecrd
+/mbcorecrd
 
 # Test binary, built with `go test -c`
 *.test
