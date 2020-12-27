@@ -1,0 +1,11 @@
+
+syntax = "proto3";
+package metabelarus.mbcorecr.mbcorecr;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/mbcorecr/types";
+
+import "gogoproto/gogo.proto";
+
+message MsgCreateSuperIdentity {
+  string creator = 1;
+}

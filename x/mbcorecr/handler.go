@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/keeper"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // NewHandler ...
@@ -15,15 +15,19 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 		switch msg := msg.(type) {
-        // this line is used by starport scaffolding # 1
-case *types.MsgCreateIdentity:
-	return handleMsgCreateIdentity(ctx, k, msg)
+		// this line is used by starport scaffolding # 1
+		case *types.MsgCreateIdentity:
+			return handleMsgCreateIdentity(ctx, k, msg)
 
-case *types.MsgUpdateIdentity:
-	return handleMsgUpdateIdentity(ctx, k, msg)
+		case *types.MsgUpdateIdentity:
+			return handleMsgUpdateIdentity(ctx, k, msg)
 
-case *types.MsgDeleteIdentity:
-	return handleMsgDeleteIdentity(ctx, k, msg)
+		case *types.MsgDeleteIdentity:
+			return handleMsgDeleteIdentity(ctx, k, msg)
+
+		// Manually created handlers
+		case *types.MsgCreateSuperIdentity:
+			return handleMsgCreateSuperIdentity(ctx, k, msg)
 
 		default:
 			errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)

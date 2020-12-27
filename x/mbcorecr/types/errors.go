@@ -11,3 +11,8 @@ var (
 	ErrSample    = sdkerrors.Register(ModuleName, 1100, "sample error")
 	ErrDateIssue = sdkerrors.Register(ModuleName, 1200, "Issue with a date")
 )
+
+// gov sentinel errors
+var (
+	ErrKeyring = sdkerrors.Register(ModuleName, 1300, "Can't load Keyring")
+)

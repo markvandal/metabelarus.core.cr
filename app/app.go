@@ -3,11 +3,11 @@ package app
 import (
 	"io"
 	"os"
-    "path/filepath"
+	"path/filepath"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec/types"
-    "github.com/pelletier/go-toml"
+	"github.com/pelletier/go-toml"
 	"github.com/spf13/cast"
 
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -78,13 +78,13 @@ import (
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
 	appparams "github.com/metabelarus/mbcorecr/app/params"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr"
 	mbcorecrkeeper "github.com/metabelarus/mbcorecr/x/mbcorecr/keeper"
 	mbcorecrtypes "github.com/metabelarus/mbcorecr/x/mbcorecr/types"
+	tmjson "github.com/tendermint/tendermint/libs/json"
+	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -210,7 +210,7 @@ func New(
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey,
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
-        mbcorecrtypes.StoreKey,
+		mbcorecrtypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -312,7 +312,9 @@ func New(
 	app.EvidenceKeeper = *evidenceKeeper
 
 	app.mbcorecrKeeper = *mbcorecrkeeper.NewKeeper(
-        appCodec, keys[mbcorecrtypes.StoreKey], keys[mbcorecrtypes.MemStoreKey],
+		appCodec,
+		keys[mbcorecrtypes.StoreKey],
+		keys[mbcorecrtypes.MemStoreKey],
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
