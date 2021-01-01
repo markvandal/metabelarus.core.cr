@@ -7,10 +7,11 @@ import (
 
 var _ sdk.Msg = &MsgCreateSuperIdentity{}
 
-// NewNewMsgCreateIdentity - create message to generate supper identity
-func NewNewMsgCreateIdentity(creator string) *MsgCreateSuperIdentity {
+// NewMsgCreateSuperIdentity - create message to generate supper identity
+func NewMsgCreateSuperIdentity(creator string, path string) *MsgCreateSuperIdentity {
 	return &MsgCreateSuperIdentity{
-		Creator: creator,
+		Creator:    creator,
+		WalletPath: path,
 	}
 }
 

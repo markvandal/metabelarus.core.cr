@@ -24,7 +24,8 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MsgCreateSuperIdentity struct {
-	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Creator    string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	WalletPath string `protobuf:"bytes,4,opt,name=walletPath,proto3" json:"walletPath,omitempty"`
 }
 
 func (m *MsgCreateSuperIdentity) Reset()         { *m = MsgCreateSuperIdentity{} }
@@ -67,26 +68,116 @@ func (m *MsgCreateSuperIdentity) GetCreator() string {
 	return ""
 }
 
+func (m *MsgCreateSuperIdentity) GetWalletPath() string {
+	if m != nil {
+		return m.WalletPath
+	}
+	return ""
+}
+
+type IdentityAccount struct {
+	Uid      string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Address  string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	PubKey   string `protobuf:"bytes,3,opt,name=pubKey,proto3" json:"pubKey,omitempty"`
+	PrivKey  string `protobuf:"bytes,4,opt,name=privKey,proto3" json:"privKey,omitempty"`
+	Mnemonic string `protobuf:"bytes,5,opt,name=mnemonic,proto3" json:"mnemonic,omitempty"`
+}
+
+func (m *IdentityAccount) Reset()         { *m = IdentityAccount{} }
+func (m *IdentityAccount) String() string { return proto.CompactTextString(m) }
+func (*IdentityAccount) ProtoMessage()    {}
+func (*IdentityAccount) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ef5434c92c47b57d, []int{1}
+}
+func (m *IdentityAccount) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IdentityAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IdentityAccount.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IdentityAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IdentityAccount.Merge(m, src)
+}
+func (m *IdentityAccount) XXX_Size() int {
+	return m.Size()
+}
+func (m *IdentityAccount) XXX_DiscardUnknown() {
+	xxx_messageInfo_IdentityAccount.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IdentityAccount proto.InternalMessageInfo
+
+func (m *IdentityAccount) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+func (m *IdentityAccount) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *IdentityAccount) GetPubKey() string {
+	if m != nil {
+		return m.PubKey
+	}
+	return ""
+}
+
+func (m *IdentityAccount) GetPrivKey() string {
+	if m != nil {
+		return m.PrivKey
+	}
+	return ""
+}
+
+func (m *IdentityAccount) GetMnemonic() string {
+	if m != nil {
+		return m.Mnemonic
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*MsgCreateSuperIdentity)(nil), "metabelarus.mbcorecr.mbcorecr.MsgCreateSuperIdentity")
+	proto.RegisterType((*IdentityAccount)(nil), "metabelarus.mbcorecr.mbcorecr.IdentityAccount")
 }
 
 func init() { proto.RegisterFile("mbcorecr/gov.proto", fileDescriptor_ef5434c92c47b57d) }
 
 var fileDescriptor_ef5434c92c47b57d = []byte{
-	// 177 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0xca, 0x4d, 0x4a, 0xce,
-	0x2f, 0x4a, 0x4d, 0x2e, 0xd2, 0x4f, 0xcf, 0x2f, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92,
-	0xcd, 0x4d, 0x2d, 0x49, 0x4c, 0x4a, 0xcd, 0x49, 0x2c, 0x2a, 0x2d, 0xd6, 0x83, 0xc9, 0xc3, 0x19,
-	0x52, 0x22, 0xe9, 0xf9, 0xe9, 0xf9, 0x60, 0x95, 0xfa, 0x20, 0x16, 0x44, 0x93, 0x92, 0x11, 0x97,
-	0x98, 0x6f, 0x71, 0xba, 0x73, 0x51, 0x6a, 0x62, 0x49, 0x6a, 0x70, 0x69, 0x41, 0x6a, 0x91, 0x67,
-	0x4a, 0x6a, 0x5e, 0x49, 0x66, 0x49, 0xa5, 0x90, 0x04, 0x17, 0x7b, 0x32, 0x48, 0x38, 0xbf, 0x48,
-	0x82, 0x51, 0x81, 0x51, 0x83, 0x33, 0x08, 0xc6, 0x75, 0xf2, 0x3a, 0xf1, 0x48, 0x8e, 0xf1, 0xc2,
-	0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1,
-	0xc6, 0x63, 0x39, 0x86, 0x28, 0x83, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd, 0xe4, 0xfc, 0x5c,
-	0x7d, 0x24, 0xd7, 0xe8, 0xc3, 0x5d, 0x5b, 0x81, 0x60, 0x96, 0x54, 0x16, 0xa4, 0x16, 0x27, 0xb1,
-	0x81, 0x9d, 0x61, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff, 0x92, 0xda, 0x24, 0xc8, 0xd1, 0x00, 0x00,
-	0x00,
+	// 277 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x90, 0xcd, 0x4a, 0xf4, 0x30,
+	0x14, 0x86, 0x9b, 0x6f, 0x3e, 0x47, 0xcd, 0x46, 0x09, 0x32, 0x84, 0x01, 0x83, 0xcc, 0xca, 0x55,
+	0x2b, 0x78, 0x05, 0xea, 0x4a, 0x45, 0x90, 0x71, 0xe7, 0x2e, 0x4d, 0x0f, 0x9d, 0x42, 0xdb, 0x94,
+	0xf4, 0x64, 0xb4, 0xd7, 0xe0, 0xc6, 0xcb, 0x72, 0x39, 0x4b, 0x97, 0xd2, 0xde, 0x88, 0x24, 0xfd,
+	0x71, 0x76, 0xef, 0x73, 0x9e, 0x9c, 0x37, 0x70, 0x28, 0x2b, 0x62, 0xa5, 0x0d, 0x28, 0x13, 0xa5,
+	0x7a, 0x1b, 0x56, 0x46, 0xa3, 0x66, 0xe7, 0x05, 0xa0, 0x8c, 0x21, 0x97, 0xc6, 0xd6, 0xe1, 0xe8,
+	0xa7, 0xb0, 0x3c, 0x4b, 0x75, 0xaa, 0xfd, 0xcb, 0xc8, 0xa5, 0x7e, 0x69, 0xb5, 0xa6, 0x8b, 0xa7,
+	0x3a, 0xbd, 0x33, 0x20, 0x11, 0x5e, 0x6c, 0x05, 0xe6, 0x3e, 0x81, 0x12, 0x33, 0x6c, 0x18, 0xa7,
+	0x87, 0xca, 0x8d, 0xb5, 0xe1, 0xe4, 0x82, 0x5c, 0x1e, 0xaf, 0x47, 0x64, 0x82, 0xd2, 0x37, 0x99,
+	0xe7, 0x80, 0xcf, 0x12, 0x37, 0xfc, 0xbf, 0x97, 0x7b, 0x93, 0xd5, 0x07, 0xa1, 0x27, 0x63, 0xcd,
+	0x8d, 0x52, 0xda, 0x96, 0xc8, 0x4e, 0xe9, 0xcc, 0x66, 0xc9, 0xd0, 0xe4, 0xa2, 0xeb, 0x97, 0x49,
+	0x62, 0xa0, 0xae, 0xf9, 0xbf, 0xbe, 0x7f, 0x40, 0xb6, 0xa0, 0xf3, 0xca, 0xc6, 0x8f, 0xd0, 0xf0,
+	0x99, 0x17, 0x03, 0xb9, 0x8d, 0xca, 0x64, 0x5b, 0x27, 0xfa, 0x4f, 0x47, 0x64, 0x4b, 0x7a, 0x54,
+	0x94, 0x50, 0xe8, 0x32, 0x53, 0xfc, 0xc0, 0xab, 0x89, 0x6f, 0x1f, 0xbe, 0x5a, 0x41, 0x76, 0xad,
+	0x20, 0x3f, 0xad, 0x20, 0x9f, 0x9d, 0x08, 0x76, 0x9d, 0x08, 0xbe, 0x3b, 0x11, 0xbc, 0x5e, 0xa5,
+	0x19, 0x6e, 0x6c, 0x1c, 0x2a, 0x5d, 0x44, 0x7b, 0xb7, 0x8b, 0xa6, 0xdb, 0xbe, 0xff, 0x45, 0x6c,
+	0x2a, 0xa8, 0xe3, 0xb9, 0x3f, 0xda, 0xf5, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd7, 0xf1, 0x5a,
+	0xe6, 0x7f, 0x01, 0x00, 0x00,
 }
 
 func (m *MsgCreateSuperIdentity) Marshal() (dAtA []byte, err error) {
@@ -109,10 +200,75 @@ func (m *MsgCreateSuperIdentity) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
+	if len(m.WalletPath) > 0 {
+		i -= len(m.WalletPath)
+		copy(dAtA[i:], m.WalletPath)
+		i = encodeVarintGov(dAtA, i, uint64(len(m.WalletPath)))
+		i--
+		dAtA[i] = 0x22
+	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
 		copy(dAtA[i:], m.Creator)
 		i = encodeVarintGov(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IdentityAccount) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IdentityAccount) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IdentityAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Mnemonic) > 0 {
+		i -= len(m.Mnemonic)
+		copy(dAtA[i:], m.Mnemonic)
+		i = encodeVarintGov(dAtA, i, uint64(len(m.Mnemonic)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.PrivKey) > 0 {
+		i -= len(m.PrivKey)
+		copy(dAtA[i:], m.PrivKey)
+		i = encodeVarintGov(dAtA, i, uint64(len(m.PrivKey)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.PubKey) > 0 {
+		i -= len(m.PubKey)
+		copy(dAtA[i:], m.PubKey)
+		i = encodeVarintGov(dAtA, i, uint64(len(m.PubKey)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintGov(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Uid) > 0 {
+		i -= len(m.Uid)
+		copy(dAtA[i:], m.Uid)
+		i = encodeVarintGov(dAtA, i, uint64(len(m.Uid)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -137,6 +293,39 @@ func (m *MsgCreateSuperIdentity) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovGov(uint64(l))
+	}
+	l = len(m.WalletPath)
+	if l > 0 {
+		n += 1 + l + sovGov(uint64(l))
+	}
+	return n
+}
+
+func (m *IdentityAccount) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Uid)
+	if l > 0 {
+		n += 1 + l + sovGov(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovGov(uint64(l))
+	}
+	l = len(m.PubKey)
+	if l > 0 {
+		n += 1 + l + sovGov(uint64(l))
+	}
+	l = len(m.PrivKey)
+	if l > 0 {
+		n += 1 + l + sovGov(uint64(l))
+	}
+	l = len(m.Mnemonic)
 	if l > 0 {
 		n += 1 + l + sovGov(uint64(l))
 	}
@@ -209,6 +398,251 @@ func (m *MsgCreateSuperIdentity) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WalletPath", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGov
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGov
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGov
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WalletPath = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGov(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGov
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGov
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IdentityAccount) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGov
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IdentityAccount: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IdentityAccount: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Uid", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGov
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGov
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGov
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Uid = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGov
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGov
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGov
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGov
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGov
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGov
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PubKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGov
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGov
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGov
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrivKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mnemonic", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGov
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGov
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGov
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Mnemonic = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

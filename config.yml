@@ -1,7 +1,16 @@
 version: 1
 accounts:
   - name: user1
-    coins: ["1000token", "100000000stake"]
+    coins: [
+      "1000token", 
+      "100000000stake", 
+      "100invitesuper",
+      "150invite0",
+      "100invite1",
+      "50invite2",
+      "15invite3",
+      "5invite4"
+    ]
   - name: user2
     coins: ["500token"]
 validator:

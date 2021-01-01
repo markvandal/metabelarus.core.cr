@@ -8,4 +8,13 @@ import "gogoproto/gogo.proto";
 
 message MsgCreateSuperIdentity {
   string creator = 1;
+  string walletPath = 4;
+}
+
+message IdentityAccount {
+  string uid = 1;
+  string address = 2;
+  string pubKey = 3;
+  string privKey = 4;
+  string mnemonic = 5;
 }

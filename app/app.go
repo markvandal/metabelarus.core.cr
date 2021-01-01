@@ -315,6 +315,8 @@ func New(
 		appCodec,
 		keys[mbcorecrtypes.StoreKey],
 		keys[mbcorecrtypes.MemStoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition

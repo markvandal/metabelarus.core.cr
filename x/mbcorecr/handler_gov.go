@@ -1,18 +1,24 @@
 package mbcorecr
 
 import (
+	"encoding/hex"
+	"encoding/json"
+
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	// https://godoc.org/github.com/decred/dcrd/dcrec/secp256k1#example-package--EncryptDecryptMessage
+
 	"github.com/google/uuid"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/keeper"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
+
+	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
 func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreateSuperIdentity) (*sdk.Result, error) {
-	//k.CreateIdentity(ctx, *msg)
-
 	kring, err := keyring.New(
 		sdk.KeyringServiceName(),
 		keyring.BackendMemory,
@@ -23,48 +29,146 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		return nil, sdkerrors.Wrap(types.ErrKeyring, err.Error())
 	}
 
-	var (
-		info     keyring.Info
-		mnemonic string
-		pkey     string
-		pub      string
+	pubKey, err := k.AuthKeeper.GetPubKey(ctx, sdk.AccAddress(msg.Creator))
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrCreator, err.Error())
+	}
+
+	coin := &sdk.Coin{
+		Denom:  types.SuperInviteDenom,
+		Amount: sdk.NewInt(1),
+	}
+
+	if !k.BankKeeper.HasBalance(ctx, sdk.AccAddress(msg.Creator), *coin) {
+		return nil, sdkerrors.Wrap(types.ErrCreator, "there is no super invite")
+	}
+
+	path := types.DefaultWalletPath
+	if msg.WalletPath != "" {
+		path = msg.WalletPath
+	}
+
+	_, mnemonic, err := kring.NewMnemonic(
+		uuid.New().String(),
+		keyring.English,
+		path,
+		hd.Secp256k1,
 	)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrKeyringAccount, err.Error())
+	}
 
+	// ctx.Logger().Info(mnemonic)
 	uid := uuid.New().String()
-
-	path := "m/44'/0'/0'/0/0"
-
-	_, mnemonic, err = kring.NewMnemonic(uid, keyring.English, path, hd.Secp256k1)
+	info, err := kring.NewAccount(
+		uid,
+		mnemonic,
+		types.UnsecureNewAcctountPKPassword,
+		path,
+		hd.Secp256k1,
+	)
 	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrKeyring, err.Error())
+		return nil, sdkerrors.Wrap(types.ErrKeyringAccount, err.Error())
 	}
 
-	info, err = kring.NewAccount(uid, mnemonic, "", path, hd.Secp256k1)
+	pub, err := sdk.Bech32ifyPubKey(
+		sdk.Bech32PubKeyTypeAccPub,
+		info.GetPubKey(),
+	)
 	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrKeyring, err.Error())
+		return nil, sdkerrors.Wrap(types.ErrCryptConversion, err.Error())
 	}
 
-	// @TODO pkey should be reencrypted with a password
-	pkey, err = kring.ExportPrivKeyArmor(uid, "")
+	// armoredPub := crypto.ArmorPubKeyBytes(info.GetPubKey().Bytes(), info.GetPubKey().Type())
+
+	// ctx.Logger().Info(pub)
+	// ctx.Logger().Info(armoredPub)
+
+	pkey, err := kring.ExportPrivKeyArmor(uid, types.UnsecureNewAcctountPKPassword)
 	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrKeyring, err.Error())
+		return nil, sdkerrors.Wrap(types.ErrCryptConversion, err.Error())
 	}
 
-	pub, err = sdk.Bech32ifyPubKey(sdk.Bech32PubKeyTypeAccPub, info.GetPubKey())
-	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrKeyring, err.Error())
+	// ctx.Logger().Info(pkey)
+	// pkUnarm, _, err = crypto.UnarmorDecryptPrivKey(pkey, msg.Password)
+	// if err !+ nil {
+	// 	return nil, sdkerrors.Wrap(types.ErrCipher, err.Error())
+	// }
+	// ctx.Logger().Info(string(pkUnarm.Bytes()))
+
+	newAcc := k.AuthKeeper.NewAccountWithAddress(ctx, info.GetAddress())
+	if err := newAcc.SetPubKey(info.GetPubKey()); err != nil {
+		return nil, sdkerrors.Wrap(types.ErrNewAccount, err.Error())
+	}
+	k.AuthKeeper.SetAccount(ctx, newAcc)
+
+	if err := k.BankKeeper.SubtractCoins(
+		ctx,
+		sdk.AccAddress(msg.Creator),
+		sdk.Coins{*coin},
+	); err != nil {
+		return nil, sdkerrors.Wrap(types.ErrCreator, err.Error())
 	}
 
-	// @TODO Pack the account details in JSON and encrypt it
+	if err := k.BankKeeper.SetBalances(
+		ctx,
+		info.GetAddress(),
+		types.SuperIdentityCoinsPack,
+	); err != nil {
+		return nil, sdkerrors.Wrap(types.ErrNewAccount, err.Error())
+	}
+
+	resp := &types.IdentityAccount{
+		Uid:      uid,
+		Address:  info.GetAddress().String(),
+		Mnemonic: mnemonic,
+		PubKey:   pub,
+		PrivKey:  pkey,
+	}
+
+	payload, err := json.Marshal(resp)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrCipher, err.Error())
+	}
+
+	// ctx.Logger().Info(string(payload))
+
+	// pubKey, err := sdk.GetPubKeyFromBech32(
+	// 	sdk.Bech32PubKeyTypeAccPub,
+	// 	msg.PubKey,
+	// )
+	// if err != nil {
+	// 	return nil, sdkerrors.Wrap(types.ErrCryptConversion, err.Error())
+	// }
+
+	// pubCipherKeyBytes, err := sdk.GetPubKeyFromBech32(
+	// 	sdk.Bech32PubKeyTypeAccPub,
+	// 	msg.PubKey,
+	// )
+	// if err != nil {
+	// 	return nil, sdkerrors.Wrap(types.ErrCryptConversion, err.Error())
+	// }
+
+	cipherPayload, err := mbutils.EncryptPayload(pubKey.Bytes(), payload)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrCipher, err.Error())
+	}
+
+	ecnryptedPayload := hex.EncodeToString(cipherPayload)
+
+	// ctx.Logger().Info(string(ecnryptedPayload))
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventGovCreateIdentity,
-			sdk.NewAttribute(types.EventAttrIdentityType, string(types.AttrIdentityTypeSuper)),
-			sdk.NewAttribute(types.EventAttrIdentityUid, uid),
-			sdk.NewAttribute(types.EventAttrIdentityAddress, info.GetAddress().String()),
-			sdk.NewAttribute(types.EventAttrIdentityMnemonic, mnemonic),
-			sdk.NewAttribute(types.EventAttrIdentityPubKey, pub),
-			sdk.NewAttribute(types.EventAttrIdentityPrivKey, pkey),
+			sdk.NewAttribute(
+				types.EventAttrIdentityType,
+				string(types.AttrIdentityTypeSuper),
+			),
+			sdk.NewAttribute(
+				types.EventAttrIdentityPayload,
+				ecnryptedPayload,
+			),
 		),
 	)
 
