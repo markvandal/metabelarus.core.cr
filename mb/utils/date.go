@@ -23,6 +23,15 @@ type Created struct {
 	CreationDt *time.Time
 }
 
+func NewCurrentDate() *Created {
+	nowTime := time.Now()
+	nowDate := time.Date(nowTime.Year(), nowTime.Month(), nowTime.Day(), 0, 0, 0, 0, BelarusLocation)
+
+	return &Created{
+		CreationDt: &nowDate,
+	}
+}
+
 func (msg *Created) ValidateBasic() error {
 	nowTime := time.Now()
 	nowDate := time.Date(nowTime.Year(), nowTime.Month(), nowTime.Day(), 0, 0, 0, 0, BelarusLocation)

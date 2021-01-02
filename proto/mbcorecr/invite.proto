@@ -1,0 +1,40 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.mbcorecr;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/mbcorecr/types";
+
+import "gogoproto/gogo.proto";
+
+message Invite {
+  string creator = 1;
+  string id = 2;
+  string inviter = 3; 
+  string invitee = 4; 
+  string level = 5; 
+  string key = 6; 
+  string creationDt = 7; 
+}
+
+message MsgCreateInvite {
+  string creator = 1;
+  string inviter = 2; 
+  string invitee = 3; 
+  string level = 4; 
+  string key = 5; 
+  string creationDt = 6; 
+}
+
+message MsgUpdateInvite {
+  string creator = 1;
+  string id = 2;
+  string inviter = 3; 
+  string invitee = 4; 
+  string level = 5; 
+  string key = 6; 
+  string creationDt = 7; 
+}
+
+message MsgDeleteInvite {
+  string creator = 1;
+  string id = 2;
+}

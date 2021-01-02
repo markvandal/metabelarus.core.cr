@@ -12,6 +12,5 @@
 # -----END TENDERMINT PRIVATE KEY-----
 
 
-mbcorecrd tx mbcorecr cast-super-identity 11111111 \
-metabelpub1addwnpepq0humu58pmsetp87e2pkk963xuuuqx3ljxzwwyfnjh4tp8vl2etsq2ppqht \
+mbcorecrd tx mbcorecr cast-super-identity \
 '' --from $(mbcorecrd keys show user1 -a) --trace

@@ -25,3 +25,8 @@ const (
 	IdentityKey      = "identity-value-"
 	IdentityCountKey = "identity-count-"
 )
+
+const (
+	InviteKey= "Invite-value-"
+	InviteCountKey= "Invite-count-"
+)

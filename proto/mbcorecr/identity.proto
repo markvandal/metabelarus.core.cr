@@ -14,31 +14,16 @@ enum IdentityType {
 }
 
 message Identity {
-  string creator = 1;
-  string id = 2;
-  string accountID = 3; 
-  IdentityType identityType = 4; 
-  string details = 5; 
-  google.protobuf.Timestamp creationDt = 6  [(gogoproto.stdtime) = true]; 
-}
-
-message MsgCreateIdentity {
-  string creator = 1;
+  string id = 1;
   string accountID = 2; 
   IdentityType identityType = 3; 
   string details = 4; 
-  google.protobuf.Timestamp creationDt = 5  [(gogoproto.stdtime) = true]; 
+  string invitationId = 5;
+  google.protobuf.Timestamp creationDt = 6  [(gogoproto.stdtime) = true]; 
 }
 
 message MsgUpdateIdentity {
-  string creator = 1;
-  string id = 2;
-  string accountID = 3; 
-  IdentityType identityType = 4; 
-  string details = 5;
-}
-
-message MsgDeleteIdentity {
-  string creator = 1;
-  string id = 2;
+  string id = 1;
+  string accountID = 2; 
+  string details = 3;
 }

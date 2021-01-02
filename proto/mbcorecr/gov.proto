@@ -17,4 +17,5 @@ message IdentityAccount {
   string pubKey = 3;
   string privKey = 4;
   string mnemonic = 5;
+  string identityID = 6;
 }

@@ -29,7 +29,12 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		return nil, sdkerrors.Wrap(types.ErrKeyring, err.Error())
 	}
 
-	pubKey, err := k.AuthKeeper.GetPubKey(ctx, sdk.AccAddress(msg.Creator))
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrCreator, err.Error())
+	}
+
+	pubKey, err := k.AuthKeeper.GetPubKey(ctx, creator)
 	if err != nil {
 		return nil, sdkerrors.Wrap(types.ErrCreator, err.Error())
 	}
@@ -39,7 +44,7 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		Amount: sdk.NewInt(1),
 	}
 
-	if !k.BankKeeper.HasBalance(ctx, sdk.AccAddress(msg.Creator), *coin) {
+	if !k.BankKeeper.HasBalance(ctx, creator, *coin) {
 		return nil, sdkerrors.Wrap(types.ErrCreator, "there is no super invite")
 	}
 
@@ -104,7 +109,7 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 
 	if err := k.BankKeeper.SubtractCoins(
 		ctx,
-		sdk.AccAddress(msg.Creator),
+		creator,
 		sdk.Coins{*coin},
 	); err != nil {
 		return nil, sdkerrors.Wrap(types.ErrCreator, err.Error())
@@ -118,12 +123,26 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		return nil, sdkerrors.Wrap(types.ErrNewAccount, err.Error())
 	}
 
+	created := mbutils.NewCurrentDate()
+
+	// Create an identity
+	identityKey := k.CreateIdentity(ctx, types.Identity{
+		AccountID:    info.GetAddress().String(),
+		IdentityType: types.IdentityType_CITIZEN,
+		Details:      "",
+		CreationDt:   created.CreationDt,
+	})
+
+	// Add 1.000.000 simple tokens
+	// Add 1.000 stake
+
 	resp := &types.IdentityAccount{
-		Uid:      uid,
-		Address:  info.GetAddress().String(),
-		Mnemonic: mnemonic,
-		PubKey:   pub,
-		PrivKey:  pkey,
+		Uid:        uid,
+		Address:    info.GetAddress().String(),
+		Mnemonic:   mnemonic,
+		PubKey:     pub,
+		PrivKey:    pkey,
+		IdentityID: identityKey,
 	}
 
 	payload, err := json.Marshal(resp)
@@ -171,17 +190,6 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 			),
 		),
 	)
-
-	// Create an account
-
-	// Add 1.000.000 simple tokens
-	// Add 1.000 stake
-	// Add token 100 invitesuper
-	// Add token 150 invite0
-	// Add token 100 invite1
-	// Add token 50 invite2
-	// Add token 15 invite3
-	// Add token 5 invite4
 
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }

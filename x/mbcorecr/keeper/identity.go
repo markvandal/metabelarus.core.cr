@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -37,11 +38,10 @@ func (k Keeper) SetIdentityCount(ctx sdk.Context, count int64) {
 	store.Set(byteKey, bz)
 }
 
-func (k Keeper) CreateIdentity(ctx sdk.Context, msg types.MsgCreateIdentity) {
+func (k Keeper) CreateIdentity(ctx sdk.Context, msg types.Identity) string {
 	// Create the identity
 	count := k.GetIdentityCount(ctx)
 	var identity = types.Identity{
-		Creator:      msg.Creator,
 		Id:           strconv.FormatInt(count, 10),
 		AccountID:    msg.AccountID,
 		IdentityType: msg.IdentityType,
@@ -56,6 +56,8 @@ func (k Keeper) CreateIdentity(ctx sdk.Context, msg types.MsgCreateIdentity) {
 
 	// Update identity count
 	k.SetIdentityCount(ctx, count+1)
+
+	return hex.EncodeToString(key)
 }
 
 func (k Keeper) UpdateIdentity(ctx sdk.Context, identity types.Identity) {
@@ -77,7 +79,7 @@ func (k Keeper) HasIdentity(ctx sdk.Context, id string) bool {
 }
 
 func (k Keeper) GetIdentityOwner(ctx sdk.Context, key string) string {
-	return k.GetIdentity(ctx, key).Creator
+	return k.GetIdentity(ctx, key).AccountID
 }
 
 // DeleteIdentity deletes a identity
