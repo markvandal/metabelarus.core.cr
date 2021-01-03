@@ -11,13 +11,11 @@ import (
 
 func CmdCastSuperIdentity() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cast-super-identity [Wallet Path]",
+		Use:   "cast-super-identity",
 		Short: "Create a new supper identity as governer",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
-
-			argsPath := string(args[0])
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err = client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -27,7 +25,6 @@ func CmdCastSuperIdentity() *cobra.Command {
 
 			msg := types.NewMsgCreateSuperIdentity(
 				clientCtx.GetFromAddress().String(),
-				argsPath,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

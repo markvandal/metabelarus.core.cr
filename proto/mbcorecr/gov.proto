@@ -5,10 +5,12 @@ package metabelarus.mbcorecr.mbcorecr;
 option go_package = "github.com/metabelarus/mbcorecr/x/mbcorecr/types";
 
 import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
 
 message MsgCreateSuperIdentity {
   string creator = 1;
-  string walletPath = 4;
+  string uid = 2;
+  google.protobuf.Timestamp creationDt = 3 [(gogoproto.stdtime) = true]; 
 }
 
 message IdentityAccount {

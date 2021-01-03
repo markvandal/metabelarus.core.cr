@@ -3,15 +3,18 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/google/uuid"
+	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
 var _ sdk.Msg = &MsgCreateSuperIdentity{}
 
 // NewMsgCreateSuperIdentity - create message to generate supper identity
-func NewMsgCreateSuperIdentity(creator string, path string) *MsgCreateSuperIdentity {
+func NewMsgCreateSuperIdentity(creator string) *MsgCreateSuperIdentity {
 	return &MsgCreateSuperIdentity{
 		Creator:    creator,
-		WalletPath: path,
+		Uid:        uuid.New().String(),
+		CreationDt: mbutils.CreateCurrentDate(),
 	}
 }
 
@@ -40,6 +43,12 @@ func (msg *MsgCreateSuperIdentity) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	created := mbutils.Created{CreationDt: msg.CreationDt}
+
+	if err := created.ValidateBasic(); err != nil {
+		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
 	}
 
 	return nil

@@ -23,13 +23,11 @@ type Created struct {
 	CreationDt *time.Time
 }
 
-func NewCurrentDate() *Created {
+func CreateCurrentDate() *time.Time {
 	nowTime := time.Now()
 	nowDate := time.Date(nowTime.Year(), nowTime.Month(), nowTime.Day(), 0, 0, 0, 0, BelarusLocation)
 
-	return &Created{
-		CreationDt: &nowDate,
-	}
+	return &nowDate
 }
 
 func (msg *Created) ValidateBasic() error {

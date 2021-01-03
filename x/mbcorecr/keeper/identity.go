@@ -46,6 +46,7 @@ func (k Keeper) CreateIdentity(ctx sdk.Context, msg types.Identity) string {
 		AccountID:    msg.AccountID,
 		IdentityType: msg.IdentityType,
 		Details:      msg.Details,
+		InvitationId: msg.InvitationId,
 		CreationDt:   msg.CreationDt,
 	}
 

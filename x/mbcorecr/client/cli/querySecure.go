@@ -53,6 +53,7 @@ func CmdReencryptPrivKey() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "repack-privkey [Armored Private Key] [Old Secretbox Password] [New Password]",
 		Short: "repack private key with a new password",
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
@@ -85,8 +86,9 @@ func CmdReencryptPrivKey() *cobra.Command {
  */
 func CmdDecryptPayload() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "decrypt-payload",
+		Use:   "decrypt-payload [Private Key] [Payload]",
 		Short: "decrypt payload that was encrypted with public key",
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
@@ -108,7 +110,7 @@ func CmdDecryptPayload() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintString(hex.EncodeToString(decryptedPayload))
+			return clientCtx.PrintString(string(decryptedPayload))
 		},
 	}
 
