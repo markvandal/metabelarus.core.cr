@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"encoding/hex"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -51,7 +50,7 @@ func (k Keeper) CreateIdentity(ctx sdk.Context, identity types.Identity) string 
 	// Update identity count
 	k.SetIdentityCount(ctx, count+1)
 
-	return hex.EncodeToString(key)
+	return string(key)
 }
 
 func (k Keeper) UpdateIdentity(ctx sdk.Context, identity types.Identity) {

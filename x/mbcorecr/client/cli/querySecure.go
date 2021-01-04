@@ -5,7 +5,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	"encoding/hex"
+	"encoding/base64"
 
 	"github.com/cosmos/cosmos-sdk/crypto"
 	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
@@ -35,7 +35,7 @@ func CmdUnpackPrivKey() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintString(hex.EncodeToString(pkUnarm.Bytes()))
+			return clientCtx.PrintString(base64.URLEncoding.EncodeToString(pkUnarm.Bytes()))
 		},
 	}
 
@@ -96,11 +96,11 @@ func CmdDecryptPayload() *cobra.Command {
 				return err
 			}
 
-			privateKey, err := hex.DecodeString(args[0])
+			privateKey, err := base64.URLEncoding.DecodeString(args[0])
 			if err != nil {
 				return err
 			}
-			payload, err := hex.DecodeString(args[1])
+			payload, err := base64.URLEncoding.DecodeString(args[1])
 			if err != nil {
 				return err
 			}

@@ -7,6 +7,7 @@ import (
 const (
 	EventGovCreateIdentity = "mbcorecr.gov:create.identity"
 	EventCreateInvite = "mbcorecr:create.invite"
+	EventCreateIdentity = "mbcorecr:create.identity"
 )
 
 const (
@@ -37,6 +38,35 @@ var (
 		sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
 		sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
 		sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+	}
+
+	IndentityCoinPacks = map[IdentityLevel]sdk.Coins{
+		IdentityLevel_LevelSuper: sdk.Coins{
+			sdk.Coin{Denom: Invite0Denom, Amount: sdk.NewInt(150)},
+			sdk.Coin{Denom: Invite1Denom, Amount: sdk.NewInt(100)},
+			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
+			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+		},
+		IdentityLevel_Level0: sdk.Coins{
+			sdk.Coin{Denom: Invite1Denom, Amount: sdk.NewInt(100)},
+			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
+			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+		},
+		IdentityLevel_Level1: sdk.Coins{
+			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
+			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+		},
+		IdentityLevel_Level2: sdk.Coins{
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
+			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+		},
+		IdentityLevel_Level3: sdk.Coins{
+			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+		},
+		IdentityLevel_Level4: sdk.Coins{},
 	}
 
 	IdentityLevelToDenom = map[IdentityLevel]string{

@@ -1,7 +1,7 @@
 package types
 
 import (
-	"encoding/hex"
+	"encoding/base64"
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -42,10 +42,13 @@ func (this *InviteAccount) EncryptStr(data string) (string, error) {
 		return "", sdkerrors.Wrap(ErrCryptDetails, err.Error())
 	}
 
-	return hex.EncodeToString(ecnrypted), nil
+	return base64.URLEncoding.EncodeToString(ecnrypted), nil
 }
 
 func (this *InviteAccount) EncryptData(data interface{}) (string, error) {
+	if data == nil {
+		data = this
+	}
 	payload, err := json.Marshal(data)
 	if err != nil {
 		return "", sdkerrors.Wrap(ErrCipher, err.Error())

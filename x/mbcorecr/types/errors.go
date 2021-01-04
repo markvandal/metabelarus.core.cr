@@ -21,4 +21,5 @@ var (
 	ErrCreator         = sdkerrors.Register(ModuleName, 1400, "Transaction creator issue")
 	ErrNewAccount      = sdkerrors.Register(ModuleName, 1500, "Can't create a new account")
 	ErrCryptDetails    = sdkerrors.Register(ModuleName, 1600, "Can't convert encrypted details")
+	ErrInvite    = sdkerrors.Register(ModuleName, 1700, "Can't accept invite")
 )

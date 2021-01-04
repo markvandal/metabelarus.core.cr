@@ -9,6 +9,8 @@ import (
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/helper"
 )
 
+// [DEPRECATED] This method is only used for alpha version purposes
+// until the standard method of service permissions is implemented.
 func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreateSuperIdentity) (*sdk.Result, error) {
 	inviteHelper, err := helper.NewInviteHelper(msg.Creator, &ctx, &k.BankKeeper, &k.AuthKeeper)
 	if err != nil {
@@ -42,7 +44,7 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 
 	// Create an identity
 	identityKey := k.CreateIdentity(ctx, types.Identity{
-		AccountID:    inviteAcc.PubKey,
+		AccountID:    inviteAcc.Address,
 		IdentityType: types.IdentityType_CITIZEN,
 		Details:      datails,
 		InvitationId: "",
@@ -61,7 +63,7 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		IdentityID: identityKey,
 	}
 
-	ecnryptedPayload, err := inviteAcc.EncryptData(resp)
+	ecnryptedPayload, err := inviteHelper.EncryptData(resp)
 	if err != nil {
 		return nil, err
 	}

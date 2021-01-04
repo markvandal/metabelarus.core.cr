@@ -71,10 +71,6 @@ func (k Keeper) HasInvite(ctx sdk.Context, id string) bool {
 	return store.Has(types.KeyPrefix(types.InviteKey + id))
 }
 
-func (k Keeper) GetInviteOwner(ctx sdk.Context, key string) string {
-	return k.GetInvite(ctx, key).Inviter
-}
-
 // DeleteInvite deletes a invite
 func (k Keeper) DeleteInvite(ctx sdk.Context, key string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.InviteKey))

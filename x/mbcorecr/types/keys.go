@@ -27,6 +27,6 @@ const (
 )
 
 const (
-	InviteKey= "Invite-value-"
-	InviteCountKey= "Invite-count-"
+	InviteKey      = "invite-value-"
+	InviteCountKey = "invite-count-"
 )

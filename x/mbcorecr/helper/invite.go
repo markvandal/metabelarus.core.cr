@@ -1,6 +1,9 @@
 package helper
 
 import (
+	"encoding/base64"
+	"encoding/json"
+
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -8,7 +11,19 @@ import (
 	"github.com/google/uuid"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 	"github.com/tendermint/tendermint/crypto"
+
+	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
+
+func DeleteAccount(ctx sdk.Context, auth types.AccountKeeper, address string) error {
+	tmpAddr, err := sdk.AccAddressFromBech32(address)
+	if err != nil {
+		return sdkerrors.Wrap(types.ErrInvite, err.Error())
+	}
+	auth.RemoveAccount(ctx, auth.GetAccount(ctx, tmpAddr))
+
+	return nil
+}
 
 // NewInviteAccount - Generate payload object for Invite and
 // Identity Account responses.
@@ -140,4 +155,27 @@ func (this *InviteHelper) GetPubKey() (crypto.PubKey, error) {
 	}
 
 	return pubKey, nil
+}
+
+func (this *InviteHelper) EncryptStr(data string) (string, error) {
+	pubKey, err := this.GetPubKey()
+	if err != nil {
+		return "", err
+	}
+
+	ecnrypted, err := mbutils.EncryptPayload(pubKey.Bytes(), []byte(data))
+	if err != nil {
+		return "", sdkerrors.Wrap(types.ErrCryptDetails, err.Error())
+	}
+
+	return base64.URLEncoding.EncodeToString(ecnrypted), nil
+}
+
+func (this *InviteHelper) EncryptData(data interface{}) (string, error) {
+	payload, err := json.Marshal(data)
+	if err != nil {
+		return "", sdkerrors.Wrap(types.ErrCipher, err.Error())
+	}
+
+	return this.EncryptStr(string(payload))
 }
