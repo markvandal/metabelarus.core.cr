@@ -1,4 +1,4 @@
-package mbcorecr
+package helper
 
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
@@ -102,6 +102,10 @@ func NewInviteHelper(
 	}
 
 	return inviteHelper, nil
+}
+
+func (this *InviteHelper) WithLevel(level types.IdentityLevel) error {
+	return this.WithDenom(types.IdentityLevelToDenom[level])
 }
 
 func (this *InviteHelper) WithDenom(denom string) error {

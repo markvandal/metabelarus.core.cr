@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/binary"
 
+	// https://godoc.org/github.com/decred/dcrd/dcrec/secp256k1#example-package--EncryptDecryptMessage
 	"github.com/decred/dcrd/dcrec/secp256k1"
 )
 

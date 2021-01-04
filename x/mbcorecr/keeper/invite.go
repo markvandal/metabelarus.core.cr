@@ -37,25 +37,20 @@ func (k Keeper) SetInviteCount(ctx sdk.Context, count int64) {
 	store.Set(byteKey, bz)
 }
 
-func (k Keeper) CreateInvite(ctx sdk.Context, msg types.MsgCreateInvite) {
+func (k Keeper) CreateInvite(ctx sdk.Context, invite *types.Invite) string {
 	// Create the invite
 	count := k.GetInviteCount(ctx)
-	var invite = types.Invite{
-		Id:         strconv.FormatInt(count, 10),
-		Inviter:    msg.Inviter,
-		Invitee:    "",
-		Level:      msg.Level,
-		Key:        "",
-		CreationDt: msg.CreationDt,
-	}
+	invite.Id = strconv.FormatInt(count, 10)
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.InviteKey))
 	key := types.KeyPrefix(types.InviteKey + invite.Id)
-	value := k.cdc.MustMarshalBinaryBare(&invite)
+	value := k.cdc.MustMarshalBinaryBare(invite)
 	store.Set(key, value)
 
 	// Update invite count
 	k.SetInviteCount(ctx, count+1)
+
+	return invite.Id
 }
 
 func (k Keeper) UpdateInvite(ctx sdk.Context, invite types.Invite) {

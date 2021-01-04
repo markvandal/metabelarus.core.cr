@@ -1,22 +1,16 @@
 package mbcorecr
 
 import (
-	"encoding/hex"
-	"encoding/json"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	// https://godoc.org/github.com/decred/dcrd/dcrec/secp256k1#example-package--EncryptDecryptMessage
 
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/keeper"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 
-	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
+	"github.com/metabelarus/mbcorecr/x/mbcorecr/helper"
 )
 
 func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreateSuperIdentity) (*sdk.Result, error) {
-	inviteHelper, err := NewInviteHelper(msg.Creator, &ctx, &k.BankKeeper, &k.AuthKeeper)
+	inviteHelper, err := helper.NewInviteHelper(msg.Creator, &ctx, &k.BankKeeper, &k.AuthKeeper)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +19,7 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		return nil, err
 	}
 
-	inviteAcc, err := NewInviteAccount(msg.Uid, ctx, k.AuthKeeper)
+	inviteAcc, err := helper.NewInviteAccount(msg.Uid, ctx, k.AuthKeeper)
 	if err != nil {
 		return nil, err
 	}
@@ -34,32 +28,31 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		return nil, err
 	}
 
-	inviteAddr, err := sdk.AccAddressFromBech32(inviteAcc.Address)
-	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrNewAccount, err.Error())
-	}
-
-	if err := k.BankKeeper.SetBalances(
-		ctx,
-		inviteAddr,
+	if err := inviteAcc.SetBalances(
+		ctx, k.BankKeeper,
 		types.SuperIdentityCoinsPack,
 	); err != nil {
-		return nil, sdkerrors.Wrap(types.ErrNewAccount, err.Error())
+		return nil, err
+	}
+
+	datails, err := inviteAcc.EncryptStr("{}")
+	if err != nil {
+		return nil, err
 	}
 
 	// Create an identity
 	identityKey := k.CreateIdentity(ctx, types.Identity{
 		AccountID:    inviteAcc.PubKey,
 		IdentityType: types.IdentityType_CITIZEN,
-		Details:      "",
+		Details:      datails,
 		InvitationId: "",
 		CreationDt:   msg.CreationDt,
 	})
 
-	// Add 1.000.000 simple tokens
-	// Add 1.000 stake
+	// [TODO] Probably we need to add 1.000.000 simple tokens
+	// [TODO] Probably we need to add 1.000 stake
 
-	resp := &types.IdentityAccount{
+	resp := types.IdentityAccount{
 		Uid:        inviteAcc.Uid,
 		Address:    inviteAcc.Address,
 		Mnemonic:   inviteAcc.Mnemonic,
@@ -68,21 +61,10 @@ func handleMsgCreateSuperIdentity(ctx sdk.Context, k keeper.Keeper, msg *types.M
 		IdentityID: identityKey,
 	}
 
-	payload, err := json.Marshal(resp)
-	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrCipher, err.Error())
-	}
-
-	pubKey, err := inviteHelper.GetPubKey()
+	ecnryptedPayload, err := inviteAcc.EncryptData(resp)
 	if err != nil {
 		return nil, err
 	}
-	cipherPayload, err := mbutils.EncryptPayload(pubKey.Bytes(), payload)
-	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrCipher, err.Error())
-	}
-
-	ecnryptedPayload := hex.EncodeToString(cipherPayload)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

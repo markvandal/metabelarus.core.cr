@@ -6,6 +6,7 @@ import (
 
 const (
 	EventGovCreateIdentity = "mbcorecr.gov:create.identity"
+	EventCreateInvite = "mbcorecr:create.invite"
 )
 
 const (
@@ -36,5 +37,14 @@ var (
 		sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
 		sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
 		sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+	}
+
+	IdentityLevelToDenom = map[IdentityLevel]string{
+		IdentityLevel_LevelSuper: SuperInviteDenom,
+		IdentityLevel_Level0:     Invite0Denom,
+		IdentityLevel_Level1:     Invite1Denom,
+		IdentityLevel_Level2:     Invite2Denom,
+		IdentityLevel_Level3:     Invite3Denom,
+		IdentityLevel_Level4:     Invite4Denom,
 	}
 )

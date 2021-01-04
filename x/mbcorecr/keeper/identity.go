@@ -38,17 +38,10 @@ func (k Keeper) SetIdentityCount(ctx sdk.Context, count int64) {
 	store.Set(byteKey, bz)
 }
 
-func (k Keeper) CreateIdentity(ctx sdk.Context, msg types.Identity) string {
+func (k Keeper) CreateIdentity(ctx sdk.Context, identity types.Identity) string {
 	// Create the identity
 	count := k.GetIdentityCount(ctx)
-	var identity = types.Identity{
-		Id:           strconv.FormatInt(count, 10),
-		AccountID:    msg.AccountID,
-		IdentityType: msg.IdentityType,
-		Details:      msg.Details,
-		InvitationId: msg.InvitationId,
-		CreationDt:   msg.CreationDt,
-	}
+	identity.Id = strconv.FormatInt(count, 10)
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.IdentityKey))
 	key := types.KeyPrefix(types.IdentityKey + identity.Id)
