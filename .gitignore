@@ -31,3 +31,6 @@ vue/.cache
 frontend/node_modules
 frontend/dist
 frontend/.cache
+/tmpinvited
+/tmppk
+/tmppk2

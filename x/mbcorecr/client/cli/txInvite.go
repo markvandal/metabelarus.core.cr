@@ -3,6 +3,7 @@ package cli
 import (
 	"encoding/base64"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/google/uuid"
@@ -15,7 +16,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
@@ -49,22 +49,38 @@ func CmdAcceptInvite() *cobra.Command {
 				return err
 			}
 
-			singerAddr := sdk.MustBech32ifyAddressBytes(sdk.Bech32PrefixAccAddr, info.GetAddress())
-
-			fromAddr, fromName, err := client.GetFromFields(clientCtx.Keyring, singerAddr, clientCtx.GenerateOnly)
+			fromAddr, fromName, err := client.GetFromFields(clientCtx.Keyring, info.GetAddress().String(), clientCtx.GenerateOnly)
 			if err != nil {
 				return err
 			}
 
-			clientCtx = clientCtx.WithFrom(singerAddr).WithFromAddress(fromAddr).WithFromName(fromName)
+			clientCtx = clientCtx.WithFrom(uid).WithFromAddress(fromAddr).WithFromName(fromName)
+			clientCtx.OutputFormat = "text"
 
-			msg := types.NewMsgAcceptInvite(argsInviteID, singerAddr)
+			msg := types.NewMsgAcceptInvite(argsInviteID, info.GetAddress().String())
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
 			res := tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 
+			exportedPk, err := clientCtx.Keyring.ExportPrivKeyArmor(uid, types.UnsecureNewAcctountPKPassword)
+			if err != nil {
+				return err
+			}
+
 			clientCtx.Keyring.Delete(uid)
+
+			writer := clientCtx.Output
+			if writer == nil {
+				writer = os.Stdout
+			}
+
+			_, err = writer.Write([]byte(
+				strings.Replace(exportedPk, "\n", "\\\\n", -1),
+			))
+			if err != nil {
+				return err
+			}
 
 			return res
 		},

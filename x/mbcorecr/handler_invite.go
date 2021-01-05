@@ -26,12 +26,6 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 	invite.Key = ""
 	invite.AcceptanceDt = msg.AcceptanceDt
 
-	// Delete temporary account
-	err = helper.DeleteAccount(ctx, k.AuthKeeper, msg.Invitee)
-	if err != nil {
-		return nil, err
-	}
-
 	// Add coins to the account
 	coinsPack := types.IndentityCoinPacks[invite.Level]
 	if len(coinsPack) > 0 {
@@ -62,10 +56,21 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 	// Build response
 	newAcc.InviteID = invite.IdentityId
 
-	ecnryptedPayload, err := newAcc.EncryptData(nil)
+	inviteHelper, err := helper.NewInviteHelper(
+		msg.Invitee, &ctx,
+		&k.BankKeeper, &k.AuthKeeper,
+	)
 	if err != nil {
 		return nil, err
 	}
+
+	ecnryptedPayload, err := inviteHelper.EncryptData(newAcc)
+	if err != nil {
+		return nil, err
+	}
+
+	// Delete temporary account
+	inviteHelper.DeleteAccount()
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

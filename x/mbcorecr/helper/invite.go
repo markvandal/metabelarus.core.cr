@@ -15,16 +15,6 @@ import (
 	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
-func DeleteAccount(ctx sdk.Context, auth types.AccountKeeper, address string) error {
-	tmpAddr, err := sdk.AccAddressFromBech32(address)
-	if err != nil {
-		return sdkerrors.Wrap(types.ErrInvite, err.Error())
-	}
-	auth.RemoveAccount(ctx, auth.GetAccount(ctx, tmpAddr))
-
-	return nil
-}
-
 // NewInviteAccount - Generate payload object for Invite and
 // Identity Account responses.
 func NewInviteAccount(staticUID string, ctx sdk.Context, authKeeper types.AccountKeeper) (*types.InviteAccount, error) {
@@ -137,12 +127,12 @@ func (this *InviteHelper) WithDenom(denom string) error {
 }
 
 func (this *InviteHelper) Pay() error {
-	if err := (*this.bankKeeper).SetBalances(
+	if err := (*this.bankKeeper).SubtractCoins(
 		*this.ctx,
 		this.InviterAddress,
-		types.SuperIdentityCoinsPack,
+		sdk.Coins{*this.coin},
 	); err != nil {
-		return sdkerrors.Wrap(types.ErrNewAccount, err.Error())
+		return sdkerrors.Wrap(types.ErrCreator, err.Error())
 	}
 
 	return nil
@@ -178,4 +168,10 @@ func (this *InviteHelper) EncryptData(data interface{}) (string, error) {
 	}
 
 	return this.EncryptStr(string(payload))
+}
+
+func (this *InviteHelper) DeleteAccount() {
+	(*this.authKeeper).RemoveAccount(
+		*this.ctx, (*this.authKeeper).GetAccount(*this.ctx, this.InviterAddress),
+	)
 }
