@@ -1,6 +1,6 @@
-# metabelaruscorecr
+# mbcorecr
 
-**metabelaruscorecr** is a blockchain application built using Cosmos SDK and Tendermint and generated with [Starport](https://github.com/tendermint/starport).
+**mbcorecr** is a blockchain application built using Cosmos SDK and Tendermint and generated with [Starport](https://github.com/tendermint/starport).
 
 ## Get started
 
