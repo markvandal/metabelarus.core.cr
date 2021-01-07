@@ -1,6 +1,6 @@
-# metabelaruscorecr UI
+# mbcorecr UI
 
-This is the [vuejs](https://vuejs.org/) user inteface to metabelaruscorecr.
+This is the [vuejs](https://vuejs.org/) user inteface to mbcorecr.
 
 It provides UI components including login, and a template for you to do additonal development.
 

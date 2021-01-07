@@ -5,12 +5,7 @@
       <sp-bank-balances />
       <sp-token-send />
       <!-- this line is used by starport scaffolding # 4 -->
-		<sp-type-form type="confirmation" :fields="['idenitityID', 'creationDate', 'expirationDate', 'confirmatorID', 'centerGeo', 'status', 'nextTryDate', ]" module="metabelaruscorecr" />
-		<sp-type-form type="invitation" :fields="['inviterId', 'identityId', 'creationDate', 'activationPubKey', ]" module="metabelaruscorecr" />
-		<sp-type-form type="identity" :fields="['accountID', 'details', 'creationDt', 'idenitityType', 'authPubKey', ]" module="metabelaruscorecr" />
-		<sp-type-form type="allowance" :fields="['passportId', 'allowanceType', 'resolution', ]" module="mbpasstrust" />
-		<sp-type-form type="consent" :fields="['extserviceId', 'passportId', 'resolution', ]" module="mbgovperm" />
-		<sp-type-form type="extservice" :fields="['alias', 'detailsUrl', ]" module="mbgovperm" />
+		<sp-type-form path="metabelarus.mbcorecr.mbcorecr" type="identity" :fields="[ ['creator', 1, 'string'] , ['AccountID', 2, 'string'] , ['IdentityType', 3, 'string'] , ['Details', 4, 'string'] , ['CreationDt', 5, 'string'] ]" />
     </div>
   </div>
 </template>
