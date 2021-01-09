@@ -1,0 +1,111 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crsign;
+
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+// this line is used by starport scaffolding # 1
+import "crsign/id2auth.proto";
+import "crsign/auth.proto";
+import "crsign/id2sign.proto";
+import "crsign/signature.proto";
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // this line is used by starport scaffolding # 2
+	rpc Id2Auth(QueryGetId2AuthRequest) returns (QueryGetId2AuthResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2auth/{id}";
+	}
+	rpc Id2AuthAll(QueryAllId2AuthRequest) returns (QueryAllId2AuthResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2auth";
+	}
+
+	rpc Auth(QueryGetAuthRequest) returns (QueryGetAuthResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auth/{id}";
+	}
+	rpc AuthAll(QueryAllAuthRequest) returns (QueryAllAuthResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auth";
+	}
+
+	rpc Id2Sign(QueryGetId2SignRequest) returns (QueryGetId2SignResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2sign/{id}";
+	}
+	rpc Id2SignAll(QueryAllId2SignRequest) returns (QueryAllId2SignResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2sign";
+	}
+
+	rpc Signature(QueryGetSignatureRequest) returns (QueryGetSignatureResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/signature/{id}";
+	}
+	rpc SignatureAll(QueryAllSignatureRequest) returns (QueryAllSignatureResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/signature";
+	}
+
+}
+
+// this line is used by starport scaffolding # 3
+message QueryGetId2AuthRequest {
+	string id = 1;
+}
+
+message QueryGetId2AuthResponse {
+	Id2Auth Id2Auth = 1;
+}
+
+message QueryAllId2AuthRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllId2AuthResponse {
+	repeated Id2Auth Id2Auth = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryGetAuthRequest {
+	string id = 1;
+}
+
+message QueryGetAuthResponse {
+	Auth Auth = 1;
+}
+
+message QueryAllAuthRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllAuthResponse {
+	repeated Auth Auth = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryGetId2SignRequest {
+	string id = 1;
+}
+
+message QueryGetId2SignResponse {
+	Id2Sign Id2Sign = 1;
+}
+
+message QueryAllId2SignRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllId2SignResponse {
+	repeated Id2Sign Id2Sign = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryGetSignatureRequest {
+	string id = 1;
+}
+
+message QueryGetSignatureResponse {
+	Signature Signature = 1;
+}
+
+message QueryAllSignatureRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllSignatureResponse {
+	repeated Signature Signature = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

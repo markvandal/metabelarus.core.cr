@@ -1,0 +1,49 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crsign;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+enum AuthStatus {
+  AUTH_OPEN = 0; // <- [new], closed, signed?
+  AUTH_SIGNED = 1; // <- open
+  AUTH_CLOSED = 2; // <- signed
+}
+
+message Auth {
+  string id = 1;
+  string identity = 2; 
+  string service = 3; 
+  string key = 4; 
+  AuthStatus status = 5; 
+  google.protobuf.Timestamp creationDt = 6 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp availabilityDt = 7 [(gogoproto.stdtime) = true];
+}
+
+message MsgCreateAuth {
+  string creator = 1;
+  string identity = 2; 
+  string service = 3; 
+  string key = 4; 
+  string status = 5; 
+  string creationDt = 6; 
+  string availabilityDt = 7; 
+}
+
+message MsgUpdateAuth {
+  string creator = 1;
+  string id = 2;
+  string identity = 3; 
+  string service = 4; 
+  string key = 5; 
+  string status = 6; 
+  string creationDt = 7; 
+  string availabilityDt = 8; 
+}
+
+message MsgDeleteAuth {
+  string creator = 1;
+  string id = 2;
+}

@@ -1,0 +1,8 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crsign;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
+
+// GenesisState defines the crsign module's genesis state.
+message GenesisState {
+}

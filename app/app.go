@@ -86,6 +86,9 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
+		"github.com/metabelarus/mbcorecr/x/crsign"
+		crsignkeeper "github.com/metabelarus/mbcorecr/x/crsign/keeper"
+		crsigntypes "github.com/metabelarus/mbcorecr/x/crsign/types"
 )
 
 var (
@@ -118,6 +121,7 @@ var (
 		vesting.AppModuleBasic{},
 		mbcorecr.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
+		crsign.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -183,6 +187,7 @@ type App struct {
 
 	mbcorecrKeeper mbcorecrkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
+		crsignKeeper crsignkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -212,6 +217,7 @@ func New(
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		mbcorecrtypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
+		crsigntypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -320,6 +326,11 @@ func New(
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
+		app.crsignKeeper = *crsignkeeper.NewKeeper(
+			appCodec,
+			keys[crsigntypes.StoreKey],
+			keys[crsigntypes.MemStoreKey],
+		)
 
 	/****  Module Options ****/
 
@@ -352,6 +363,7 @@ func New(
 		transferModule,
 		mbcorecr.NewAppModule(appCodec, app.mbcorecrKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
+		crsign.NewAppModule(appCodec, app.crsignKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -385,6 +397,7 @@ func New(
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
+		crsigntypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -582,6 +595,7 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
+		paramsKeeper.Subspace(crsigntypes.ModuleName)
 
 	return paramsKeeper
 }
