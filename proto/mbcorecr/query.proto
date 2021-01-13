@@ -4,6 +4,7 @@ package metabelarus.mbcorecr.mbcorecr;
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
+import "mbcorecr/invite.proto";
 import "mbcorecr/identity.proto";
 
 option go_package = "github.com/metabelarus/mbcorecr/x/mbcorecr/types";
@@ -11,6 +12,13 @@ option go_package = "github.com/metabelarus/mbcorecr/x/mbcorecr/types";
 // Query defines the gRPC querier service.
 service Query {
     // this line is used by starport scaffolding # 2
+	rpc Invite(QueryGetInviteRequest) returns (QueryGetInviteResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/mbcorecr/invite/{id}";
+	}
+	rpc InviteAll(QueryAllInviteRequest) returns (QueryAllInviteResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/mbcorecr/invite";
+	}
+
 	rpc Identity(QueryGetIdentityRequest) returns (QueryGetIdentityResponse) {
 		option (google.api.http).get = "/metabelarus/mbcorecr/mbcorecr/identity/{id}";
 	}
@@ -21,6 +29,22 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetInviteRequest {
+	string id = 1;
+}
+
+message QueryGetInviteResponse {
+	Invite Invite = 1;
+}
+
+message QueryAllInviteRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllInviteResponse {
+	repeated Invite Invite = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
 message QueryGetIdentityRequest {
 	string id = 1;
 }

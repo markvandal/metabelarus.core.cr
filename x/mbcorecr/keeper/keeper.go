@@ -15,14 +15,26 @@ type (
 		cdc      codec.Marshaler
 		storeKey sdk.StoreKey
 		memKey   sdk.StoreKey
+
+		AuthKeeper types.AccountKeeper
+		BankKeeper types.BankKeeper
 	}
 )
 
-func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey) *Keeper {
+// NewKeeper - create Meta-Belarus Citizen Register Keeper
+func NewKeeper(
+	cdc codec.Marshaler,
+	storeKey,
+	memKey sdk.StoreKey,
+	authKeeper types.AccountKeeper,
+	bankKeeper types.BankKeeper,
+) *Keeper {
 	return &Keeper{
-		cdc:      cdc,
-		storeKey: storeKey,
-		memKey:   memKey,
+		cdc:        cdc,
+		storeKey:   storeKey,
+		memKey:     memKey,
+		AuthKeeper: authKeeper,
+		BankKeeper: bankKeeper,
 	}
 }
 

@@ -1,0 +1,58 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.mbcorecr;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/mbcorecr/types";
+
+import "mbcorecr/identity.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+enum IdentityLevel {
+  LevelSuper = 0;
+  Level0 = 1;
+  Level1 = 2;
+  Level2 = 3;
+  Level3 = 4;
+  Level4 = 5;
+}
+
+message Invite {
+  string id = 1;
+  string inviter = 2; 
+  string invitee = 3; 
+  string identityId = 4;
+  IdentityLevel level = 5;
+  IdentityType identityType = 6;
+  string key = 7; 
+  google.protobuf.Timestamp creationDt = 8 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp acceptanceDt = 9 [(gogoproto.stdtime) = true]; 
+}
+
+message MsgCreateInvite {
+  string inviter = 1; 
+  string uid = 2;
+  IdentityLevel level = 3; 
+  IdentityType identityType = 4;
+  google.protobuf.Timestamp creationDt = 5 [(gogoproto.stdtime) = true]; 
+}
+
+message MsgAcceptInvite {
+  string inviteId = 1;
+  string invitee = 2;
+  string uid = 3;
+  google.protobuf.Timestamp acceptanceDt = 4 [(gogoproto.stdtime) = true]; 
+}
+
+message InviteAccount {
+  string uid = 1;
+  string address = 2;
+  string pubKey = 3;
+  string privKey = 4;
+  string mnemonic = 5;
+  string inviteID = 6;
+}
+
+message MsgCancelInvite {
+  string inviter = 1;
+  string sequence = 2;
+}

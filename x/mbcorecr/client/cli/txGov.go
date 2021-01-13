@@ -9,25 +9,22 @@ import (
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 )
 
-func CmdUpdateIdentity() *cobra.Command {
+func CmdCastSuperIdentity() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-identity [id] [Details]",
-		Short: "Update a identity",
-		Args:  cobra.ExactArgs(3),
+		Use:   "cast-super-identity",
+		Short: "Create a new supper identity as governer",
+		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id := args[0]
-			argsDetails := string(args[2])
+			var err error
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err = client.ReadTxCommandFlags(clientCtx, cmd.Flags())
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgUpdateIdentity(
-				id,
+			msg := types.NewMsgCreateSuperIdentity(
 				clientCtx.GetFromAddress().String(),
-				string(argsDetails),
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
