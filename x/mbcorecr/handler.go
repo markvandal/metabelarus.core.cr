@@ -26,8 +26,6 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 			return handleMsgUpdateIdentity(ctx, k, msg)
 
 		// Manually created handlers
-		case *types.MsgCreateSuperIdentity:
-			return handleMsgCreateSuperIdentity(ctx, k, msg)
 
 		default:
 			errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)

@@ -28,12 +28,6 @@ message MsgUpdateIdentity {
   string details = 3;
 }
 
-message MsgCreateSuperIdentity {
-  string creator = 1;
-  string uid = 2;
-  google.protobuf.Timestamp creationDt = 3 [(gogoproto.stdtime) = true]; 
-}
-
 message IdentityAccount {
   string uid = 1;
   string address = 2;

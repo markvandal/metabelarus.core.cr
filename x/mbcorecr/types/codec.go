@@ -12,8 +12,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgAcceptInvite{}, "mbcorecr/AcceptInvite", nil)
 
 	cdc.RegisterConcrete(&MsgUpdateIdentity{}, "mbcorecr/UpdateIdentity", nil)
-
-	cdc.RegisterConcrete(&MsgCreateSuperIdentity{}, "mbcorecr/CreateSuperIdentity", nil)
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -24,7 +22,6 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateIdentity{},
-		&MsgCreateSuperIdentity{},
 	)
 }
 

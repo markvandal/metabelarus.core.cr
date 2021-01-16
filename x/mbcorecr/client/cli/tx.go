@@ -27,7 +27,5 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdUpdateIdentity())
 
-	cmd.AddCommand(CmdCastSuperIdentity())
-
 	return cmd
 }

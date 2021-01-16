@@ -30,29 +30,17 @@ message Invite {
 
 message MsgCreateInvite {
   string inviter = 1; 
-  string uid = 2;
-  IdentityLevel level = 3; 
-  IdentityType identityType = 4;
-  google.protobuf.Timestamp creationDt = 5 [(gogoproto.stdtime) = true]; 
+  IdentityLevel level = 2; 
+  IdentityType identityType = 3;
+  string address = 4;
+  string pubKey = 5;
+  google.protobuf.Timestamp creationDt = 6 [(gogoproto.stdtime) = true]; 
 }
 
 message MsgAcceptInvite {
   string inviteId = 1;
-  string invitee = 2;
-  string uid = 3;
-  google.protobuf.Timestamp acceptanceDt = 4 [(gogoproto.stdtime) = true]; 
-}
-
-message InviteAccount {
-  string uid = 1;
-  string address = 2;
-  string pubKey = 3;
-  string privKey = 4;
-  string mnemonic = 5;
-  string inviteID = 6;
-}
-
-message MsgCancelInvite {
-  string inviter = 1;
-  string sequence = 2;
+  string tmpAddress = 2;
+  string address = 3;
+  string pubKey = 4;
+  google.protobuf.Timestamp acceptanceDt = 5 [(gogoproto.stdtime) = true]; 
 }

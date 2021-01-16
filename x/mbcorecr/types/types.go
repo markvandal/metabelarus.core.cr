@@ -5,14 +5,16 @@ import (
 )
 
 const (
-	EventGovCreateIdentity = "mbcorecr.gov:create.identity"
-	EventCreateInvite = "mbcorecr:create.invite"
+	EventCreateInvite   = "mbcorecr:create.invite"
 	EventCreateIdentity = "mbcorecr:create.identity"
 )
 
 const (
 	EventAttrIdentityType    = "type"
-	EventAttrIdentityPayload = "payload"
+	EventAttrTmpAddress      = "tmp_address"
+	EventAttrIdentityAddress = "identity_address"
+	EventAttrInviteId        = "invite_id"
+	EventAttrIentityId       = "identity_id"
 
 	DefaultWalletPath             = "0'"
 	UnsecureNewAcctountPKPassword = "11112222"
@@ -23,12 +25,6 @@ const (
 	Invite2Denom     = "invite2"
 	Invite3Denom     = "invite3"
 	Invite4Denom     = "invite4"
-)
-
-type AttrIdentityType string
-
-const (
-	AttrIdentityTypeSuper AttrIdentityType = "super"
 )
 
 var (

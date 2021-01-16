@@ -50,7 +50,7 @@ func (k Keeper) CreateIdentity(ctx sdk.Context, identity types.Identity) string 
 	// Update identity count
 	k.SetIdentityCount(ctx, count+1)
 
-	return string(key)
+	return identity.Id
 }
 
 func (k Keeper) UpdateIdentity(ctx sdk.Context, identity types.Identity) {
