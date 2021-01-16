@@ -19,3 +19,8 @@ const (
 	QueryGetId2Auth  = "get-id2auth"
 	QueryListId2Auth = "list-id2auth"
 )
+
+const (
+	QueryGetSignatureList  = "get-signatureList"
+	QueryListSignatureList = "list-signatureList"
+)

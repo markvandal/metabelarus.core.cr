@@ -40,3 +40,8 @@ const (
 	Id2AuthKey= "Id2Auth-value-"
 	Id2AuthCountKey= "Id2Auth-count-"
 )
+
+const (
+	SignatureListKey= "SignatureList-value-"
+	SignatureListCountKey= "SignatureList-count-"
+)

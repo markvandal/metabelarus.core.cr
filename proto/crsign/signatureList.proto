@@ -1,0 +1,28 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crsign;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
+
+import "gogoproto/gogo.proto";
+
+message SignatureList {
+  string id = 1;
+  string rootSignatureId = 2; 
+  string lastSignatureId = 3; 
+  string nextSignatureId = 4; 
+  string metadata = 5; 
+}
+
+message MsgCreateSignatureList {
+  string creator = 1;
+  string rootSignatureId = 2; 
+}
+
+message MsgUpdateSignatureList {
+  string creator = 1;
+  string id = 2;
+  string rootSignatureId = 3; 
+  string lastSignatureId = 4; 
+  string nextSignatureId = 5; 
+  string metadata = 6; 
+}
