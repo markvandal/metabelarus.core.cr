@@ -174,10 +174,11 @@ func (m *Invite) GetAcceptanceDt() *time.Time {
 
 type MsgCreateInvite struct {
 	Inviter      string        `protobuf:"bytes,1,opt,name=inviter,proto3" json:"inviter,omitempty"`
-	Uid          string        `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
-	Level        IdentityLevel `protobuf:"varint,3,opt,name=level,proto3,enum=metabelarus.mbcorecr.mbcorecr.IdentityLevel" json:"level,omitempty"`
-	IdentityType IdentityType  `protobuf:"varint,4,opt,name=identityType,proto3,enum=metabelarus.mbcorecr.mbcorecr.IdentityType" json:"identityType,omitempty"`
-	CreationDt   *time.Time    `protobuf:"bytes,5,opt,name=creationDt,proto3,stdtime" json:"creationDt,omitempty"`
+	Level        IdentityLevel `protobuf:"varint,2,opt,name=level,proto3,enum=metabelarus.mbcorecr.mbcorecr.IdentityLevel" json:"level,omitempty"`
+	IdentityType IdentityType  `protobuf:"varint,3,opt,name=identityType,proto3,enum=metabelarus.mbcorecr.mbcorecr.IdentityType" json:"identityType,omitempty"`
+	Address      string        `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+	PubKey       string        `protobuf:"bytes,5,opt,name=pubKey,proto3" json:"pubKey,omitempty"`
+	CreationDt   *time.Time    `protobuf:"bytes,6,opt,name=creationDt,proto3,stdtime" json:"creationDt,omitempty"`
 }
 
 func (m *MsgCreateInvite) Reset()         { *m = MsgCreateInvite{} }
@@ -220,13 +221,6 @@ func (m *MsgCreateInvite) GetInviter() string {
 	return ""
 }
 
-func (m *MsgCreateInvite) GetUid() string {
-	if m != nil {
-		return m.Uid
-	}
-	return ""
-}
-
 func (m *MsgCreateInvite) GetLevel() IdentityLevel {
 	if m != nil {
 		return m.Level
@@ -241,6 +235,20 @@ func (m *MsgCreateInvite) GetIdentityType() IdentityType {
 	return IdentityType_CITIZEN
 }
 
+func (m *MsgCreateInvite) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *MsgCreateInvite) GetPubKey() string {
+	if m != nil {
+		return m.PubKey
+	}
+	return ""
+}
+
 func (m *MsgCreateInvite) GetCreationDt() *time.Time {
 	if m != nil {
 		return m.CreationDt
@@ -250,9 +258,10 @@ func (m *MsgCreateInvite) GetCreationDt() *time.Time {
 
 type MsgAcceptInvite struct {
 	InviteId     string     `protobuf:"bytes,1,opt,name=inviteId,proto3" json:"inviteId,omitempty"`
-	Invitee      string     `protobuf:"bytes,2,opt,name=invitee,proto3" json:"invitee,omitempty"`
-	Uid          string     `protobuf:"bytes,3,opt,name=uid,proto3" json:"uid,omitempty"`
-	AcceptanceDt *time.Time `protobuf:"bytes,4,opt,name=acceptanceDt,proto3,stdtime" json:"acceptanceDt,omitempty"`
+	TmpAddress   string     `protobuf:"bytes,2,opt,name=tmpAddress,proto3" json:"tmpAddress,omitempty"`
+	Address      string     `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	PubKey       string     `protobuf:"bytes,4,opt,name=pubKey,proto3" json:"pubKey,omitempty"`
+	AcceptanceDt *time.Time `protobuf:"bytes,5,opt,name=acceptanceDt,proto3,stdtime" json:"acceptanceDt,omitempty"`
 }
 
 func (m *MsgAcceptInvite) Reset()         { *m = MsgAcceptInvite{} }
@@ -295,16 +304,23 @@ func (m *MsgAcceptInvite) GetInviteId() string {
 	return ""
 }
 
-func (m *MsgAcceptInvite) GetInvitee() string {
+func (m *MsgAcceptInvite) GetTmpAddress() string {
 	if m != nil {
-		return m.Invitee
+		return m.TmpAddress
 	}
 	return ""
 }
 
-func (m *MsgAcceptInvite) GetUid() string {
+func (m *MsgAcceptInvite) GetAddress() string {
 	if m != nil {
-		return m.Uid
+		return m.Address
+	}
+	return ""
+}
+
+func (m *MsgAcceptInvite) GetPubKey() string {
+	if m != nil {
+		return m.PubKey
 	}
 	return ""
 }
@@ -316,191 +332,49 @@ func (m *MsgAcceptInvite) GetAcceptanceDt() *time.Time {
 	return nil
 }
 
-type InviteAccount struct {
-	Uid      string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
-	Address  string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
-	PubKey   string `protobuf:"bytes,3,opt,name=pubKey,proto3" json:"pubKey,omitempty"`
-	PrivKey  string `protobuf:"bytes,4,opt,name=privKey,proto3" json:"privKey,omitempty"`
-	Mnemonic string `protobuf:"bytes,5,opt,name=mnemonic,proto3" json:"mnemonic,omitempty"`
-	InviteID string `protobuf:"bytes,6,opt,name=inviteID,proto3" json:"inviteID,omitempty"`
-}
-
-func (m *InviteAccount) Reset()         { *m = InviteAccount{} }
-func (m *InviteAccount) String() string { return proto.CompactTextString(m) }
-func (*InviteAccount) ProtoMessage()    {}
-func (*InviteAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_60b07f1de3d385de, []int{3}
-}
-func (m *InviteAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *InviteAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InviteAccount.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *InviteAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InviteAccount.Merge(m, src)
-}
-func (m *InviteAccount) XXX_Size() int {
-	return m.Size()
-}
-func (m *InviteAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_InviteAccount.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_InviteAccount proto.InternalMessageInfo
-
-func (m *InviteAccount) GetUid() string {
-	if m != nil {
-		return m.Uid
-	}
-	return ""
-}
-
-func (m *InviteAccount) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
-
-func (m *InviteAccount) GetPubKey() string {
-	if m != nil {
-		return m.PubKey
-	}
-	return ""
-}
-
-func (m *InviteAccount) GetPrivKey() string {
-	if m != nil {
-		return m.PrivKey
-	}
-	return ""
-}
-
-func (m *InviteAccount) GetMnemonic() string {
-	if m != nil {
-		return m.Mnemonic
-	}
-	return ""
-}
-
-func (m *InviteAccount) GetInviteID() string {
-	if m != nil {
-		return m.InviteID
-	}
-	return ""
-}
-
-type MsgCancelInvite struct {
-	Inviter  string `protobuf:"bytes,1,opt,name=inviter,proto3" json:"inviter,omitempty"`
-	Sequence string `protobuf:"bytes,2,opt,name=sequence,proto3" json:"sequence,omitempty"`
-}
-
-func (m *MsgCancelInvite) Reset()         { *m = MsgCancelInvite{} }
-func (m *MsgCancelInvite) String() string { return proto.CompactTextString(m) }
-func (*MsgCancelInvite) ProtoMessage()    {}
-func (*MsgCancelInvite) Descriptor() ([]byte, []int) {
-	return fileDescriptor_60b07f1de3d385de, []int{4}
-}
-func (m *MsgCancelInvite) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgCancelInvite) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgCancelInvite.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgCancelInvite) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCancelInvite.Merge(m, src)
-}
-func (m *MsgCancelInvite) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgCancelInvite) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCancelInvite.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgCancelInvite proto.InternalMessageInfo
-
-func (m *MsgCancelInvite) GetInviter() string {
-	if m != nil {
-		return m.Inviter
-	}
-	return ""
-}
-
-func (m *MsgCancelInvite) GetSequence() string {
-	if m != nil {
-		return m.Sequence
-	}
-	return ""
-}
-
 func init() {
 	proto.RegisterEnum("metabelarus.mbcorecr.mbcorecr.IdentityLevel", IdentityLevel_name, IdentityLevel_value)
 	proto.RegisterType((*Invite)(nil), "metabelarus.mbcorecr.mbcorecr.Invite")
 	proto.RegisterType((*MsgCreateInvite)(nil), "metabelarus.mbcorecr.mbcorecr.MsgCreateInvite")
 	proto.RegisterType((*MsgAcceptInvite)(nil), "metabelarus.mbcorecr.mbcorecr.MsgAcceptInvite")
-	proto.RegisterType((*InviteAccount)(nil), "metabelarus.mbcorecr.mbcorecr.InviteAccount")
-	proto.RegisterType((*MsgCancelInvite)(nil), "metabelarus.mbcorecr.mbcorecr.MsgCancelInvite")
 }
 
 func init() { proto.RegisterFile("mbcorecr/invite.proto", fileDescriptor_60b07f1de3d385de) }
 
 var fileDescriptor_60b07f1de3d385de = []byte{
-	// 570 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x94, 0xc9, 0x8e, 0xd3, 0x40,
-	0x10, 0x86, 0xd3, 0x76, 0xd6, 0x62, 0x26, 0x58, 0x2d, 0x16, 0x2b, 0x12, 0x9e, 0x28, 0xa7, 0x08,
-	0x90, 0x3d, 0x64, 0x78, 0x00, 0x26, 0x44, 0x42, 0x61, 0x11, 0x52, 0x98, 0x13, 0x9c, 0xbc, 0x14,
-	0xc6, 0x22, 0x5e, 0xb0, 0xdb, 0x11, 0x79, 0x8b, 0x39, 0x70, 0xe3, 0xc0, 0x89, 0x77, 0xe1, 0x38,
-	0x47, 0x6e, 0xa0, 0xe4, 0x45, 0x90, 0xdb, 0x6e, 0x2f, 0x1c, 0x60, 0x58, 0x6e, 0x7f, 0x75, 0xf9,
-	0xaf, 0x2e, 0x7f, 0x55, 0x36, 0x5c, 0xf7, 0x2d, 0x3b, 0x8c, 0xd1, 0x8e, 0x0d, 0x2f, 0xd8, 0x78,
-	0x0c, 0xf5, 0x28, 0x0e, 0x59, 0x48, 0x6f, 0xf9, 0xc8, 0x4c, 0x0b, 0xd7, 0x66, 0x9c, 0x26, 0xba,
-	0x78, 0xa4, 0x14, 0xa3, 0x9b, 0x95, 0xcb, 0xc1, 0x80, 0x79, 0x6c, 0x9b, 0xfb, 0x46, 0xd7, 0xdc,
-	0xd0, 0x0d, 0xb9, 0x34, 0x32, 0x55, 0x9c, 0x1e, 0xb9, 0x61, 0xe8, 0xae, 0xd1, 0xe0, 0x91, 0x95,
-	0xbe, 0x36, 0x98, 0xe7, 0x63, 0xc2, 0x4c, 0x3f, 0xca, 0x1f, 0x98, 0x7c, 0x94, 0xa1, 0xbb, 0xe4,
-	0xf7, 0xd3, 0x21, 0x48, 0x9e, 0xa3, 0x92, 0x31, 0x99, 0x0e, 0x56, 0x92, 0xe7, 0x50, 0x15, 0x7a,
-	0x79, 0x67, 0xb1, 0x2a, 0xf1, 0x43, 0x11, 0x56, 0x19, 0x54, 0xe5, 0x7a, 0x06, 0xa9, 0x06, 0x20,
-	0xfa, 0x5a, 0x3a, 0x6a, 0x9b, 0x27, 0x6b, 0x27, 0x74, 0x0e, 0x9d, 0x35, 0x6e, 0x70, 0xad, 0x76,
-	0xc6, 0x64, 0x3a, 0x9c, 0xdd, 0xd5, 0x7f, 0xf9, 0xb6, 0xfa, 0xb2, 0x70, 0x3e, 0xcd, 0x3c, 0xab,
-	0xdc, 0x4a, 0x9f, 0xc3, 0x81, 0xa8, 0x78, 0xb6, 0x8d, 0x50, 0xed, 0xf2, 0x52, 0x77, 0x2e, 0x59,
-	0x2a, 0xb3, 0xac, 0x1a, 0x05, 0xa8, 0x02, 0xf2, 0x5b, 0xdc, 0xaa, 0x3d, 0xde, 0x6d, 0x26, 0xe9,
-	0x03, 0x00, 0x3b, 0x46, 0x93, 0x79, 0x61, 0xb0, 0x60, 0x6a, 0x7f, 0x4c, 0xa6, 0x57, 0x66, 0x23,
-	0x3d, 0x67, 0xa9, 0x0b, 0x96, 0xfa, 0x99, 0x60, 0x39, 0x6f, 0x9f, 0x7f, 0x3b, 0x22, 0xab, 0x9a,
-	0x87, 0x2e, 0xe0, 0xc0, 0xb4, 0x6d, 0x8c, 0x98, 0x19, 0xd8, 0xb8, 0x60, 0xea, 0xe0, 0x92, 0x35,
-	0x1a, 0xae, 0xc9, 0x07, 0x09, 0xae, 0x3e, 0x4b, 0xdc, 0x87, 0x59, 0x5d, 0x2c, 0xc6, 0x54, 0x1b,
-	0x0b, 0x69, 0x8e, 0x45, 0x01, 0x39, 0xf5, 0x9c, 0x62, 0x58, 0x99, 0xac, 0x70, 0xcb, 0xff, 0x0f,
-	0x77, 0xfb, 0x5f, 0x71, 0x37, 0xe1, 0x76, 0xfe, 0x1c, 0xee, 0xe4, 0x13, 0xe1, 0x58, 0x4e, 0x39,
-	0xaa, 0x02, 0xcb, 0x08, 0xfa, 0x39, 0x87, 0xa5, 0xd8, 0xe1, 0x32, 0xae, 0xef, 0xab, 0xd4, 0xdc,
-	0xd7, 0x02, 0x99, 0x5c, 0x21, 0xfb, 0x79, 0x70, 0xed, 0xbf, 0x1a, 0xdc, 0x67, 0x02, 0x87, 0x79,
-	0x63, 0xa7, 0xb6, 0x1d, 0xa6, 0x01, 0x13, 0x37, 0x91, 0xea, 0x26, 0x15, 0x7a, 0xa6, 0xe3, 0xc4,
-	0x98, 0x24, 0xa2, 0xab, 0x22, 0xa4, 0x37, 0xa0, 0x1b, 0xa5, 0xd6, 0x13, 0xdc, 0x16, 0x8d, 0x15,
-	0x51, 0xe6, 0x88, 0x62, 0x6f, 0x93, 0x25, 0xf2, 0x4f, 0x4b, 0x84, 0xd9, 0xdb, 0xfb, 0x01, 0xfa,
-	0x61, 0xe0, 0xd9, 0x9c, 0xe8, 0x60, 0x55, 0xc6, 0x35, 0x32, 0x0b, 0xfe, 0xad, 0x54, 0x64, 0x16,
-	0x93, 0x47, 0xf9, 0x7e, 0x65, 0x5d, 0xaf, 0x7f, 0xbb, 0x5f, 0x23, 0xe8, 0x27, 0xf8, 0x2e, 0xc5,
-	0xc0, 0x16, 0x1c, 0xcb, 0xf8, 0xf6, 0x2b, 0x38, 0x6c, 0x6c, 0x0f, 0x1d, 0x02, 0x70, 0xf1, 0x22,
-	0x8d, 0x30, 0x56, 0x5a, 0x14, 0xa0, 0xcb, 0xe3, 0x63, 0x85, 0x94, 0xfa, 0x9e, 0x22, 0x95, 0x7a,
-	0xa6, 0xc8, 0xa5, 0x3e, 0x51, 0xda, 0xa5, 0xbe, 0xaf, 0x74, 0xe6, 0x8f, 0xbf, 0xec, 0x34, 0x72,
-	0xb1, 0xd3, 0xc8, 0xf7, 0x9d, 0x46, 0xce, 0xf7, 0x5a, 0xeb, 0x62, 0xaf, 0xb5, 0xbe, 0xee, 0xb5,
-	0xd6, 0xcb, 0x63, 0xd7, 0x63, 0x6f, 0x52, 0x4b, 0xb7, 0x43, 0xdf, 0xa8, 0x2d, 0xa4, 0x51, 0xfe,
-	0x25, 0xdf, 0x57, 0x92, 0x6d, 0x23, 0x4c, 0xac, 0x2e, 0x9f, 0xe0, 0xc9, 0x8f, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xec, 0xb1, 0x53, 0x11, 0x7f, 0x05, 0x00, 0x00,
+	// 505 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcb, 0x6e, 0xd3, 0x50,
+	0x10, 0xcd, 0xb5, 0x13, 0xa7, 0x19, 0x4a, 0xb0, 0xae, 0x78, 0x5c, 0x45, 0xc2, 0x8d, 0xb2, 0x8a,
+	0x00, 0xd9, 0x25, 0xe5, 0x03, 0x68, 0xc8, 0x26, 0x3c, 0x84, 0x64, 0xba, 0x82, 0x95, 0x1f, 0x83,
+	0xb1, 0x88, 0x63, 0xcb, 0xbe, 0xae, 0xf0, 0x5f, 0x74, 0xcf, 0x6f, 0xf0, 0x0b, 0x48, 0x2c, 0xbb,
+	0x64, 0x07, 0x4a, 0x7e, 0x04, 0xf9, 0xfa, 0x11, 0xbb, 0x12, 0x28, 0x40, 0x77, 0x67, 0x66, 0xee,
+	0x19, 0xcf, 0x9c, 0x33, 0x32, 0xdc, 0x09, 0x6c, 0x27, 0x8c, 0xd1, 0x89, 0x0d, 0x7f, 0x7d, 0xee,
+	0x73, 0xd4, 0xa3, 0x38, 0xe4, 0x21, 0xbd, 0x1f, 0x20, 0xb7, 0x6c, 0x5c, 0x59, 0x71, 0x9a, 0xe8,
+	0xd5, 0x93, 0x1a, 0x8c, 0xee, 0xed, 0x58, 0x2e, 0xae, 0xb9, 0xcf, 0xb3, 0x82, 0x37, 0xba, 0xed,
+	0x85, 0x5e, 0x28, 0xa0, 0x91, 0xa3, 0x32, 0x7b, 0xe4, 0x85, 0xa1, 0xb7, 0x42, 0x43, 0x44, 0x76,
+	0xfa, 0xde, 0xe0, 0x7e, 0x80, 0x09, 0xb7, 0x82, 0xa8, 0x78, 0x30, 0xf9, 0x2c, 0x83, 0xb2, 0x14,
+	0xdf, 0xa7, 0x43, 0x90, 0x7c, 0x97, 0x91, 0x31, 0x99, 0x0e, 0x4c, 0xc9, 0x77, 0x29, 0x83, 0x7e,
+	0x31, 0x59, 0xcc, 0x24, 0x91, 0xac, 0xc2, 0x5d, 0x05, 0x99, 0xdc, 0xac, 0x20, 0xd5, 0x00, 0xaa,
+	0xb9, 0x96, 0x2e, 0xeb, 0x8a, 0x62, 0x23, 0x43, 0xe7, 0xd0, 0x5b, 0xe1, 0x39, 0xae, 0x58, 0x6f,
+	0x4c, 0xa6, 0xc3, 0xd9, 0x23, 0xfd, 0x8f, 0xdb, 0xea, 0xcb, 0x92, 0xf9, 0x32, 0xe7, 0x98, 0x05,
+	0x95, 0xbe, 0x86, 0xc3, 0xaa, 0xe3, 0x59, 0x16, 0x21, 0x53, 0x44, 0xab, 0x87, 0x7b, 0xb6, 0xca,
+	0x29, 0x66, 0xab, 0x01, 0x55, 0x41, 0xfe, 0x88, 0x19, 0xeb, 0x8b, 0x69, 0x73, 0x48, 0x9f, 0x02,
+	0x38, 0x31, 0x5a, 0xdc, 0x0f, 0xd7, 0x0b, 0xce, 0x0e, 0xc6, 0x64, 0x7a, 0x63, 0x36, 0xd2, 0x0b,
+	0x2d, 0xf5, 0x4a, 0x4b, 0xfd, 0xac, 0xd2, 0x72, 0xde, 0xbd, 0xf8, 0x71, 0x44, 0xcc, 0x06, 0x87,
+	0x2e, 0xe0, 0xd0, 0x72, 0x1c, 0x8c, 0xb8, 0xb5, 0x76, 0x70, 0xc1, 0xd9, 0x60, 0xcf, 0x1e, 0x2d,
+	0xd6, 0xe4, 0x8b, 0x04, 0xb7, 0x5e, 0x25, 0xde, 0xb3, 0xbc, 0x2f, 0x96, 0x36, 0x35, 0x6c, 0x21,
+	0x6d, 0x5b, 0x6a, 0x71, 0xa5, 0xeb, 0x13, 0x57, 0xfe, 0x5f, 0x71, 0x19, 0xf4, 0x2d, 0xd7, 0x8d,
+	0x31, 0x49, 0xca, 0x73, 0xa8, 0x42, 0x7a, 0x17, 0x94, 0x28, 0xb5, 0x5f, 0x60, 0x26, 0x8e, 0x61,
+	0x60, 0x96, 0xd1, 0x15, 0xf1, 0x95, 0xbf, 0x17, 0x7f, 0xf2, 0x95, 0x08, 0xd9, 0x4e, 0x85, 0x94,
+	0xa5, 0x6c, 0x23, 0x38, 0x28, 0x74, 0x5a, 0x56, 0x37, 0x5e, 0xc7, 0xf9, 0xd5, 0xf2, 0x20, 0x3a,
+	0x2d, 0xc7, 0x2c, 0x8e, 0xbd, 0x91, 0x69, 0xee, 0x20, 0xff, 0x6e, 0x87, 0x6e, 0x6b, 0x87, 0xab,
+	0xf6, 0xf7, 0xfe, 0xc5, 0xfe, 0x07, 0xef, 0xe0, 0x66, 0xcb, 0x24, 0x3a, 0x04, 0x10, 0xe0, 0x4d,
+	0x1a, 0x61, 0xac, 0x76, 0x28, 0x80, 0x22, 0xe2, 0x63, 0x95, 0xd4, 0xf8, 0xb1, 0x2a, 0xd5, 0x78,
+	0xa6, 0xca, 0x35, 0x3e, 0x51, 0xbb, 0x35, 0x7e, 0xa2, 0xf6, 0xe6, 0xcf, 0xbf, 0x6d, 0x34, 0x72,
+	0xb9, 0xd1, 0xc8, 0xcf, 0x8d, 0x46, 0x2e, 0xb6, 0x5a, 0xe7, 0x72, 0xab, 0x75, 0xbe, 0x6f, 0xb5,
+	0xce, 0xdb, 0x63, 0xcf, 0xe7, 0x1f, 0x52, 0x5b, 0x77, 0xc2, 0xc0, 0x68, 0xf8, 0x6e, 0xd4, 0xbf,
+	0x9e, 0x4f, 0x3b, 0xc8, 0xb3, 0x08, 0x13, 0x5b, 0x11, 0x0b, 0x9d, 0xfc, 0x0a, 0x00, 0x00, 0xff,
+	0xff, 0x6d, 0x9d, 0x4a, 0xdb, 0xd4, 0x04, 0x00, 0x00,
 }
 
 func (m *Invite) Marshal() (dAtA []byte, err error) {
@@ -619,24 +493,31 @@ func (m *MsgCreateInvite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= n3
 		i = encodeVarintInvite(dAtA, i, uint64(n3))
 		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.PubKey) > 0 {
+		i -= len(m.PubKey)
+		copy(dAtA[i:], m.PubKey)
+		i = encodeVarintInvite(dAtA, i, uint64(len(m.PubKey)))
+		i--
 		dAtA[i] = 0x2a
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintInvite(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.IdentityType != 0 {
 		i = encodeVarintInvite(dAtA, i, uint64(m.IdentityType))
 		i--
-		dAtA[i] = 0x20
+		dAtA[i] = 0x18
 	}
 	if m.Level != 0 {
 		i = encodeVarintInvite(dAtA, i, uint64(m.Level))
 		i--
-		dAtA[i] = 0x18
-	}
-	if len(m.Uid) > 0 {
-		i -= len(m.Uid)
-		copy(dAtA[i:], m.Uid)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Uid)))
-		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
 	if len(m.Inviter) > 0 {
 		i -= len(m.Inviter)
@@ -676,19 +557,26 @@ func (m *MsgAcceptInvite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= n4
 		i = encodeVarintInvite(dAtA, i, uint64(n4))
 		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.PubKey) > 0 {
+		i -= len(m.PubKey)
+		copy(dAtA[i:], m.PubKey)
+		i = encodeVarintInvite(dAtA, i, uint64(len(m.PubKey)))
+		i--
 		dAtA[i] = 0x22
 	}
-	if len(m.Uid) > 0 {
-		i -= len(m.Uid)
-		copy(dAtA[i:], m.Uid)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Uid)))
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintInvite(dAtA, i, uint64(len(m.Address)))
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.Invitee) > 0 {
-		i -= len(m.Invitee)
-		copy(dAtA[i:], m.Invitee)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Invitee)))
+	if len(m.TmpAddress) > 0 {
+		i -= len(m.TmpAddress)
+		copy(dAtA[i:], m.TmpAddress)
+		i = encodeVarintInvite(dAtA, i, uint64(len(m.TmpAddress)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -696,108 +584,6 @@ func (m *MsgAcceptInvite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.InviteId)
 		copy(dAtA[i:], m.InviteId)
 		i = encodeVarintInvite(dAtA, i, uint64(len(m.InviteId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *InviteAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *InviteAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *InviteAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.InviteID) > 0 {
-		i -= len(m.InviteID)
-		copy(dAtA[i:], m.InviteID)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.InviteID)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.Mnemonic) > 0 {
-		i -= len(m.Mnemonic)
-		copy(dAtA[i:], m.Mnemonic)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Mnemonic)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.PrivKey) > 0 {
-		i -= len(m.PrivKey)
-		copy(dAtA[i:], m.PrivKey)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.PrivKey)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.PubKey) > 0 {
-		i -= len(m.PubKey)
-		copy(dAtA[i:], m.PubKey)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.PubKey)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Uid) > 0 {
-		i -= len(m.Uid)
-		copy(dAtA[i:], m.Uid)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Uid)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgCancelInvite) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgCancelInvite) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgCancelInvite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Sequence) > 0 {
-		i -= len(m.Sequence)
-		copy(dAtA[i:], m.Sequence)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Sequence)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Inviter) > 0 {
-		i -= len(m.Inviter)
-		copy(dAtA[i:], m.Inviter)
-		i = encodeVarintInvite(dAtA, i, uint64(len(m.Inviter)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -868,15 +654,19 @@ func (m *MsgCreateInvite) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovInvite(uint64(l))
 	}
-	l = len(m.Uid)
-	if l > 0 {
-		n += 1 + l + sovInvite(uint64(l))
-	}
 	if m.Level != 0 {
 		n += 1 + sovInvite(uint64(m.Level))
 	}
 	if m.IdentityType != 0 {
 		n += 1 + sovInvite(uint64(m.IdentityType))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovInvite(uint64(l))
+	}
+	l = len(m.PubKey)
+	if l > 0 {
+		n += 1 + l + sovInvite(uint64(l))
 	}
 	if m.CreationDt != nil {
 		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.CreationDt)
@@ -895,28 +685,7 @@ func (m *MsgAcceptInvite) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovInvite(uint64(l))
 	}
-	l = len(m.Invitee)
-	if l > 0 {
-		n += 1 + l + sovInvite(uint64(l))
-	}
-	l = len(m.Uid)
-	if l > 0 {
-		n += 1 + l + sovInvite(uint64(l))
-	}
-	if m.AcceptanceDt != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.AcceptanceDt)
-		n += 1 + l + sovInvite(uint64(l))
-	}
-	return n
-}
-
-func (m *InviteAccount) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Uid)
+	l = len(m.TmpAddress)
 	if l > 0 {
 		n += 1 + l + sovInvite(uint64(l))
 	}
@@ -928,33 +697,8 @@ func (m *InviteAccount) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovInvite(uint64(l))
 	}
-	l = len(m.PrivKey)
-	if l > 0 {
-		n += 1 + l + sovInvite(uint64(l))
-	}
-	l = len(m.Mnemonic)
-	if l > 0 {
-		n += 1 + l + sovInvite(uint64(l))
-	}
-	l = len(m.InviteID)
-	if l > 0 {
-		n += 1 + l + sovInvite(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgCancelInvite) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Inviter)
-	if l > 0 {
-		n += 1 + l + sovInvite(uint64(l))
-	}
-	l = len(m.Sequence)
-	if l > 0 {
+	if m.AcceptanceDt != nil {
+		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.AcceptanceDt)
 		n += 1 + l + sovInvite(uint64(l))
 	}
 	return n
@@ -1351,8 +1095,46 @@ func (m *MsgCreateInvite) Unmarshal(dAtA []byte) error {
 			m.Inviter = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
+			}
+			m.Level = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInvite
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Level |= IdentityLevel(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdentityType", wireType)
+			}
+			m.IdentityType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInvite
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IdentityType |= IdentityType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Uid", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1380,47 +1162,41 @@ func (m *MsgCreateInvite) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Uid = string(dAtA[iNdEx:postIndex])
+			m.Address = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
-			}
-			m.Level = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Level |= IdentityLevel(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IdentityType", wireType)
-			}
-			m.IdentityType = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.IdentityType |= IdentityType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInvite
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthInvite
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthInvite
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PubKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CreationDt", wireType)
 			}
@@ -1543,7 +1319,7 @@ func (m *MsgAcceptInvite) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Invitee", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TmpAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1571,11 +1347,11 @@ func (m *MsgAcceptInvite) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Invitee = string(dAtA[iNdEx:postIndex])
+			m.TmpAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Uid", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1603,9 +1379,41 @@ func (m *MsgAcceptInvite) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Uid = string(dAtA[iNdEx:postIndex])
+			m.Address = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInvite
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthInvite
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthInvite
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PubKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AcceptanceDt", wireType)
 			}
@@ -1640,368 +1448,6 @@ func (m *MsgAcceptInvite) Unmarshal(dAtA []byte) error {
 			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.AcceptanceDt, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipInvite(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *InviteAccount) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowInvite
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InviteAccount: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InviteAccount: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Uid", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Uid = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PubKey = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrivKey", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PrivKey = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mnemonic", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Mnemonic = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InviteID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.InviteID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipInvite(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgCancelInvite) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowInvite
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCancelInvite: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCancelInvite: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Inviter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Inviter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sequence", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInvite
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInvite
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInvite
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sequence = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

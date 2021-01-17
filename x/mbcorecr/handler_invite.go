@@ -1,8 +1,6 @@
 package mbcorecr
 
 import (
-	"encoding/base64"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/keeper"
@@ -16,21 +14,25 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 
 	// Check if invite is not activated yet
 	// Check if invitee is an owner
-	if invite.Key != msg.Invitee {
+	if invite.Invitee != "" {
 		return nil, sdkerrors.Wrap(types.ErrInvite, "Invite is already accepted")
 	}
+	if invite.Key != msg.TmpAddress {
+		return nil, sdkerrors.Wrap(types.ErrInvite, "Wrong invite key")
+	}
 	// Create a new account
-	newAcc, err := helper.NewInviteAccount(msg.Uid, ctx, k.AuthKeeper)
+	newAcc, err := types.NewInviteAccount(
+		msg.Address, msg.PubKey, &ctx, k.AuthKeeper,
+	)
 	// Set new account as invitee and remove key
 	invite.Invitee = newAcc.Address
-	invite.Key = ""
 	invite.AcceptanceDt = msg.AcceptanceDt
 
 	// Add coins to the account
 	coinsPack := types.IndentityCoinPacks[invite.Level]
 	if len(coinsPack) > 0 {
 		if err := newAcc.SetBalances(
-			ctx, k.BankKeeper,
+			k.BankKeeper,
 			coinsPack,
 		); err != nil {
 			return nil, err
@@ -43,7 +45,7 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 	}
 
 	invite.IdentityId = k.CreateIdentity(ctx, types.Identity{
-		AccountID:    newAcc.Address,
+		Address:      newAcc.Address,
 		IdentityType: invite.IdentityType,
 		Details:      datails,
 		InvitationId: invite.Id,
@@ -53,25 +55,17 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 	// Update invite
 	k.UpdateInvite(ctx, invite)
 
-	// Build response
-	newAcc.InviteID = invite.IdentityId
-
-	inviteHelper, err := helper.NewInviteHelper(
-		msg.Invitee, &ctx,
-		&k.BankKeeper, &k.AuthKeeper,
-	)
+	tmpAddr, err := sdk.AccAddressFromBech32(invite.Key)
 	if err != nil {
-		return nil, err
-	}
-
-	ecnryptedPayload, err := inviteHelper.EncryptData(newAcc)
-	if err != nil {
-		return nil, err
+		return nil, sdkerrors.Wrap(types.ErrInvite, "Incorrect invite key")
 	}
 
 	// Delete temporary account
-	inviteHelper.DeleteAccount()
+	k.AuthKeeper.RemoveAccount(
+		ctx, k.AuthKeeper.GetAccount(ctx, tmpAddr),
+	)
 
+	// Build response
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventCreateIdentity,
@@ -80,8 +74,12 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 				types.IdentityType_name[int32(invite.IdentityType)],
 			),
 			sdk.NewAttribute(
-				types.EventAttrIdentityPayload,
-				ecnryptedPayload,
+				types.EventAttrIdentityAddress,
+				invite.Invitee,
+			),
+			sdk.NewAttribute(
+				types.EventAttrIentityId,
+				invite.IdentityId,
 			),
 		),
 	)
@@ -101,7 +99,9 @@ func handleMsgCreateInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 	}
 
 	// Create a temporary account
-	tempAcc, err := helper.NewInviteAccount(msg.Uid, ctx, k.AuthKeeper)
+	tempAcc, err := types.NewInviteAccount(
+		msg.Address, msg.PubKey, &ctx, k.AuthKeeper,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -117,27 +117,13 @@ func handleMsgCreateInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 		Invitee:      "",
 		Level:        msg.Level,
 		IdentityType: msg.IdentityType,
-		Key:          tempAcc.GetAddress(),
+		Key:          tempAcc.Address,
 		CreationDt:   msg.CreationDt,
 	}
 
 	k.CreateInvite(ctx, invite)
 
 	// Provide response
-	inviteAcc := types.InviteAccount{
-		Uid:      tempAcc.Uid,
-		Address:  tempAcc.Address,
-		Mnemonic: base64.URLEncoding.EncodeToString([]byte(tempAcc.Mnemonic)),
-		PubKey:   tempAcc.PubKey,
-		PrivKey:  tempAcc.PrivKey,
-		InviteID: invite.Id,
-	}
-
-	ecnryptedPayload, err := inviteHelper.EncryptData(inviteAcc)
-	if err != nil {
-		return nil, err
-	}
-
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventCreateInvite,
@@ -146,8 +132,12 @@ func handleMsgCreateInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 				types.IdentityType_name[int32(msg.IdentityType)],
 			),
 			sdk.NewAttribute(
-				types.EventAttrIdentityPayload,
-				ecnryptedPayload,
+				types.EventAttrTmpAddress,
+				tempAcc.Address,
+			),
+			sdk.NewAttribute(
+				types.EventAttrInviteId,
+				invite.Id,
 			),
 		),
 	)
