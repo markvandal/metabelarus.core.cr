@@ -1,5 +1,7 @@
 package types
 
+var _ IdentityI = &Identity{}
+
 type IdentityI interface {
 	ExportId() string
 	ExportAddress() string

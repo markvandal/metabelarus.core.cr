@@ -8,3 +8,7 @@ const (
 const (
 	EventAttrAuthId = "auth_id"
 )
+
+const (
+	DefaultAuthLifeTime = "12h"
+)

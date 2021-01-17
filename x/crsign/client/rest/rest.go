@@ -16,16 +16,6 @@ func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 2
 	registerQueryRoutes(clientCtx, r)
 	registerTxHandlers(clientCtx, r)
-
-	registerQueryRoutes(clientCtx, r)
-	registerTxHandlers(clientCtx, r)
-
-	registerQueryRoutes(clientCtx, r)
-	registerTxHandlers(clientCtx, r)
-
-	registerQueryRoutes(clientCtx, r)
-	registerTxHandlers(clientCtx, r)
-
 }
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
@@ -43,7 +33,8 @@ func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 4
-	r.HandleFunc("/crsign/auths", requestAuthHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/crsign/auth", requestAuthHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/crsign/auth/confirm", confirmAuthHandler(clientCtx)).Methods("POST")
 
 	r.HandleFunc("/crsign/id2signs", createId2SignHandler(clientCtx)).Methods("POST")
 	r.HandleFunc("/crsign/id2signs/{id}", updateId2SignHandler(clientCtx)).Methods("POST")

@@ -22,21 +22,21 @@ func KeyPrefix(p string) []byte {
 }
 
 const (
-	SignatureKey= "Signature-value-"
-	SignatureCountKey= "Signature-count-"
+	SignatureKey= "signature-value-"
+	SignatureCountKey= "signature-count-"
 )
 
 const (
-	Id2SignKey= "Id2Sign-value-"
-	Id2SignCountKey= "Id2Sign-count-"
+	Id2SignKey= "id2sign-value-"
+	Id2SignCountKey= "id2sign-count-"
 )
 
 const (
-	AuthKey= "Auth-value-"
-	AuthCountKey= "Auth-count-"
+	AuthKey= "auth-value-"
+	AuthCountKey= "auth-count-"
 )
 
 const (
-	Id2AuthKey= "Id2Auth-value-"
-	Id2AuthCountKey= "Id2Auth-count-"
+	Id2AuthKey= "id2auth-value-"
+	Id2AuthCountKey= "id2auth-count-"
 )

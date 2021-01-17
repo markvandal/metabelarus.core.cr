@@ -8,7 +8,8 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
-	cdc.RegisterConcrete(&MsgRequestAuth{}, "crsign/CreateAuth", nil)
+	cdc.RegisterConcrete(&MsgRequestAuth{}, "crsign/RequestAuth", nil)
+	cdc.RegisterConcrete(&MsgConfirmAuth{}, "crsign/ConfirmAuth", nil)
 
 	cdc.RegisterConcrete(&MsgCreateId2Sign{}, "crsign/CreateId2Sign", nil)
 	cdc.RegisterConcrete(&MsgUpdateId2Sign{}, "crsign/UpdateId2Sign", nil)
@@ -24,6 +25,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	// this line is used by starport scaffolding # 3
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgRequestAuth{},
+		&MsgConfirmAuth{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreateId2Sign{},

@@ -16,10 +16,6 @@ func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 2
 	registerQueryRoutes(clientCtx, r)
 	registerTxHandlers(clientCtx, r)
-
-	registerQueryRoutes(clientCtx, r)
-	registerTxHandlers(clientCtx, r)
-
 }
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
@@ -34,7 +30,8 @@ func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 4
-	r.HandleFunc("/mbcorecr/invites", createInviteHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/mbcorecr/invite", createInviteHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/mbcorecr/invite/accept", acceptInviteHandler(clientCtx)).Methods("POST")
 
 	r.HandleFunc("/mbcorecr/identities/{id}", updateIdentityHandler(clientCtx)).Methods("POST")
 

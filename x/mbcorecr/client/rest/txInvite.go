@@ -86,3 +86,48 @@ func createInviteHandler(clientCtx client.Context) http.HandlerFunc {
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}
 }
+
+type acceptInviteRequest struct {
+	BaseReq rest.BaseReq `json:"base_req"`
+	Invite  string       `json:"invite"`
+	Address string       `json:"address"`
+	PubKey  string       `json:"pubkey"`
+}
+
+func acceptInviteHandler(clientCtx client.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req acceptInviteRequest
+		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			return
+		}
+
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		_, err := sdk.AccAddressFromBech32(req.Address)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		_, err = sdk.GetPubKeyFromBech32(
+			sdk.Bech32PubKeyTypeAccPub, req.PubKey,
+		)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		msg := types.NewMsgAcceptInvite(
+			req.Invite,
+			clientCtx.GetFromAddress().String(),
+			req.Address,
+			req.PubKey,
+		)
+
+		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
+	}
+}

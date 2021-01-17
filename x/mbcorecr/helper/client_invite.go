@@ -64,10 +64,7 @@ func (this *ClientInviteHelper) GetPubKeyString() string {
 func (this *ClientInviteHelper) getMnemonics() (string, error) {
 	if this.Mnemonics == "" {
 		this.Uid = uuid.New().String()
-		kring, err := getTmpKeyring()
-		if err != nil {
-			return "", err
-		}
+		kring := keyring.NewInMemory()
 
 		_, mnemonics, err := kring.NewMnemonic(
 			uuid.New().String(),
@@ -83,18 +80,4 @@ func (this *ClientInviteHelper) getMnemonics() (string, error) {
 	}
 
 	return this.Mnemonics, nil
-}
-
-func getTmpKeyring() (keyring.Keyring, error) {
-	kring, err := keyring.New(
-		sdk.KeyringServiceName(),
-		keyring.BackendMemory,
-		"",
-		nil,
-	)
-	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrKeyring, err.Error())
-	}
-
-	return kring, nil
 }

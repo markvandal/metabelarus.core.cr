@@ -49,7 +49,6 @@ func handleMsgRequestAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgReques
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }
 
-// @TODO register this handler everywhere
 func handleMsgConfirmAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgConfirmAuth) (*sdk.Result, error) {
 	if !k.IdKeeper.HasIdentity(ctx, msg.Identity) {
 		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No user identity")
@@ -68,7 +67,7 @@ func handleMsgConfirmAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgConfir
 
 	auth.Status = types.AuthStatus_AUTH_SIGNED
 
-	duration, err := time.ParseDuration("12h") // @TODO should be variable and limited
+	duration, err := time.ParseDuration(types.DefaultAuthLifeTime) // @TODO should be variable and limited
 	if err != nil {
 		return nil, sdkerrors.Wrap(types.ErrAuthDuration, "Incorrect duration format for auth")
 	}
