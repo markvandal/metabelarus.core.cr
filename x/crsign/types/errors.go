@@ -8,5 +8,7 @@ import (
 
 // x/crsign module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrSample       = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrNoIdentity   = sdkerrors.Register(ModuleName, 1200, "no identity")
+	ErrAuthDuration = sdkerrors.Register(ModuleName, 1300, "bad auth duration")
 )

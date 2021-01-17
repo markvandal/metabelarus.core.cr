@@ -13,37 +13,24 @@ enum AuthStatus {
 }
 
 message Auth {
-  string id = 1;
+  string service = 1; 
   string identity = 2; 
-  string service = 3; 
-  string key = 4; 
-  AuthStatus status = 5; 
-  google.protobuf.Timestamp creationDt = 6 [(gogoproto.stdtime) = true];
-  google.protobuf.Timestamp availabilityDt = 7 [(gogoproto.stdtime) = true];
+  string key = 3; 
+  AuthStatus status = 4; 
+  google.protobuf.Timestamp creationDt = 5 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp availabilityDt = 6 [(gogoproto.stdtime) = true];
 }
 
-message MsgCreateAuth {
+message MsgRequestAuth {
   string creator = 1;
-  string identity = 2; 
-  string service = 3; 
-  string key = 4; 
-  string status = 5; 
-  string creationDt = 6; 
-  string availabilityDt = 7; 
+  string service = 2;
+  string identity = 3;
+  string key = 4;
+  google.protobuf.Timestamp creationDt = 5 [(gogoproto.stdtime) = true];
 }
 
-message MsgUpdateAuth {
+message MsgConfirmAuth {
   string creator = 1;
-  string id = 2;
-  string identity = 3; 
-  string service = 4; 
-  string key = 5; 
-  string status = 6; 
-  string creationDt = 7; 
-  string availabilityDt = 8; 
-}
-
-message MsgDeleteAuth {
-  string creator = 1;
-  string id = 2;
+  string service = 2;
+  string identity = 3;
 }

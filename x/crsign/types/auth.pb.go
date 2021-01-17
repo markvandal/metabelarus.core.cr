@@ -56,13 +56,12 @@ func (AuthStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type Auth struct {
-	Id             string     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Service        string     `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	Identity       string     `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"`
-	Service        string     `protobuf:"bytes,3,opt,name=service,proto3" json:"service,omitempty"`
-	Key            string     `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
-	Status         AuthStatus `protobuf:"varint,5,opt,name=status,proto3,enum=metabelarus.mbcorecr.crsign.AuthStatus" json:"status,omitempty"`
-	CreationDt     *time.Time `protobuf:"bytes,6,opt,name=creationDt,proto3,stdtime" json:"creationDt,omitempty"`
-	AvailabilityDt *time.Time `protobuf:"bytes,7,opt,name=availabilityDt,proto3,stdtime" json:"availabilityDt,omitempty"`
+	Key            string     `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	Status         AuthStatus `protobuf:"varint,4,opt,name=status,proto3,enum=metabelarus.mbcorecr.crsign.AuthStatus" json:"status,omitempty"`
+	CreationDt     *time.Time `protobuf:"bytes,5,opt,name=creationDt,proto3,stdtime" json:"creationDt,omitempty"`
+	AvailabilityDt *time.Time `protobuf:"bytes,6,opt,name=availabilityDt,proto3,stdtime" json:"availabilityDt,omitempty"`
 }
 
 func (m *Auth) Reset()         { *m = Auth{} }
@@ -98,9 +97,9 @@ func (m *Auth) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Auth proto.InternalMessageInfo
 
-func (m *Auth) GetId() string {
+func (m *Auth) GetService() string {
 	if m != nil {
-		return m.Id
+		return m.Service
 	}
 	return ""
 }
@@ -108,13 +107,6 @@ func (m *Auth) GetId() string {
 func (m *Auth) GetIdentity() string {
 	if m != nil {
 		return m.Identity
-	}
-	return ""
-}
-
-func (m *Auth) GetService() string {
-	if m != nil {
-		return m.Service
 	}
 	return ""
 }
@@ -147,28 +139,26 @@ func (m *Auth) GetAvailabilityDt() *time.Time {
 	return nil
 }
 
-type MsgCreateAuth struct {
-	Creator        string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Identity       string `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"`
-	Service        string `protobuf:"bytes,3,opt,name=service,proto3" json:"service,omitempty"`
-	Key            string `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
-	Status         string `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
-	CreationDt     string `protobuf:"bytes,6,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
-	AvailabilityDt string `protobuf:"bytes,7,opt,name=availabilityDt,proto3" json:"availabilityDt,omitempty"`
+type MsgRequestAuth struct {
+	Creator    string     `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Service    string     `protobuf:"bytes,2,opt,name=service,proto3" json:"service,omitempty"`
+	Identity   string     `protobuf:"bytes,3,opt,name=identity,proto3" json:"identity,omitempty"`
+	Key        string     `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
+	CreationDt *time.Time `protobuf:"bytes,5,opt,name=creationDt,proto3,stdtime" json:"creationDt,omitempty"`
 }
 
-func (m *MsgCreateAuth) Reset()         { *m = MsgCreateAuth{} }
-func (m *MsgCreateAuth) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateAuth) ProtoMessage()    {}
-func (*MsgCreateAuth) Descriptor() ([]byte, []int) {
+func (m *MsgRequestAuth) Reset()         { *m = MsgRequestAuth{} }
+func (m *MsgRequestAuth) String() string { return proto.CompactTextString(m) }
+func (*MsgRequestAuth) ProtoMessage()    {}
+func (*MsgRequestAuth) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1c662e8d2f1cb3ea, []int{1}
 }
-func (m *MsgCreateAuth) XXX_Unmarshal(b []byte) error {
+func (m *MsgRequestAuth) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgCreateAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRequestAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgCreateAuth.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRequestAuth.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -178,90 +168,71 @@ func (m *MsgCreateAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *MsgCreateAuth) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateAuth.Merge(m, src)
+func (m *MsgRequestAuth) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRequestAuth.Merge(m, src)
 }
-func (m *MsgCreateAuth) XXX_Size() int {
+func (m *MsgRequestAuth) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgCreateAuth) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateAuth.DiscardUnknown(m)
+func (m *MsgRequestAuth) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRequestAuth.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgCreateAuth proto.InternalMessageInfo
+var xxx_messageInfo_MsgRequestAuth proto.InternalMessageInfo
 
-func (m *MsgCreateAuth) GetCreator() string {
+func (m *MsgRequestAuth) GetCreator() string {
 	if m != nil {
 		return m.Creator
 	}
 	return ""
 }
 
-func (m *MsgCreateAuth) GetIdentity() string {
-	if m != nil {
-		return m.Identity
-	}
-	return ""
-}
-
-func (m *MsgCreateAuth) GetService() string {
+func (m *MsgRequestAuth) GetService() string {
 	if m != nil {
 		return m.Service
 	}
 	return ""
 }
 
-func (m *MsgCreateAuth) GetKey() string {
+func (m *MsgRequestAuth) GetIdentity() string {
+	if m != nil {
+		return m.Identity
+	}
+	return ""
+}
+
+func (m *MsgRequestAuth) GetKey() string {
 	if m != nil {
 		return m.Key
 	}
 	return ""
 }
 
-func (m *MsgCreateAuth) GetStatus() string {
-	if m != nil {
-		return m.Status
-	}
-	return ""
-}
-
-func (m *MsgCreateAuth) GetCreationDt() string {
+func (m *MsgRequestAuth) GetCreationDt() *time.Time {
 	if m != nil {
 		return m.CreationDt
 	}
-	return ""
+	return nil
 }
 
-func (m *MsgCreateAuth) GetAvailabilityDt() string {
-	if m != nil {
-		return m.AvailabilityDt
-	}
-	return ""
+type MsgConfirmAuth struct {
+	Creator  string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Service  string `protobuf:"bytes,2,opt,name=service,proto3" json:"service,omitempty"`
+	Identity string `protobuf:"bytes,3,opt,name=identity,proto3" json:"identity,omitempty"`
 }
 
-type MsgUpdateAuth struct {
-	Creator        string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Id             string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Identity       string `protobuf:"bytes,3,opt,name=identity,proto3" json:"identity,omitempty"`
-	Service        string `protobuf:"bytes,4,opt,name=service,proto3" json:"service,omitempty"`
-	Key            string `protobuf:"bytes,5,opt,name=key,proto3" json:"key,omitempty"`
-	Status         string `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
-	CreationDt     string `protobuf:"bytes,7,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
-	AvailabilityDt string `protobuf:"bytes,8,opt,name=availabilityDt,proto3" json:"availabilityDt,omitempty"`
-}
-
-func (m *MsgUpdateAuth) Reset()         { *m = MsgUpdateAuth{} }
-func (m *MsgUpdateAuth) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateAuth) ProtoMessage()    {}
-func (*MsgUpdateAuth) Descriptor() ([]byte, []int) {
+func (m *MsgConfirmAuth) Reset()         { *m = MsgConfirmAuth{} }
+func (m *MsgConfirmAuth) String() string { return proto.CompactTextString(m) }
+func (*MsgConfirmAuth) ProtoMessage()    {}
+func (*MsgConfirmAuth) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1c662e8d2f1cb3ea, []int{2}
 }
-func (m *MsgUpdateAuth) XXX_Unmarshal(b []byte) error {
+func (m *MsgConfirmAuth) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgConfirmAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateAuth.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgConfirmAuth.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -271,122 +242,35 @@ func (m *MsgUpdateAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateAuth) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateAuth.Merge(m, src)
+func (m *MsgConfirmAuth) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgConfirmAuth.Merge(m, src)
 }
-func (m *MsgUpdateAuth) XXX_Size() int {
+func (m *MsgConfirmAuth) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateAuth) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateAuth.DiscardUnknown(m)
+func (m *MsgConfirmAuth) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgConfirmAuth.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateAuth proto.InternalMessageInfo
+var xxx_messageInfo_MsgConfirmAuth proto.InternalMessageInfo
 
-func (m *MsgUpdateAuth) GetCreator() string {
+func (m *MsgConfirmAuth) GetCreator() string {
 	if m != nil {
 		return m.Creator
 	}
 	return ""
 }
 
-func (m *MsgUpdateAuth) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
-}
-
-func (m *MsgUpdateAuth) GetIdentity() string {
-	if m != nil {
-		return m.Identity
-	}
-	return ""
-}
-
-func (m *MsgUpdateAuth) GetService() string {
+func (m *MsgConfirmAuth) GetService() string {
 	if m != nil {
 		return m.Service
 	}
 	return ""
 }
 
-func (m *MsgUpdateAuth) GetKey() string {
+func (m *MsgConfirmAuth) GetIdentity() string {
 	if m != nil {
-		return m.Key
-	}
-	return ""
-}
-
-func (m *MsgUpdateAuth) GetStatus() string {
-	if m != nil {
-		return m.Status
-	}
-	return ""
-}
-
-func (m *MsgUpdateAuth) GetCreationDt() string {
-	if m != nil {
-		return m.CreationDt
-	}
-	return ""
-}
-
-func (m *MsgUpdateAuth) GetAvailabilityDt() string {
-	if m != nil {
-		return m.AvailabilityDt
-	}
-	return ""
-}
-
-type MsgDeleteAuth struct {
-	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Id      string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (m *MsgDeleteAuth) Reset()         { *m = MsgDeleteAuth{} }
-func (m *MsgDeleteAuth) String() string { return proto.CompactTextString(m) }
-func (*MsgDeleteAuth) ProtoMessage()    {}
-func (*MsgDeleteAuth) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1c662e8d2f1cb3ea, []int{3}
-}
-func (m *MsgDeleteAuth) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgDeleteAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgDeleteAuth.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgDeleteAuth) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDeleteAuth.Merge(m, src)
-}
-func (m *MsgDeleteAuth) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgDeleteAuth) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDeleteAuth.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgDeleteAuth proto.InternalMessageInfo
-
-func (m *MsgDeleteAuth) GetCreator() string {
-	if m != nil {
-		return m.Creator
-	}
-	return ""
-}
-
-func (m *MsgDeleteAuth) GetId() string {
-	if m != nil {
-		return m.Id
+		return m.Identity
 	}
 	return ""
 }
@@ -394,45 +278,41 @@ func (m *MsgDeleteAuth) GetId() string {
 func init() {
 	proto.RegisterEnum("metabelarus.mbcorecr.crsign.AuthStatus", AuthStatus_name, AuthStatus_value)
 	proto.RegisterType((*Auth)(nil), "metabelarus.mbcorecr.crsign.Auth")
-	proto.RegisterType((*MsgCreateAuth)(nil), "metabelarus.mbcorecr.crsign.MsgCreateAuth")
-	proto.RegisterType((*MsgUpdateAuth)(nil), "metabelarus.mbcorecr.crsign.MsgUpdateAuth")
-	proto.RegisterType((*MsgDeleteAuth)(nil), "metabelarus.mbcorecr.crsign.MsgDeleteAuth")
+	proto.RegisterType((*MsgRequestAuth)(nil), "metabelarus.mbcorecr.crsign.MsgRequestAuth")
+	proto.RegisterType((*MsgConfirmAuth)(nil), "metabelarus.mbcorecr.crsign.MsgConfirmAuth")
 }
 
 func init() { proto.RegisterFile("crsign/auth.proto", fileDescriptor_1c662e8d2f1cb3ea) }
 
 var fileDescriptor_1c662e8d2f1cb3ea = []byte{
-	// 468 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x94, 0x41, 0x6f, 0xd3, 0x30,
-	0x14, 0xc7, 0xeb, 0xb4, 0x6b, 0x17, 0x4f, 0x2b, 0xc5, 0x42, 0xc8, 0x2a, 0x52, 0x56, 0xed, 0x00,
-	0x15, 0x07, 0x47, 0x1a, 0x27, 0x0e, 0x08, 0xb6, 0xa5, 0xa2, 0x48, 0xb0, 0xa1, 0x76, 0xbb, 0x70,
-	0x41, 0x4e, 0x6a, 0x52, 0x8b, 0xa4, 0xae, 0xe2, 0x97, 0x89, 0x7e, 0x8b, 0x7d, 0x0f, 0xbe, 0x08,
-	0xc7, 0x71, 0xe3, 0x06, 0xb4, 0x5f, 0x04, 0xc5, 0x69, 0xca, 0xc6, 0xc2, 0x28, 0xd2, 0x6e, 0xfe,
-	0xbf, 0xbc, 0xe7, 0xe4, 0xf7, 0xd7, 0xff, 0x05, 0xdf, 0x0d, 0x12, 0x2d, 0xc3, 0x89, 0xcb, 0x53,
-	0x18, 0xb3, 0x69, 0xa2, 0x40, 0x91, 0x07, 0xb1, 0x00, 0xee, 0x8b, 0x88, 0x27, 0xa9, 0x66, 0xb1,
-	0x1f, 0xa8, 0x44, 0x04, 0x09, 0xcb, 0xfb, 0xda, 0xf7, 0x42, 0x15, 0x2a, 0xd3, 0xe7, 0x66, 0xa7,
-	0x7c, 0xa4, 0xbd, 0x13, 0x2a, 0x15, 0x46, 0xc2, 0x35, 0xca, 0x4f, 0x3f, 0xb8, 0x20, 0x63, 0xa1,
-	0x81, 0xc7, 0xd3, 0xbc, 0x61, 0xf7, 0xb3, 0x85, 0x6b, 0xfb, 0x29, 0x8c, 0x49, 0x13, 0x5b, 0x72,
-	0x44, 0x51, 0x07, 0x75, 0xed, 0x81, 0x25, 0x47, 0xa4, 0x8d, 0x37, 0xe5, 0x48, 0x4c, 0x40, 0xc2,
-	0x8c, 0x5a, 0xa6, 0xba, 0xd2, 0x84, 0xe2, 0x86, 0x16, 0xc9, 0x99, 0x0c, 0x04, 0xad, 0x9a, 0x47,
-	0x85, 0x24, 0x2d, 0x5c, 0xfd, 0x28, 0x66, 0xb4, 0x66, 0xaa, 0xd9, 0x91, 0x3c, 0xc7, 0x75, 0x0d,
-	0x1c, 0x52, 0x4d, 0x37, 0x3a, 0xa8, 0xdb, 0xdc, 0x7b, 0xc4, 0x6e, 0xa0, 0x60, 0xd9, 0xa7, 0x0c,
-	0x4d, 0xfb, 0x60, 0x39, 0x46, 0x5e, 0x60, 0x1c, 0x24, 0x82, 0x83, 0x54, 0x13, 0x0f, 0x68, 0xbd,
-	0x83, 0xba, 0x5b, 0x7b, 0x6d, 0x96, 0x73, 0xb1, 0x82, 0x8b, 0x9d, 0x14, 0x5c, 0x07, 0xb5, 0xf3,
-	0xef, 0x3b, 0x68, 0x70, 0x69, 0x86, 0xf4, 0x71, 0x93, 0x9f, 0x71, 0x19, 0x71, 0x5f, 0x46, 0x12,
-	0x66, 0x1e, 0xd0, 0xc6, 0x9a, 0xb7, 0xfc, 0x31, 0xb7, 0xfb, 0x15, 0xe1, 0xed, 0x37, 0x3a, 0x3c,
-	0xcc, 0xee, 0x16, 0xc6, 0x36, 0x8a, 0x1b, 0xe6, 0x4d, 0x2a, 0x59, 0x7a, 0x57, 0xc8, 0x5b, 0x33,
-	0xf0, 0xfe, 0x15, 0x03, 0xed, 0x95, 0x2f, 0xce, 0x35, 0x5f, 0xec, 0x2b, 0xd4, 0x0f, 0x4b, 0xa9,
-	0xed, 0x6b, 0x4c, 0x3f, 0x73, 0xa6, 0xd3, 0xe9, 0xe8, 0xdf, 0x4c, 0x79, 0x48, 0xac, 0xd2, 0x90,
-	0x54, 0xff, 0xce, 0x58, 0x2b, 0x65, 0xdc, 0x28, 0x63, 0xac, 0xdf, 0xc0, 0xd8, 0x58, 0x83, 0x71,
-	0xb3, 0x94, 0xf1, 0xa9, 0x41, 0xf4, 0x44, 0x24, 0xfe, 0x17, 0xf1, 0xf1, 0x33, 0x8c, 0x7f, 0x87,
-	0x92, 0x6c, 0x63, 0x7b, 0xff, 0xf4, 0xa4, 0xff, 0xfe, 0xf8, 0x6d, 0xef, 0xa8, 0x55, 0x21, 0x77,
-	0xf0, 0x96, 0x91, 0xc3, 0x57, 0x2f, 0x8f, 0x7a, 0x5e, 0x0b, 0xad, 0x0a, 0x87, 0xaf, 0x8f, 0x87,
-	0x3d, 0xaf, 0x65, 0x1d, 0xf4, 0xbf, 0xcc, 0x1d, 0x74, 0x31, 0x77, 0xd0, 0x8f, 0xb9, 0x83, 0xce,
-	0x17, 0x4e, 0xe5, 0x62, 0xe1, 0x54, 0xbe, 0x2d, 0x9c, 0xca, 0x3b, 0x16, 0x4a, 0x18, 0xa7, 0x3e,
-	0x0b, 0x54, 0xec, 0x5e, 0x5a, 0x09, 0xb7, 0x58, 0x09, 0xf7, 0x93, 0xbb, 0xfc, 0x05, 0xc0, 0x6c,
-	0x2a, 0xb4, 0x5f, 0x37, 0x29, 0x7d, 0xf2, 0x2b, 0x00, 0x00, 0xff, 0xff, 0xab, 0x01, 0x13, 0x3d,
-	0x19, 0x04, 0x00, 0x00,
+	// 419 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x93, 0x41, 0x6f, 0xd3, 0x30,
+	0x14, 0xc7, 0xeb, 0x34, 0x14, 0xe6, 0x89, 0x12, 0x2c, 0x0e, 0x51, 0x90, 0xb2, 0xaa, 0x17, 0x2a,
+	0x0e, 0xb6, 0x34, 0xce, 0x08, 0xb6, 0xa5, 0xa2, 0x48, 0xb0, 0xa1, 0x74, 0x5c, 0xb8, 0x80, 0x13,
+	0xbc, 0xd4, 0x22, 0x89, 0x8b, 0xfd, 0x32, 0x91, 0x6f, 0xb1, 0x3b, 0x5f, 0x83, 0x0f, 0xc1, 0x71,
+	0x47, 0x6e, 0xa0, 0xf6, 0x8b, 0xa0, 0x3a, 0xcd, 0x5a, 0x21, 0x40, 0x48, 0x68, 0x37, 0xff, 0x9d,
+	0xff, 0x3f, 0xef, 0xbd, 0x5f, 0x5e, 0xf0, 0xdd, 0x54, 0x1b, 0x99, 0x95, 0x8c, 0x57, 0x30, 0xa3,
+	0x73, 0xad, 0x40, 0x91, 0xfb, 0x85, 0x00, 0x9e, 0x88, 0x9c, 0xeb, 0xca, 0xd0, 0x22, 0x49, 0x95,
+	0x16, 0xa9, 0xa6, 0x8d, 0x2f, 0xb8, 0x97, 0xa9, 0x4c, 0x59, 0x1f, 0x5b, 0x9d, 0x9a, 0x48, 0xb0,
+	0x97, 0x29, 0x95, 0xe5, 0x82, 0x59, 0x95, 0x54, 0x67, 0x0c, 0x64, 0x21, 0x0c, 0xf0, 0x62, 0xde,
+	0x18, 0x86, 0x9f, 0x1d, 0xec, 0x1e, 0x54, 0x30, 0x23, 0x3e, 0xbe, 0x69, 0x84, 0x3e, 0x97, 0xa9,
+	0xf0, 0xd1, 0x00, 0x8d, 0x76, 0xe2, 0x56, 0x92, 0x00, 0xdf, 0x92, 0xef, 0x45, 0x09, 0x12, 0x6a,
+	0xdf, 0xb1, 0x8f, 0xae, 0x34, 0xf1, 0x70, 0xf7, 0x83, 0xa8, 0xfd, 0xae, 0xbd, 0x5e, 0x1d, 0xc9,
+	0x13, 0xdc, 0x33, 0xc0, 0xa1, 0x32, 0xbe, 0x3b, 0x40, 0xa3, 0xfe, 0xfe, 0x03, 0xfa, 0x97, 0xae,
+	0xe9, 0xaa, 0xf4, 0xd4, 0xda, 0xe3, 0x75, 0x8c, 0x3c, 0xc5, 0x38, 0xd5, 0x82, 0x83, 0x54, 0x65,
+	0x04, 0xfe, 0x8d, 0x01, 0x1a, 0xed, 0xee, 0x07, 0xb4, 0x99, 0x83, 0xb6, 0x73, 0xd0, 0xd3, 0x76,
+	0x8e, 0x43, 0xf7, 0xe2, 0xfb, 0x1e, 0x8a, 0xb7, 0x32, 0x64, 0x82, 0xfb, 0xfc, 0x9c, 0xcb, 0x9c,
+	0x27, 0x32, 0x97, 0x50, 0x47, 0xe0, 0xf7, 0xfe, 0xf1, 0x2d, 0xbf, 0xe4, 0x86, 0x5f, 0x10, 0xee,
+	0xbf, 0x34, 0x59, 0x2c, 0x3e, 0x56, 0xc2, 0x40, 0xcb, 0xc9, 0x96, 0x52, 0xba, 0xe5, 0xb4, 0x96,
+	0xdb, 0x04, 0x9d, 0x3f, 0x13, 0xec, 0xfe, 0x9e, 0xa0, 0xbb, 0x21, 0xf8, 0xdf, 0x00, 0x86, 0xef,
+	0x6c, 0xd7, 0x47, 0xaa, 0x3c, 0x93, 0xba, 0xb8, 0x8e, 0xae, 0x1f, 0x3e, 0xc6, 0x78, 0xf3, 0xe9,
+	0xc8, 0x6d, 0xbc, 0x73, 0xf0, 0xfa, 0x74, 0xf2, 0xf6, 0xe4, 0xd5, 0xf8, 0xd8, 0xeb, 0x90, 0x3b,
+	0x78, 0xd7, 0xca, 0xe9, 0xf3, 0x67, 0xc7, 0xe3, 0xc8, 0x43, 0x57, 0x17, 0x47, 0x2f, 0x4e, 0xa6,
+	0xe3, 0xc8, 0x73, 0x0e, 0x27, 0x5f, 0x17, 0x21, 0xba, 0x5c, 0x84, 0xe8, 0xc7, 0x22, 0x44, 0x17,
+	0xcb, 0xb0, 0x73, 0xb9, 0x0c, 0x3b, 0xdf, 0x96, 0x61, 0xe7, 0x0d, 0xcd, 0x24, 0xcc, 0xaa, 0x84,
+	0xa6, 0xaa, 0x60, 0x5b, 0x8b, 0xc3, 0xda, 0xc5, 0x61, 0x9f, 0xd8, 0xfa, 0xc7, 0x80, 0x7a, 0x2e,
+	0x4c, 0xd2, 0xb3, 0x40, 0x1e, 0xfd, 0x0c, 0x00, 0x00, 0xff, 0xff, 0x9e, 0x1a, 0x46, 0xe0, 0x2f,
+	0x03, 0x00, 0x00,
 }
 
 func (m *Auth) Marshal() (dAtA []byte, err error) {
@@ -463,7 +343,7 @@ func (m *Auth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= n1
 		i = encodeVarintAuth(dAtA, i, uint64(n1))
 		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x32
 	}
 	if m.CreationDt != nil {
 		n2, err2 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.CreationDt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.CreationDt):])
@@ -473,24 +353,17 @@ func (m *Auth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= n2
 		i = encodeVarintAuth(dAtA, i, uint64(n2))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x2a
 	}
 	if m.Status != 0 {
 		i = encodeVarintAuth(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x28
+		dAtA[i] = 0x20
 	}
 	if len(m.Key) > 0 {
 		i -= len(m.Key)
 		copy(dAtA[i:], m.Key)
 		i = encodeVarintAuth(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Service) > 0 {
-		i -= len(m.Service)
-		copy(dAtA[i:], m.Service)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Service)))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -501,17 +374,17 @@ func (m *Auth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Id)))
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintAuth(dAtA, i, uint64(len(m.Service)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgCreateAuth) Marshal() (dAtA []byte, err error) {
+func (m *MsgRequestAuth) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -521,34 +394,23 @@ func (m *MsgCreateAuth) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgCreateAuth) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRequestAuth) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgCreateAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRequestAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.AvailabilityDt) > 0 {
-		i -= len(m.AvailabilityDt)
-		copy(dAtA[i:], m.AvailabilityDt)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.AvailabilityDt)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if len(m.CreationDt) > 0 {
-		i -= len(m.CreationDt)
-		copy(dAtA[i:], m.CreationDt)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.CreationDt)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.Status) > 0 {
-		i -= len(m.Status)
-		copy(dAtA[i:], m.Status)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Status)))
+	if m.CreationDt != nil {
+		n3, err3 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.CreationDt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.CreationDt):])
+		if err3 != nil {
+			return 0, err3
+		}
+		i -= n3
+		i = encodeVarintAuth(dAtA, i, uint64(n3))
 		i--
 		dAtA[i] = 0x2a
 	}
@@ -559,17 +421,17 @@ func (m *MsgCreateAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if len(m.Service) > 0 {
-		i -= len(m.Service)
-		copy(dAtA[i:], m.Service)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Service)))
-		i--
-		dAtA[i] = 0x1a
-	}
 	if len(m.Identity) > 0 {
 		i -= len(m.Identity)
 		copy(dAtA[i:], m.Identity)
 		i = encodeVarintAuth(dAtA, i, uint64(len(m.Identity)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintAuth(dAtA, i, uint64(len(m.Service)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -583,7 +445,7 @@ func (m *MsgCreateAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateAuth) Marshal() (dAtA []byte, err error) {
+func (m *MsgConfirmAuth) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -593,51 +455,16 @@ func (m *MsgUpdateAuth) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateAuth) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgConfirmAuth) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgConfirmAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.AvailabilityDt) > 0 {
-		i -= len(m.AvailabilityDt)
-		copy(dAtA[i:], m.AvailabilityDt)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.AvailabilityDt)))
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.CreationDt) > 0 {
-		i -= len(m.CreationDt)
-		copy(dAtA[i:], m.CreationDt)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.CreationDt)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if len(m.Status) > 0 {
-		i -= len(m.Status)
-		copy(dAtA[i:], m.Status)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Status)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.Service) > 0 {
-		i -= len(m.Service)
-		copy(dAtA[i:], m.Service)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Service)))
-		i--
-		dAtA[i] = 0x22
-	}
 	if len(m.Identity) > 0 {
 		i -= len(m.Identity)
 		copy(dAtA[i:], m.Identity)
@@ -645,47 +472,10 @@ func (m *MsgUpdateAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Id)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Creator) > 0 {
-		i -= len(m.Creator)
-		copy(dAtA[i:], m.Creator)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Creator)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgDeleteAuth) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgDeleteAuth) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgDeleteAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Id)))
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintAuth(dAtA, i, uint64(len(m.Service)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -716,15 +506,11 @@ func (m *Auth) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Id)
+	l = len(m.Service)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
 	l = len(m.Identity)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.Service)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
@@ -746,17 +532,13 @@ func (m *Auth) Size() (n int) {
 	return n
 }
 
-func (m *MsgCreateAuth) Size() (n int) {
+func (m *MsgRequestAuth) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
 	l = len(m.Creator)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.Identity)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
@@ -764,40 +546,28 @@ func (m *MsgCreateAuth) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
+	l = len(m.Identity)
+	if l > 0 {
+		n += 1 + l + sovAuth(uint64(l))
+	}
 	l = len(m.Key)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
-	l = len(m.Status)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.CreationDt)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.AvailabilityDt)
-	if l > 0 {
+	if m.CreationDt != nil {
+		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.CreationDt)
 		n += 1 + l + sovAuth(uint64(l))
 	}
 	return n
 }
 
-func (m *MsgUpdateAuth) Size() (n int) {
+func (m *MsgConfirmAuth) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
 	l = len(m.Creator)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.Identity)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
@@ -805,36 +575,7 @@ func (m *MsgUpdateAuth) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
-	l = len(m.Key)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.Status)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.CreationDt)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.AvailabilityDt)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgDeleteAuth) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Creator)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.Id)
+	l = len(m.Identity)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
@@ -878,7 +619,7 @@ func (m *Auth) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -906,7 +647,7 @@ func (m *Auth) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Id = string(dAtA[iNdEx:postIndex])
+			m.Service = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -942,38 +683,6 @@ func (m *Auth) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Service = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
 			}
 			var stringLen uint64
@@ -1004,7 +713,7 @@ func (m *Auth) Unmarshal(dAtA []byte) error {
 			}
 			m.Key = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -1023,7 +732,7 @@ func (m *Auth) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 6:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CreationDt", wireType)
 			}
@@ -1059,7 +768,7 @@ func (m *Auth) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 7:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityDt", wireType)
 			}
@@ -1119,7 +828,7 @@ func (m *Auth) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgCreateAuth) Unmarshal(dAtA []byte) error {
+func (m *MsgRequestAuth) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1142,10 +851,10 @@ func (m *MsgCreateAuth) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCreateAuth: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRequestAuth: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCreateAuth: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRequestAuth: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1181,38 +890,6 @@ func (m *MsgCreateAuth) Unmarshal(dAtA []byte) error {
 			m.Creator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Identity", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Identity = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
 			}
@@ -1243,251 +920,6 @@ func (m *MsgCreateAuth) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Service = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Status = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreationDt", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CreationDt = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityDt", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AvailabilityDt = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAuth(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgUpdateAuth) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAuth
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateAuth: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateAuth: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Creator = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -1523,38 +955,6 @@ func (m *MsgUpdateAuth) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Service = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
 			}
 			var stringLen uint64
@@ -1585,43 +985,11 @@ func (m *MsgUpdateAuth) Unmarshal(dAtA []byte) error {
 			}
 			m.Key = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Status = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 7:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CreationDt", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAuth
@@ -1631,55 +999,27 @@ func (m *MsgUpdateAuth) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthAuth
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthAuth
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CreationDt = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityDt", wireType)
+			if m.CreationDt == nil {
+				m.CreationDt = new(time.Time)
 			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
+			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.CreationDt, dAtA[iNdEx:postIndex]); err != nil {
+				return err
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AvailabilityDt = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1705,7 +1045,7 @@ func (m *MsgUpdateAuth) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgDeleteAuth) Unmarshal(dAtA []byte) error {
+func (m *MsgConfirmAuth) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1728,10 +1068,10 @@ func (m *MsgDeleteAuth) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDeleteAuth: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgConfirmAuth: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDeleteAuth: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgConfirmAuth: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1768,7 +1108,7 @@ func (m *MsgDeleteAuth) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1796,7 +1136,39 @@ func (m *MsgDeleteAuth) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Id = string(dAtA[iNdEx:postIndex])
+			m.Service = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Identity", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuth
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Identity = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

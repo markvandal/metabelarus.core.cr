@@ -16,23 +16,8 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 
 		switch msg := msg.(type) {
 		// this line is used by starport scaffolding # 1
-		case *types.MsgCreateId2Auth:
-			return handleMsgCreateId2Auth(ctx, k, msg)
-
-		case *types.MsgUpdateId2Auth:
-			return handleMsgUpdateId2Auth(ctx, k, msg)
-
-		case *types.MsgDeleteId2Auth:
-			return handleMsgDeleteId2Auth(ctx, k, msg)
-
-		case *types.MsgCreateAuth:
-			return handleMsgCreateAuth(ctx, k, msg)
-
-		case *types.MsgUpdateAuth:
-			return handleMsgUpdateAuth(ctx, k, msg)
-
-		case *types.MsgDeleteAuth:
-			return handleMsgDeleteAuth(ctx, k, msg)
+		case *types.MsgRequestAuth:
+			return handleMsgRequestAuth(ctx, k, msg)
 
 		case *types.MsgCreateId2Sign:
 			return handleMsgCreateId2Sign(ctx, k, msg)

@@ -3,8 +3,8 @@ package metabelarus.mbcorecr.mbcorecr;
 
 option go_package = "github.com/metabelarus/mbcorecr/x/mbcorecr/types";
 
-import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
+import "gogoproto/gogo.proto";
 
 enum IdentityType {
   CITIZEN = 0;
@@ -15,7 +15,7 @@ enum IdentityType {
 
 message Identity {
   string id = 1;
-  string accountID = 2; 
+  string address = 2; 
   IdentityType identityType = 3; 
   string details = 4; 
   string invitationId = 5;
@@ -24,15 +24,6 @@ message Identity {
 
 message MsgUpdateIdentity {
   string id = 1;
-  string accountID = 2; 
+  string address = 2; 
   string details = 3;
-}
-
-message IdentityAccount {
-  string uid = 1;
-  string address = 2;
-  string pubKey = 3;
-  string privKey = 4;
-  string mnemonic = 5;
-  string identityID = 6;
 }

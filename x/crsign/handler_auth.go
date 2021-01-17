@@ -1,47 +1,87 @@
 package crsign
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/metabelarus/mbcorecr/x/crsign/keeper"
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
 )
 
-func handleMsgCreateAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreateAuth) (*sdk.Result, error) {
-	k.CreateAuth(ctx, *msg)
+func handleMsgRequestAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgRequestAuth) (*sdk.Result, error) {
+	if !k.IdKeeper.HasIdentity(ctx, msg.Service) {
+		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No service identity")
+	}
+
+	if !k.IdKeeper.HasIdentity(ctx, msg.Identity) {
+		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No user identity")
+	}
+
+	identity := k.IdKeeper.ExportIdentity(ctx, msg.Service)
+	if identity.ExportAddress() != msg.Creator {
+		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "Incorrect service identity")
+	}
+
+	// Reset the auth object for update
+	auth := &types.Auth{
+		Service:        msg.Service,
+		Identity:       msg.Identity,
+		Key:            msg.Key,
+		Status:         types.AuthStatus_AUTH_OPEN,
+		CreationDt:     msg.CreationDt,
+		AvailabilityDt: msg.CreationDt,
+	}
+
+	k.CreateAuth(ctx, auth)
+
+	// Produce response
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventRequestAuth,
+			sdk.NewAttribute(
+				types.EventAttrAuthId,
+				auth.GetId(),
+			),
+		),
+	)
 
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }
 
-func handleMsgUpdateAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgUpdateAuth) (*sdk.Result, error) {
-	var auth = types.Auth{
-		Id:       msg.Id,
-		Identity: msg.Identity,
-		Service:  msg.Service,
-		Key:      msg.Key,
-		// Status: msg.Status,
-		// CreationDt: msg.CreationDt,
-		// AvailabilityDt: msg.AvailabilityDt,
+// @TODO register this handler everywhere
+func handleMsgConfirmAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgConfirmAuth) (*sdk.Result, error) {
+	if !k.IdKeeper.HasIdentity(ctx, msg.Identity) {
+		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No user identity")
 	}
 
-	if msg.Creator != k.GetAuthOwner(ctx, msg.Id) { // Checks if the the msg sender is the same as the current owner
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Incorrect owner") // If not, throw an error
+	if !k.IdKeeper.HasIdentity(ctx, msg.Service) {
+		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No service identity")
 	}
 
-	k.UpdateAuth(ctx, auth)
-
-	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
-}
-
-func handleMsgDeleteAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgDeleteAuth) (*sdk.Result, error) {
-	if !k.HasAuth(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, msg.Id)
-	}
-	if msg.Creator != k.GetAuthOwner(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Incorrect owner")
+	identity := k.IdKeeper.ExportIdentity(ctx, msg.Identity)
+	if identity.ExportAddress() != msg.Creator {
+		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "Incorrect user identity")
 	}
 
-	k.DeleteAuth(ctx, msg.Id)
+	auth := k.GetAuth(ctx, msg.Service, msg.Identity)
+
+	auth.Status = types.AuthStatus_AUTH_SIGNED
+
+	duration, err := time.ParseDuration("12h") // @TODO should be variable and limited
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrAuthDuration, "Incorrect duration format for auth")
+	}
+	newDuration := auth.AvailabilityDt.Add(duration)
+	auth.AvailabilityDt = &newDuration
+
+	k.UpdateAuth(ctx, &auth)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventConfirmAuth,
+		),
+	)
 
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }

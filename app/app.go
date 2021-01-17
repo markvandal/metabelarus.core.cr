@@ -85,10 +85,11 @@ import (
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
-		"github.com/metabelarus/mbcorecr/x/crsign"
-		crsignkeeper "github.com/metabelarus/mbcorecr/x/crsign/keeper"
-		crsigntypes "github.com/metabelarus/mbcorecr/x/crsign/types"
+	"github.com/metabelarus/mbcorecr/x/crsign"
+	crsignkeeper "github.com/metabelarus/mbcorecr/x/crsign/keeper"
+	crsigntypes "github.com/metabelarus/mbcorecr/x/crsign/types"
 )
 
 var (
@@ -187,7 +188,7 @@ type App struct {
 
 	mbcorecrKeeper mbcorecrkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
-		crsignKeeper crsignkeeper.Keeper
+	crsignKeeper crsignkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -326,11 +327,13 @@ func New(
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
-		app.crsignKeeper = *crsignkeeper.NewKeeper(
-			appCodec,
-			keys[crsigntypes.StoreKey],
-			keys[crsigntypes.MemStoreKey],
-		)
+	app.crsignKeeper = *crsignkeeper.NewKeeper(
+		appCodec,
+		keys[crsigntypes.StoreKey],
+		keys[crsigntypes.MemStoreKey],
+		app.mbcorecrKeeper,
+		app.AccountKeeper,
+	)
 
 	/****  Module Options ****/
 
@@ -595,7 +598,7 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
-		paramsKeeper.Subspace(crsigntypes.ModuleName)
+	paramsKeeper.Subspace(crsigntypes.ModuleName)
 
 	return paramsKeeper
 }

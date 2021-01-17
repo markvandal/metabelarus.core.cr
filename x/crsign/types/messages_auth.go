@@ -3,128 +3,86 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
-var _ sdk.Msg = &MsgCreateAuth{}
+var _ sdk.Msg = &MsgRequestAuth{}
 
-func NewMsgCreateAuth(creator string, identity string, service string, key string, status string, creationDt string, availabilityDt string) *MsgCreateAuth {
-  return &MsgCreateAuth{
-		Creator: creator,
-    Identity: identity,
-    Service: service,
-    Key: key,
-    Status: status,
-    CreationDt: creationDt,
-    AvailabilityDt: availabilityDt,
+func NewMsgRequestAuth(creator string, service string, identity string, key string) *MsgRequestAuth {
+	return &MsgRequestAuth{
+		Creator:    creator,
+		Identity:   identity,
+		Service:    service,
+		Key:        key,
+		CreationDt: mbutils.CreateCurrentDate(),
 	}
 }
 
-func (msg *MsgCreateAuth) Route() string {
-  return RouterKey
+func (msg *MsgRequestAuth) Route() string {
+	return RouterKey
 }
 
-func (msg *MsgCreateAuth) Type() string {
-  return "CreateAuth"
+func (msg *MsgRequestAuth) Type() string {
+	return "CreateAuth"
 }
 
-func (msg *MsgCreateAuth) GetSigners() []sdk.AccAddress {
-  creator, err := sdk.AccAddressFromBech32(msg.Creator)
-  if err != nil {
-    panic(err)
-  }
-  return []sdk.AccAddress{creator}
+func (msg *MsgRequestAuth) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
 }
 
-func (msg *MsgCreateAuth) GetSignBytes() []byte {
-  bz := ModuleCdc.MustMarshalJSON(msg)
-  return sdk.MustSortJSON(bz)
+func (msg *MsgRequestAuth) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgCreateAuth) ValidateBasic() error {
-  _, err := sdk.AccAddressFromBech32(msg.Creator)
-  	if err != nil {
-  		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-  	}
-  return nil
+func (msg *MsgRequestAuth) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+	// @TODO CreationDt should be checked for an hour +\-
+	return nil
 }
 
-var _ sdk.Msg = &MsgUpdateAuth{}
+var _ sdk.Msg = &MsgConfirmAuth{}
 
-func NewMsgUpdateAuth(creator string, id string, identity string, service string, key string, status string, creationDt string, availabilityDt string) *MsgUpdateAuth {
-  return &MsgUpdateAuth{
-        Id: id,
-		Creator: creator,
-    Identity: identity,
-    Service: service,
-    Key: key,
-    Status: status,
-    CreationDt: creationDt,
-    AvailabilityDt: availabilityDt,
+func NewMsgConfirmAuth(creator string, service string, identity string) *MsgConfirmAuth {
+	return &MsgConfirmAuth{
+		Creator:  creator,
+		Identity: identity,
+		Service:  service,
 	}
 }
 
-func (msg *MsgUpdateAuth) Route() string {
-  return RouterKey
+func (msg *MsgConfirmAuth) Route() string {
+	return RouterKey
 }
 
-func (msg *MsgUpdateAuth) Type() string {
-  return "UpdateAuth"
+func (msg *MsgConfirmAuth) Type() string {
+	return "ConfirmAuth"
 }
 
-func (msg *MsgUpdateAuth) GetSigners() []sdk.AccAddress {
-  creator, err := sdk.AccAddressFromBech32(msg.Creator)
-  if err != nil {
-    panic(err)
-  }
-  return []sdk.AccAddress{creator}
-}
-
-func (msg *MsgUpdateAuth) GetSignBytes() []byte {
-  bz := ModuleCdc.MustMarshalJSON(msg)
-  return sdk.MustSortJSON(bz)
-}
-
-func (msg *MsgUpdateAuth) ValidateBasic() error {
-  _, err := sdk.AccAddressFromBech32(msg.Creator)
-  if err != nil {
-    return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-  }
-   return nil
-}
-
-var _ sdk.Msg = &MsgCreateAuth{}
-
-func NewMsgDeleteAuth(creator string, id string) *MsgDeleteAuth {
-  return &MsgDeleteAuth{
-        Id: id,
-		Creator: creator,
+func (msg *MsgConfirmAuth) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
 	}
-} 
-func (msg *MsgDeleteAuth) Route() string {
-  return RouterKey
+	return []sdk.AccAddress{creator}
 }
 
-func (msg *MsgDeleteAuth) Type() string {
-  return "DeleteAuth"
+func (msg *MsgConfirmAuth) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgDeleteAuth) GetSigners() []sdk.AccAddress {
-  creator, err := sdk.AccAddressFromBech32(msg.Creator)
-  if err != nil {
-    panic(err)
-  }
-  return []sdk.AccAddress{creator}
-}
-
-func (msg *MsgDeleteAuth) GetSignBytes() []byte {
-  bz := ModuleCdc.MustMarshalJSON(msg)
-  return sdk.MustSortJSON(bz)
-}
-
-func (msg *MsgDeleteAuth) ValidateBasic() error {
-  _, err := sdk.AccAddressFromBech32(msg.Creator)
-  if err != nil {
-    return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-  }
-  return nil
+func (msg *MsgConfirmAuth) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+	return nil
 }

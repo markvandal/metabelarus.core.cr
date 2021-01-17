@@ -45,7 +45,7 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 	}
 
 	invite.IdentityId = k.CreateIdentity(ctx, types.Identity{
-		AccountID:    newAcc.Address,
+		Address:      newAcc.Address,
 		IdentityType: invite.IdentityType,
 		Details:      datails,
 		InvitationId: invite.Id,

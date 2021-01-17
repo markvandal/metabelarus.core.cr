@@ -59,11 +59,15 @@ func (k Keeper) UpdateIdentity(ctx sdk.Context, identity types.Identity) {
 	store.Set(types.KeyPrefix(types.IdentityKey+identity.Id), b)
 }
 
-func (k Keeper) GetIdentity(ctx sdk.Context, key string) types.Identity {
+func (k Keeper) GetIdentity(ctx sdk.Context, id string) types.Identity {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.IdentityKey))
 	var identity types.Identity
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.IdentityKey+key)), &identity)
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.IdentityKey+id)), &identity)
 	return identity
+}
+
+func (k Keeper) ExportIdentity(ctx sdk.Context, id string) types.IdentityI {
+	return k.GetIdentity(ctx, id)
 }
 
 func (k Keeper) HasIdentity(ctx sdk.Context, id string) bool {
@@ -72,7 +76,7 @@ func (k Keeper) HasIdentity(ctx sdk.Context, id string) bool {
 }
 
 func (k Keeper) GetIdentityOwner(ctx sdk.Context, key string) string {
-	return k.GetIdentity(ctx, key).AccountID
+	return k.GetIdentity(ctx, key).Address
 }
 
 // DeleteIdentity deletes a identity

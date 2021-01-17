@@ -15,14 +15,26 @@ type (
 		cdc      codec.Marshaler
 		storeKey sdk.StoreKey
 		memKey   sdk.StoreKey
+
+		AccKeeper types.AccountKeeper
+		IdKeeper  types.IdentityKeeper
 	}
 )
 
-func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey) *Keeper {
+func NewKeeper(
+	cdc codec.Marshaler,
+	storeKey,
+	memKey sdk.StoreKey,
+	idKeeper types.IdentityKeeper,
+	accKeeper types.AccountKeeper,
+) *Keeper {
 	return &Keeper{
 		cdc:      cdc,
 		storeKey: storeKey,
 		memKey:   memKey,
+
+		AccKeeper: accKeeper,
+		IdKeeper:  idKeeper,
 	}
 }
 
