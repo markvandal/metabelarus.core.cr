@@ -2,11 +2,12 @@ package mbutils
 
 import (
 	"errors"
+	"fmt"
 	"time"
 )
 
 func _createLocation() *time.Location {
-	loc, err := time.LoadLocation("Europe/Minsk")
+	loc, err := time.LoadLocation("UTC")
 	if err != nil {
 		panic(err)
 	}
@@ -35,11 +36,14 @@ func (msg *Created) ValidateBasic() error {
 	nowDate := time.Date(nowTime.Year(), nowTime.Month(), nowTime.Day(), 0, 0, 0, 0, BelarusLocation)
 
 	if msg.CreationDt.After(nowDate) {
-		return errors.New("Try to create indentity after the current time")
+		return errors.New(fmt.Sprintf(
+			"Try to create indentity after the current time n:%s a:%s",
+			nowDate, msg.CreationDt,
+		))
 	}
 
 	if nowDate.Before(*msg.CreationDt) && nowTime.After(nowDate.Add(time.Minute*5)) {
-		return errors.New("Try to create idenitty that was created long ago")
+		return errors.New("Try to create identity that was created long ago")
 	}
 
 	return nil
