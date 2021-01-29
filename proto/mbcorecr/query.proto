@@ -25,6 +25,9 @@ service Query {
 	rpc IdentityAll(QueryAllIdentityRequest) returns (QueryAllIdentityResponse) {
 		option (google.api.http).get = "/metabelarus/mbcorecr/mbcorecr/identity";
 	}
+	rpc Id2AddrAll(QueryAllId2AddrRequest) returns (QueryAllId2AddrResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/mbcorecr/id2addr";
+	}
 
 }
 
@@ -45,6 +48,7 @@ message QueryAllInviteResponse {
 	repeated Invite Invite = 1;
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
+
 message QueryGetIdentityRequest {
 	string id = 1;
 }
@@ -59,5 +63,14 @@ message QueryAllIdentityRequest {
 
 message QueryAllIdentityResponse {
 	repeated Identity Identity = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryAllId2AddrRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllId2AddrResponse {
+	repeated Id2Addr Id2Addrs = 1;
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

@@ -34,8 +34,6 @@ echo "Ecnrypted key: "$ENCRYPTED_KEY
 AUTH_REQ=$(mbcorecrd tx crsign request-auth $IDEN_ID $ENCRYPTED_KEY \
  --from $(mbcorecrd keys show $SERV_ADDR -a) -y)
 
-echo $AUTH_REQ
-
 AUTH_ID=$(echo $AUTH_REQ | jq -r '.logs[0].events[0].attributes[0].value')
 
 echo "Auth ID: "$AUTH_ID
@@ -51,7 +49,7 @@ echo "Auth ID: "$AUTH_ID
 # perform specific actions with user data in specific period of time.
 
 AUTH_CONFIRM=$(mbcorecrd tx crsign confirm-auth $SERV_ID \
---from $(mbcorecrd keys show $IDEN_ADDR -a) -y)
+ --from $(mbcorecrd keys show $IDEN_ADDR -a) -y)
 
 AUTH_RESULT=$(echo $AUTH_CONFIRM | jq -r '.logs[0].events[0].type')
 

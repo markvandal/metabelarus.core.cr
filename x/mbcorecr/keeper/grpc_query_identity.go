@@ -39,6 +39,34 @@ func (k Keeper) IdentityAll(c context.Context, req *types.QueryAllIdentityReques
 	return &types.QueryAllIdentityResponse{Identity: identitys, Pagination: pageRes}, nil
 }
 
+func (k Keeper) Id2AddrAll(c context.Context, req *types.QueryAllId2AddrRequest) (*types.QueryAllId2AddrResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	var id2addrs []*types.Id2Addr
+	ctx := sdk.UnwrapSDKContext(c)
+
+	store := ctx.KVStore(k.storeKey)
+	id2addrStore := prefix.NewStore(store, types.KeyPrefix(types.IdToAddrKey))
+
+	pageRes, err := query.Paginate(id2addrStore, req.Pagination, func(key []byte, value []byte) error {
+		var id2addr types.Id2Addr
+		if err := k.cdc.UnmarshalBinaryBare(value, &id2addr); err != nil {
+			return err
+		}
+
+		id2addrs = append(id2addrs, &id2addr)
+		return nil
+	})
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryAllId2AddrResponse{Id2Addrs: id2addrs, Pagination: pageRes}, nil
+}
+
 func (k Keeper) Identity(c context.Context, req *types.QueryGetIdentityRequest) (*types.QueryGetIdentityResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
@@ -48,7 +76,7 @@ func (k Keeper) Identity(c context.Context, req *types.QueryGetIdentityRequest) 
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.IdentityKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.IdentityKey + req.Id)), &identity)
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.IdentityKey+req.Id)), &identity)
 
 	return &types.QueryGetIdentityResponse{Identity: &identity}, nil
 }

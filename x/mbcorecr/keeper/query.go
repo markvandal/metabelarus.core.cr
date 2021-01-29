@@ -1,16 +1,12 @@
 package keeper
 
 import (
-    // this line is used by starport scaffolding # 1
-"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
-
-
-
+	// this line is used by starport scaffolding # 1
+	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	
 
 	abci "github.com/tendermint/tendermint/abci/types"
 )
@@ -23,18 +19,18 @@ func NewQuerier(k Keeper, legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
 		)
 
 		switch path[0] {
-        // this line is used by starport scaffolding # 2
-	case types.QueryGetInvite:
-		return getInvite(ctx, path[1], k, legacyQuerierCdc)
+		// this line is used by starport scaffolding # 2
+		case types.QueryGetInvite:
+			return getInvite(ctx, path[1], k, legacyQuerierCdc)
 
-	case types.QueryListInvite:
-		return listInvite(ctx, k, legacyQuerierCdc)
+		case types.QueryListInvite:
+			return listInvite(ctx, k, legacyQuerierCdc)
 
-	case types.QueryGetIdentity:
-		return getIdentity(ctx, path[1], k, legacyQuerierCdc)
+		case types.QueryGetIdentity:
+			return getIdentity(ctx, path[1], k, legacyQuerierCdc)
 
-	case types.QueryListIdentity:
-		return listIdentity(ctx, k, legacyQuerierCdc)
+		case types.QueryListIdentity:
+			return listIdentity(ctx, k, legacyQuerierCdc)
 
 		default:
 			err = sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unknown %s query endpoint: %s", types.ModuleName, path[0])

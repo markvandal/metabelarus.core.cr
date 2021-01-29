@@ -43,7 +43,13 @@ func (msg *MsgRequestAuth) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-	// @TODO CreationDt should be checked for an hour +\-
+
+	created := mbutils.Created{CreationDt: msg.CreationDt}
+
+	if err := created.ValidateBasic(); err != nil {
+		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	}
+
 	return nil
 }
 
@@ -79,6 +85,7 @@ func (msg *MsgConfirmAuth) GetSignBytes() []byte {
 
 func (msg *MsgConfirmAuth) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Identity)
+
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}

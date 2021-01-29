@@ -15,8 +15,9 @@ func handleMsgRequestAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgReques
 	if serviceId == "" {
 		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No service identity")
 	}
+
 	service := k.IdKeeper.ExportIdentity(ctx, serviceId)
-	if service.VerifyIdentityType(corecrtypes.IdentityType_SERVICE) {
+	if !service.VerifyIdentityType(corecrtypes.IdentityType_SERVICE) {
 		return nil, sdkerrors.Wrap(types.ErrIdNotService, "Is not a service")
 	}
 
@@ -60,13 +61,14 @@ func handleMsgConfirmAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgConfir
 		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No service identity")
 	}
 
-	auth := k.GetAuth(ctx, msg.Service, msg.Identity)
+	auth := k.GetAuth(ctx, msg.Service, identityId)
 	auth.Status = types.AuthStatus_AUTH_SIGNED
 
 	duration, err := time.ParseDuration(types.DefaultAuthLifeTime) // @TODO should be variable and limited
 	if err != nil {
 		return nil, sdkerrors.Wrap(types.ErrAuthDuration, "Incorrect duration format for auth")
 	}
+
 	newDuration := auth.AvailabilityDt.Add(duration)
 	auth.AvailabilityDt = &newDuration
 

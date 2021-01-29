@@ -27,7 +27,7 @@ func CmdRequestAuth() *cobra.Command {
 			msg := types.NewMsgRequestAuth(
 				clientCtx.GetFromAddress().String(),
 				string(argsIdentity),
-				string(argsKey), // @TODO Encrypt key with user's pubkey
+				string(argsKey),
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -43,7 +43,7 @@ func CmdRequestAuth() *cobra.Command {
 
 func CmdConfirmAuth() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "confirm-auth [identity]",
+		Use:   "confirm-auth [service]",
 		Short: "Request a new auth by a service",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
