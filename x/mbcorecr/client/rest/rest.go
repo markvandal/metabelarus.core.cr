@@ -32,7 +32,4 @@ func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 4
 	r.HandleFunc("/mbcorecr/invite", createInviteHandler(clientCtx)).Methods("POST")
 	r.HandleFunc("/mbcorecr/invite/accept", acceptInviteHandler(clientCtx)).Methods("POST")
-
-	r.HandleFunc("/mbcorecr/identities/{id}", updateIdentityHandler(clientCtx)).Methods("POST")
-
 }

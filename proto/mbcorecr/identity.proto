@@ -15,15 +15,20 @@ enum IdentityType {
 
 message Identity {
   string id = 1;
-  string address = 2; 
-  IdentityType identityType = 3; 
-  string details = 4; 
-  string invitationId = 5;
-  google.protobuf.Timestamp creationDt = 6  [(gogoproto.stdtime) = true]; 
+  IdentityType identityType = 2; 
+  string invitationId = 3;
+  google.protobuf.Timestamp creationDt = 4  [(gogoproto.stdtime) = true]; 
 }
 
-message MsgUpdateIdentity {
+message Addr {
+  string address = 1;
+  bool main = 2;
+}
+
+message Id2Addr {
+  map<int32,Addr> addresses = 1;
+}
+
+message Addr2Id {
   string id = 1;
-  string address = 2; 
-  string details = 3;
 }

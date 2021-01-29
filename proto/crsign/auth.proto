@@ -22,7 +22,6 @@ message Auth {
 }
 
 message MsgRequestAuth {
-  string creator = 1;
   string service = 2;
   string identity = 3;
   string key = 4;
@@ -30,7 +29,6 @@ message MsgRequestAuth {
 }
 
 message MsgConfirmAuth {
-  string creator = 1;
+  string identity = 1;
   string service = 2;
-  string identity = 3;
 }

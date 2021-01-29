@@ -5,7 +5,6 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
 import "crsign/auth.proto";
-import "crsign/id2sign.proto";
 import "crsign/signature.proto";
 
 option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
@@ -17,13 +16,6 @@ service Query {
 	}
 	rpc AuthAll(QueryAllAuthRequest) returns (QueryAllAuthResponse) {
 		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auth";
-	}
-
-	rpc Id2Sign(QueryGetId2SignRequest) returns (QueryGetId2SignResponse) {
-		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2sign/{id}";
-	}
-	rpc Id2SignAll(QueryAllId2SignRequest) returns (QueryAllId2SignResponse) {
-		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2sign";
 	}
 
 	rpc Signature(QueryGetSignatureRequest) returns (QueryGetSignatureResponse) {
@@ -52,22 +44,7 @@ message QueryAllAuthResponse {
 	repeated Auth Auth = 1;
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
-message QueryGetId2SignRequest {
-	string id = 1;
-}
 
-message QueryGetId2SignResponse {
-	Id2Sign Id2Sign = 1;
-}
-
-message QueryAllId2SignRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllId2SignResponse {
-	repeated Id2Sign Id2Sign = 1;
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
 message QueryGetSignatureRequest {
 	string id = 1;
 }

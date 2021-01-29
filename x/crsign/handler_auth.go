@@ -7,25 +7,26 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/metabelarus/mbcorecr/x/crsign/keeper"
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
+	corecrtypes "github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 )
 
 func handleMsgRequestAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgRequestAuth) (*sdk.Result, error) {
-	if !k.IdKeeper.HasIdentity(ctx, msg.Service) {
+	serviceId := k.IdKeeper.GetIdFromAddress(ctx, msg.Service)
+	if serviceId == "" {
 		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No service identity")
+	}
+	service := k.IdKeeper.ExportIdentity(ctx, serviceId)
+	if service.VerifyIdentityType(corecrtypes.IdentityType_SERVICE) {
+		return nil, sdkerrors.Wrap(types.ErrIdNotService, "Is not a service")
 	}
 
 	if !k.IdKeeper.HasIdentity(ctx, msg.Identity) {
 		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No user identity")
 	}
 
-	identity := k.IdKeeper.ExportIdentity(ctx, msg.Service)
-	if identity.ExportAddress() != msg.Creator {
-		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "Incorrect service identity")
-	}
-
 	// Reset the auth object for update
 	auth := &types.Auth{
-		Service:        msg.Service,
+		Service:        serviceId,
 		Identity:       msg.Identity,
 		Key:            msg.Key,
 		Status:         types.AuthStatus_AUTH_OPEN,
@@ -50,7 +51,8 @@ func handleMsgRequestAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgReques
 }
 
 func handleMsgConfirmAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgConfirmAuth) (*sdk.Result, error) {
-	if !k.IdKeeper.HasIdentity(ctx, msg.Identity) {
+	identityId := k.IdKeeper.GetIdFromAddress(ctx, msg.Identity)
+	if identityId == "" {
 		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No user identity")
 	}
 
@@ -58,13 +60,7 @@ func handleMsgConfirmAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgConfir
 		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No service identity")
 	}
 
-	identity := k.IdKeeper.ExportIdentity(ctx, msg.Identity)
-	if identity.ExportAddress() != msg.Creator {
-		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "Incorrect user identity")
-	}
-
 	auth := k.GetAuth(ctx, msg.Service, msg.Identity)
-
 	auth.Status = types.AuthStatus_AUTH_SIGNED
 
 	duration, err := time.ParseDuration(types.DefaultAuthLifeTime) // @TODO should be variable and limited

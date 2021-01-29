@@ -4,13 +4,13 @@ var _ IdentityI = &Identity{}
 
 type IdentityI interface {
 	ExportId() string
-	ExportAddress() string
+	VerifyIdentityType(identityType IdentityType) bool
 }
 
 func (this Identity) ExportId() string {
 	return this.Id
 }
 
-func (this Identity) ExportAddress() string {
-	return this.Address
+func (this Identity) VerifyIdentityType(identityType IdentityType) bool {
+	return this.IdentityType == identityType
 }

@@ -11,10 +11,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgRequestAuth{}, "crsign/RequestAuth", nil)
 	cdc.RegisterConcrete(&MsgConfirmAuth{}, "crsign/ConfirmAuth", nil)
 
-	cdc.RegisterConcrete(&MsgCreateId2Sign{}, "crsign/CreateId2Sign", nil)
-	cdc.RegisterConcrete(&MsgUpdateId2Sign{}, "crsign/UpdateId2Sign", nil)
-	cdc.RegisterConcrete(&MsgDeleteId2Sign{}, "crsign/DeleteId2Sign", nil)
-
 	cdc.RegisterConcrete(&MsgCreateSignature{}, "crsign/CreateSignature", nil)
 	cdc.RegisterConcrete(&MsgUpdateSignature{}, "crsign/UpdateSignature", nil)
 	cdc.RegisterConcrete(&MsgDeleteSignature{}, "crsign/DeleteSignature", nil)
@@ -26,11 +22,6 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgRequestAuth{},
 		&MsgConfirmAuth{},
-	)
-	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgCreateId2Sign{},
-		&MsgUpdateId2Sign{},
-		&MsgDeleteId2Sign{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreateSignature{},

@@ -31,8 +31,10 @@ echo "Ecnrypted key: "$ENCRYPTED_KEY
 
 # The service requests an authentication handshake with the user
 
-AUTH_REQ=$(mbcorecrd tx crsign request-auth $SERV_ID $IDEN_ID $ENCRYPTED_KEY \
+AUTH_REQ=$(mbcorecrd tx crsign request-auth $IDEN_ID $ENCRYPTED_KEY \
  --from $(mbcorecrd keys show $SERV_ADDR -a) -y)
+
+echo $AUTH_REQ
 
 AUTH_ID=$(echo $AUTH_REQ | jq -r '.logs[0].events[0].attributes[0].value')
 
@@ -47,7 +49,8 @@ echo "Auth ID: "$AUTH_ID
 # from the name of this user.
 # In different cases it can be required to check if the service could
 # perform specific actions with user data in specific period of time.
-AUTH_CONFIRM=$(mbcorecrd tx crsign confirm-auth $IDEN_ID $SERV_ID \
+
+AUTH_CONFIRM=$(mbcorecrd tx crsign confirm-auth $SERV_ID \
 --from $(mbcorecrd keys show $IDEN_ADDR -a) -y)
 
 AUTH_RESULT=$(echo $AUTH_CONFIRM | jq -r '.logs[0].events[0].type')
@@ -57,6 +60,7 @@ echo "Auth confirmation result: "$AUTH_RESULT
 # As a part of handshake the user should send to the service the 
 # unencrypted token, to prove that this is really the client who
 # communicates with the service may represent the user.
+
 AUTH_RECORD=$(mbcorecrd query crsign show-auth $AUTH_ID --output json)
 
 KEYTODECRYPT=$(echo $AUTH_RECORD | jq -r '.Auth.key')

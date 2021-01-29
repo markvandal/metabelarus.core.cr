@@ -20,12 +20,11 @@ message Invite {
   string id = 1;
   string inviter = 2; 
   string invitee = 3; 
-  string identityId = 4;
-  IdentityLevel level = 5;
-  IdentityType identityType = 6;
-  string key = 7; 
-  google.protobuf.Timestamp creationDt = 8 [(gogoproto.stdtime) = true]; 
-  google.protobuf.Timestamp acceptanceDt = 9 [(gogoproto.stdtime) = true]; 
+  IdentityLevel level = 4;
+  IdentityType identityType = 5;
+  string key = 6; 
+  google.protobuf.Timestamp creationDt = 7 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp acceptanceDt = 8 [(gogoproto.stdtime) = true]; 
 }
 
 message MsgCreateInvite {

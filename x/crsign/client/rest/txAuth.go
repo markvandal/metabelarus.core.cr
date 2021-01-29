@@ -17,7 +17,6 @@ var _ = strconv.Itoa(42)
 type authRequest struct {
 	BaseReq  rest.BaseReq `json:"base_req"`
 	Creator  string       `json:"creator"`
-	Service  string       `json:"service"`
 	Identity string       `json:"identity"`
 	Key      string       `json:"key"`
 }
@@ -43,14 +42,11 @@ func requestAuthHandler(clientCtx client.Context) http.HandlerFunc {
 
 		parsedIdentity := req.Identity
 
-		parsedService := req.Service
-
 		parsedKey := req.Key
 
 		msg := types.NewMsgRequestAuth(
-			req.Creator,
 			parsedIdentity,
-			parsedService,
+			req.Creator,
 			parsedKey,
 		)
 
@@ -59,10 +55,9 @@ func requestAuthHandler(clientCtx client.Context) http.HandlerFunc {
 }
 
 type authConfirmation struct {
-	BaseReq  rest.BaseReq `json:"base_req"`
-	Creator  string       `json:"creator"`
-	Service  string       `json:"service"`
-	Identity string       `json:"identity"`
+	BaseReq rest.BaseReq `json:"base_req"`
+	Creator string       `json:"creator"`
+	Service string       `json:"service"`
 }
 
 func confirmAuthHandler(clientCtx client.Context) http.HandlerFunc {
@@ -84,13 +79,10 @@ func confirmAuthHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		parsedIdentity := req.Identity
-
 		parsedService := req.Service
 
 		msg := types.NewMsgConfirmAuth(
 			req.Creator,
-			parsedIdentity,
 			parsedService,
 		)
 

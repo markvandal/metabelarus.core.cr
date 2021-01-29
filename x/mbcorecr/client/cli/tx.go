@@ -25,8 +25,6 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdCreateInvite())
 	cmd.AddCommand(CmdAcceptInvite())
 
-	cmd.AddCommand(CmdUpdateIdentity())
-
 	cmd.AddCommand(CmdDecrypt())
 
 	return cmd

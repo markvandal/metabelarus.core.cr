@@ -25,7 +25,6 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 		msg.Address, msg.PubKey, &ctx, k.AuthKeeper,
 	)
 	// Set new account as invitee and remove key
-	invite.Invitee = newAcc.Address
 	invite.AcceptanceDt = msg.AcceptanceDt
 
 	// Add coins to the account
@@ -38,19 +37,12 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 			return nil, err
 		}
 	}
-	// Create identity and backreference identity to invite
-	datails, err := newAcc.EncryptStr("{}")
-	if err != nil {
-		return nil, err
-	}
 
-	invite.IdentityId = k.CreateIdentity(ctx, types.Identity{
-		Address:      newAcc.Address,
+	invite.Invitee = k.CreateIdentity(ctx, types.Identity{
 		IdentityType: invite.IdentityType,
-		Details:      datails,
 		InvitationId: invite.Id,
 		CreationDt:   invite.AcceptanceDt,
-	})
+	}, newAcc.Address)
 
 	// Update invite
 	k.UpdateInvite(ctx, invite)
@@ -75,11 +67,11 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 			),
 			sdk.NewAttribute(
 				types.EventAttrIdentityAddress,
-				invite.Invitee,
+				newAcc.Address,
 			),
 			sdk.NewAttribute(
 				types.EventAttrIentityId,
-				invite.IdentityId,
+				invite.Invitee,
 			),
 		),
 	)
@@ -89,7 +81,7 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 
 func handleMsgCreateInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreateInvite) (*sdk.Result, error) {
 	// Has invite coin of appropriate level
-	inviteHelper, err := helper.NewInviteHelper(msg.Inviter, &ctx, &k.BankKeeper, &k.AuthKeeper)
+	inviteHelper, err := helper.NewInviteHelper(msg.Inviter, &ctx, &k)
 	if err != nil {
 		return nil, err
 	}
@@ -111,9 +103,14 @@ func handleMsgCreateInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 		return nil, err
 	}
 
+	inviterId, err := k.EnsureIdFromAddress(ctx, msg.Inviter, msg.CreationDt)
+	if err != nil {
+		return nil, err
+	}
+
 	// Create invite entery
 	invite := &types.Invite{
-		Inviter:      msg.Inviter,
+		Inviter:      inviterId,
 		Invitee:      "",
 		Level:        msg.Level,
 		IdentityType: msg.IdentityType,

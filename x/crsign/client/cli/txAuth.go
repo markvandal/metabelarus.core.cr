@@ -11,13 +11,12 @@ import (
 
 func CmdRequestAuth() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "request-auth [service] [identity] [key]",
+		Use:   "request-auth [identity] [key]",
 		Short: "Request a new auth by a service",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsIdentity := string(args[1])
-			argsService := string(args[0])
-			argsKey := string(args[2])
+			argsIdentity := string(args[0])
+			argsKey := string(args[1])
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -27,7 +26,6 @@ func CmdRequestAuth() *cobra.Command {
 
 			msg := types.NewMsgRequestAuth(
 				clientCtx.GetFromAddress().String(),
-				string(argsService),
 				string(argsIdentity),
 				string(argsKey), // @TODO Encrypt key with user's pubkey
 			)
@@ -45,12 +43,11 @@ func CmdRequestAuth() *cobra.Command {
 
 func CmdConfirmAuth() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "confirm-auth [identity] [service]",
+		Use:   "confirm-auth [identity]",
 		Short: "Request a new auth by a service",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsIdentity := string(args[0])
-			argsService := string(args[1])
+			argsService := string(args[0])
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -61,7 +58,6 @@ func CmdConfirmAuth() *cobra.Command {
 			msg := types.NewMsgConfirmAuth(
 				clientCtx.GetFromAddress().String(),
 				string(argsService),
-				string(argsIdentity),
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
