@@ -17,8 +17,8 @@ func listAuth(ctx sdk.Context, keeper Keeper, legacyQuerierCdc *codec.LegacyAmin
 	return bz, nil
 }
 
-func getAuth(ctx sdk.Context, service string, identity string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
-	msg := keeper.GetAuth(ctx, service, identity)
+func getAuth(ctx sdk.Context, key string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
+	msg := keeper.GetAuthByKey(ctx, key)
 
 	bz, err := codec.MarshalJSONIndent(legacyQuerierCdc, msg)
 	if err != nil {

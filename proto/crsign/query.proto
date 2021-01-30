@@ -12,10 +12,14 @@ option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
 // Query defines the gRPC querier service.
 service Query {
 	rpc Auth(QueryGetAuthRequest) returns (QueryGetAuthResponse) {
-		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auth/{id}";
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auths/{id}";
 	}
 	rpc AuthAll(QueryAllAuthRequest) returns (QueryAllAuthResponse) {
-		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auth";
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auths";
+	}
+
+	rpc Id2Service(QueryGetId2ServiceRequest) returns (QueryGetId2ServiceResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2services/{id}";
 	}
 
 	rpc Signature(QueryGetSignatureRequest) returns (QueryGetSignatureResponse) {
@@ -34,6 +38,14 @@ message QueryGetAuthRequest {
 
 message QueryGetAuthResponse {
 	Auth Auth = 1;
+}
+
+message QueryGetId2ServiceRequest {
+	string id = 1;
+}
+
+message QueryGetId2ServiceResponse {
+	Id2Service Id2Service = 1;
 }
 
 message QueryAllAuthRequest {
