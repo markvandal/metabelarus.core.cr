@@ -55,9 +55,9 @@ func requestAuthHandler(clientCtx client.Context) http.HandlerFunc {
 }
 
 type authConfirmation struct {
-	BaseReq rest.BaseReq `json:"base_req"`
-	Creator string       `json:"creator"`
-	Service string       `json:"service"`
+	BaseReq  rest.BaseReq `json:"base_req"`
+	Identity string       `json:"identity"`
+	Service  string       `json:"service"`
 }
 
 func confirmAuthHandler(clientCtx client.Context) http.HandlerFunc {
@@ -73,7 +73,7 @@ func confirmAuthHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		_, err := sdk.AccAddressFromBech32(req.Creator)
+		_, err := sdk.AccAddressFromBech32(req.Identity)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
@@ -82,7 +82,7 @@ func confirmAuthHandler(clientCtx client.Context) http.HandlerFunc {
 		parsedService := req.Service
 
 		msg := types.NewMsgConfirmAuth(
-			req.Creator,
+			req.Identity,
 			parsedService,
 		)
 
