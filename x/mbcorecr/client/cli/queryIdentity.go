@@ -45,42 +45,6 @@ func CmdListIdentity() *cobra.Command {
 	return cmd
 }
 
-func CmdListId2Addr() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "list-id2addr",
-		Short: "list all maps of identities to address",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
-			if err != nil {
-				return err
-			}
-
-			pageReq, err := client.ReadPageRequest(cmd.Flags())
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-
-			params := &types.QueryAllId2AddrRequest{
-				Pagination: pageReq,
-			}
-
-			res, err := queryClient.Id2AddrAll(context.Background(), params)
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintOutput(res)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
 func CmdShowIdentity() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "show-identity [id]",
@@ -100,6 +64,38 @@ func CmdShowIdentity() *cobra.Command {
 			}
 
 			res, err := queryClient.Identity(context.Background(), params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintOutput(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdShowAddrToId() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "show-addr2id [address]",
+		Short: "shows identity id mapped to address",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			params := &types.QueryAddrToIdRequest{
+				Address: args[0],
+			}
+
+			res, err := queryClient.AddrToId(context.Background(), params)
 			if err != nil {
 				return err
 			}

@@ -27,3 +27,14 @@ func getIdentity(ctx sdk.Context, id string, keeper Keeper, legacyQuerierCdc *co
 
 	return bz, nil
 }
+
+func addr2id(ctx sdk.Context, address string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
+	msg := keeper.GetIdFromAddress(ctx, address)
+
+	bz, err := codec.MarshalJSONIndent(legacyQuerierCdc, msg)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrJSONMarshal, err.Error())
+	}
+
+	return bz, nil
+}

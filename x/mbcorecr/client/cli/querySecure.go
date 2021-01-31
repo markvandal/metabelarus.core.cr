@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"encoding/base64"
+	"encoding/hex"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -31,16 +32,22 @@ func CmdEncrypt() *cobra.Command {
 				return err
 			}
 
-			ecnrypted, err := mbutils.EncryptPayload(pubKey.Bytes(), []byte(payload))
+			nodeScript, err := cmd.Flags().GetString(mbutils.MBFlagCrypt)
 			if err != nil {
 				return err
 			}
 
-			return clientCtx.PrintString(base64.URLEncoding.EncodeToString(ecnrypted))
+			ecnrypted, err := mbutils.EncryptPayload(nodeScript, pubKey.Bytes(), []byte(payload))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintString(string(ecnrypted))
 		},
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	mbutils.AddMbCryptFlags(cmd)
 
 	return cmd
 }
@@ -69,7 +76,7 @@ func CmdUnpackPrivKey() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintString(base64.URLEncoding.EncodeToString(pkUnarm.Bytes()))
+			return clientCtx.PrintString(hex.EncodeToString(pkUnarm.Bytes()))
 		},
 	}
 
@@ -130,16 +137,21 @@ func CmdDecryptPayload() *cobra.Command {
 				return err
 			}
 
-			privateKey, err := base64.URLEncoding.DecodeString(args[0])
+			privateKey, err := hex.DecodeString(args[0])
 			if err != nil {
 				return err
 			}
-			payload, err := base64.URLEncoding.DecodeString(args[1])
+			payload, err := base64.StdEncoding.DecodeString(args[1])
 			if err != nil {
 				return err
 			}
 
-			decryptedPayload, err := mbutils.DecryptPayload(privateKey, payload)
+			nodeScript, err := cmd.Flags().GetString(mbutils.MBFlagCrypt)
+			if err != nil {
+				return err
+			}
+
+			decryptedPayload, err := mbutils.DecryptPayload(nodeScript, privateKey, payload)
 			if err != nil {
 				return err
 			}
@@ -149,6 +161,7 @@ func CmdDecryptPayload() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	mbutils.AddMbCryptFlags(cmd)
 
 	return cmd
 }

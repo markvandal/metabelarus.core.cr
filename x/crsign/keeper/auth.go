@@ -11,7 +11,7 @@ func (k Keeper) CreateAuth(ctx sdk.Context, auth *types.Auth) {
 	key := types.KeyPrefix(types.AuthKey + auth.GetId())
 	value := k.cdc.MustMarshalBinaryBare(auth)
 	store.Set(key, value)
-	k.SetId2Service(ctx, auth.Identity, auth.Service)
+	k.AddService2Id(ctx, auth.Identity, auth.Service)
 }
 
 func (k Keeper) UpdateAuth(ctx sdk.Context, auth *types.Auth) {

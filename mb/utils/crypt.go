@@ -1,71 +1,80 @@
 package mbutils
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/sha256"
-	"encoding/binary"
+	"bytes"
+	"encoding/base64"
+	"encoding/hex"
+	"errors"
+	"os"
+	"os/exec"
 
-	// https://godoc.org/github.com/decred/dcrd/dcrec/secp256k1#example-package--EncryptDecryptMessage
-	"github.com/decred/dcrd/dcrec/secp256k1"
+	ecies "github.com/ecies/go"
+
+	"github.com/spf13/cobra"
 )
 
+const (
+	MBFlagCrypt = "node-crypt"
+)
+
+func AddMbCryptFlags(cmd *cobra.Command) {
+	cmd.Flags().String(MBFlagCrypt, "", "Specify absolute path to node crypt script")
+}
+
 // EncryptPayload - Asymetric event/message payload encryption
-func EncryptPayload(pubKeyBytes []byte, payload []byte) ([]byte, error) {
-	cihperPubKey, err := secp256k1.ParsePubKey(pubKeyBytes)
-	ephemeralPrivKey, err := secp256k1.GeneratePrivateKey()
-	if err != nil {
-		return nil, err
+func EncryptPayload(script string, pubKeyBytes []byte, payload []byte) ([]byte, error) {
+	if script == "" {
+		pubKey, err := ecies.NewPublicKeyFromBytes(pubKeyBytes)
+		if err != nil {
+			return nil, err
+		}
+
+		val, err := ecies.Encrypt(pubKey, payload)
+		if err != nil {
+			return nil, err
+		}
+
+		return []byte(base64.StdEncoding.EncodeToString(val)), nil
 	}
-	ephemeralPubKey := ephemeralPrivKey.PubKey().SerializeCompressed()
-	cipherKey := sha256.Sum256(
-		secp256k1.GenerateSharedSecret(ephemeralPrivKey, cihperPubKey),
-	)
 
-	aead, err := newAEAD(cipherKey[:])
-	if err != nil {
-		return nil, err
-	}
-
-	nonce := make([]byte, aead.NonceSize())
-	cipherPayload := make([]byte, 4+len(ephemeralPubKey))
-	binary.LittleEndian.PutUint32(cipherPayload, uint32(len(ephemeralPubKey)))
-	copy(cipherPayload[4:], ephemeralPubKey)
-
-	return aead.Seal(cipherPayload, nonce, payload, ephemeralPubKey), nil
+	return crypt(script, "encrypt", payload, pubKeyBytes)
 }
 
 // DecryptPayload - Asymetric event/message payload deciption
-func DecryptPayload(pkBytes []byte, ciphertext []byte) ([]byte, error) {
-	privKey, _ := secp256k1.PrivKeyFromBytes(pkBytes)
-
-	// Read the sender's ephemeral public key from the start of the message.
-	// Error handling for inappropriate pubkey lengths is elided here for
-	// brevity.
-	pubKeyLen := binary.LittleEndian.Uint32(ciphertext[:4])
-	senderPubKeyBytes := ciphertext[4 : 4+pubKeyLen]
-	senderPubKey, err := secp256k1.ParsePubKey(senderPubKeyBytes)
-	if err != nil {
-		return nil, err
+func DecryptPayload(script string, pkBytes []byte, ciphertext []byte) ([]byte, error) {
+	if script == "" {
+		return ecies.Decrypt(ecies.NewPrivateKeyFromBytes(pkBytes), ciphertext)
 	}
 
-	// Derive the key used to seal the message, this time from the
-	// recipient's private key and the sender's public key.
-	recoveredCipherKey := sha256.Sum256(secp256k1.GenerateSharedSecret(privKey, senderPubKey))
-
-	// Open the sealed message.
-	aead, err := newAEAD(recoveredCipherKey[:])
-	if err != nil {
-		return nil, err
-	}
-	nonce := make([]byte, aead.NonceSize())
-	return aead.Open(nil, nonce, ciphertext[4+pubKeyLen:], senderPubKeyBytes)
+	return crypt(script, "decrypt", ciphertext, pkBytes)
 }
 
-func newAEAD(key []byte) (cipher.AEAD, error) {
-	block, err := aes.NewCipher(key)
+func crypt(script string, action string, payload []byte, key []byte) ([]byte, error) {
+	if script == "" {
+		return nil, errors.New("Crypt script location should be specified, probably with --node-crypt flag")
+	}
+
+	args := []string{
+		script,
+		action,
+		base64.StdEncoding.EncodeToString(payload),
+		hex.EncodeToString(key),
+	}
+	process := exec.Command("node", args...)
+	stdin, err := process.StdinPipe()
 	if err != nil {
 		return nil, err
 	}
-	return cipher.NewGCM(block)
+	defer stdin.Close()
+	buf := new(bytes.Buffer) // THIS STORES THE NODEJS OUTPUT
+	process.Stdout = buf
+	process.Stderr = os.Stderr
+
+	if err = process.Start(); err != nil {
+		return nil, err
+	}
+
+	process.Wait()
+
+	return buf.Bytes(), nil
 }

@@ -6,10 +6,10 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-func listAuth(ctx sdk.Context, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
-	msgs := keeper.GetAllAuth(ctx)
+func getAuth(ctx sdk.Context, key string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
+	msg := keeper.GetAuthByKey(ctx, key)
 
-	bz, err := codec.MarshalJSONIndent(legacyQuerierCdc, msgs)
+	bz, err := codec.MarshalJSONIndent(legacyQuerierCdc, msg)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrJSONMarshal, err.Error())
 	}
@@ -17,8 +17,8 @@ func listAuth(ctx sdk.Context, keeper Keeper, legacyQuerierCdc *codec.LegacyAmin
 	return bz, nil
 }
 
-func getAuth(ctx sdk.Context, key string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
-	msg := keeper.GetAuthByKey(ctx, key)
+func getId2Service(ctx sdk.Context, id string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
+	msg := keeper.GetServicesFromId(ctx, id)
 
 	bz, err := codec.MarshalJSONIndent(legacyQuerierCdc, msg)
 	if err != nil {

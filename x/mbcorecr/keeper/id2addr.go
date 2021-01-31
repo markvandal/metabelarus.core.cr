@@ -55,7 +55,7 @@ func (k Keeper) EnsureIdFromAddress(ctx sdk.Context, address string, creationDt 
 func (k Keeper) GetIdFromAddress(ctx sdk.Context, address string) string {
 	addr2IdBytes := prefix.NewStore(
 		ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrToIdKey),
-	).Get(types.KeyPrefix(address))
+	).Get(types.KeyPrefix(types.AddrToIdKey + address))
 
 	var addr2id types.Addr2Id
 	k.cdc.MustUnmarshalBinaryBare(addr2IdBytes, &addr2id)
@@ -76,28 +76,32 @@ func (k Keeper) GetAddressFromId(ctx sdk.Context, id string) string {
 
 func (k Keeper) SetId2Addr(ctx sdk.Context, id string, addr types.Addr) {
 	id2addr := k.GetAddressesFromId(ctx, id)
-	var currentKey int32
-	var currentMain int32
-	for key, address := range id2addr.Addresses {
-		if address.Address == addr.Address {
-			currentKey = key
+
+	if id2addr.Addresses == nil || len(id2addr.Addresses) == 0 {
+		id2addr.Addresses = []*types.Addr{&addr}
+	} else {
+		var currentKey int
+		var currentMain int
+		found := false
+		for key, address := range id2addr.Addresses {
+			if address.Address == addr.Address {
+				currentKey = key
+				found = true
+			}
+			if address.Main {
+				currentMain = key
+			}
 		}
-		if address.Main {
-			currentMain = key
+
+		if found {
+			if currentKey != currentMain {
+				id2addr.Addresses[currentMain].Main = false
+				id2addr.Addresses[currentKey].Main = true
+			}
+		} else {
+			addr.Main = true
+			id2addr.Addresses = append(id2addr.Addresses, &addr)
 		}
-	}
-
-	if _, ok := id2addr.Addresses[currentKey]; !ok {
-		currentKey = int32(len(id2addr.Addresses))
-	}
-
-	if len(id2addr.Addresses) == 0 {
-		id2addr.Addresses = make(map[int32]*types.Addr)
-	}
-
-	id2addr.Addresses[currentKey] = &addr
-	if existingMain, ok := id2addr.Addresses[currentMain]; ok && addr.Main && currentMain != currentKey {
-		existingMain.Main = false
 	}
 
 	prefix.NewStore(
@@ -110,7 +114,7 @@ func (k Keeper) SetId2Addr(ctx sdk.Context, id string, addr types.Addr) {
 	prefix.NewStore(
 		ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrToIdKey),
 	).Set(
-		types.KeyPrefix(addr.Address),
+		types.KeyPrefix(types.AddrToIdKey+addr.Address),
 		k.cdc.MustMarshalBinaryBare(&types.Addr2Id{Id: id}),
 	)
 }

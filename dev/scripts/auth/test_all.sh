@@ -3,6 +3,8 @@
 
 SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+NODECRYPT=$SCRIPTPATH/../../../node/crypt.js
+
 # [SETUP TEST] Create service and user identities
 
 SERVICE=$(. $SCRIPTPATH/../invite/test_all.sh)
@@ -25,7 +27,7 @@ IDEN_ID=$(echo $IDENTITY | jq -r '.id')
 # power.
 
 ENCRYPTED_KEY=$(mbcorecrd query mbcorecr encrypt some-uid-generated-by-service \
- $(mbcorecrd keys show $IDEN_ADDR -p))
+ $(mbcorecrd keys show $IDEN_ADDR -p) --node-crypt $NODECRYPT)
 
 echo "Ecnrypted key: "$ENCRYPTED_KEY
 
@@ -64,6 +66,6 @@ AUTH_RECORD=$(mbcorecrd query crsign show-auth $AUTH_ID --output json)
 KEYTODECRYPT=$(echo $AUTH_RECORD | jq -r '.Auth.key')
 
 DECRYPTEDKEY=$(mbcorecrd tx mbcorecr decrypt $KEYTODECRYPT \
- --from $(mbcorecrd keys show $IDEN_ADDR -a) -y)
+ --from $(mbcorecrd keys show $IDEN_ADDR -a) --node-crypt $NODECRYPT -y)
 
 echo "Decrypted Key: "$DECRYPTEDKEY

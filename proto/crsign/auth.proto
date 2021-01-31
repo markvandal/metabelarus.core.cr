@@ -34,5 +34,5 @@ message MsgConfirmAuth {
 }
 
 message Id2Service {
-  map<int32,string> services = 1;
+  repeated string services = 1;
 }

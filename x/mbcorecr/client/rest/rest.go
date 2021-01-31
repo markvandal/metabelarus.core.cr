@@ -21,9 +21,9 @@ func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 3
 	r.HandleFunc("/mbcorecr/invites/{id}", getInviteHandler(clientCtx)).Methods("GET")
-	r.HandleFunc("/mbcorecr/invites", listInviteHandler(clientCtx)).Methods("GET")
 
 	r.HandleFunc("/mbcorecr/identities/{id}", getIdentityHandler(clientCtx)).Methods("GET")
+	r.HandleFunc("/mbcorecr/addr2id/{address}", getIdFromAddrHandler(clientCtx)).Methods("GET")
 	r.HandleFunc("/mbcorecr/identities", listIdentityHandler(clientCtx)).Methods("GET")
 
 }

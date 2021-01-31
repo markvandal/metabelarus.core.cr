@@ -1,14 +1,10 @@
 package types
 
 import (
-	"encoding/base64"
-	"encoding/json"
-
 	"github.com/tendermint/tendermint/crypto"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
 type InviteAccount struct {
@@ -68,25 +64,4 @@ func (this *InviteAccount) SetBalances(bank BankKeeper, balances sdk.Coins) erro
 	}
 
 	return nil
-}
-
-func (this *InviteAccount) EncryptStr(data string) (string, error) {
-	ecnrypted, err := mbutils.EncryptPayload(this.GetAccPubKey().Bytes(), []byte(data))
-	if err != nil {
-		return "", sdkerrors.Wrap(ErrCryptDetails, err.Error())
-	}
-
-	return base64.URLEncoding.EncodeToString(ecnrypted), nil
-}
-
-func (this *InviteAccount) EncryptData(data interface{}) (string, error) {
-	if data == nil {
-		data = this
-	}
-	payload, err := json.Marshal(data)
-	if err != nil {
-		return "", sdkerrors.Wrap(ErrCipher, err.Error())
-	}
-
-	return this.EncryptStr(string(payload))
 }

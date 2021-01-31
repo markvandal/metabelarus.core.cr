@@ -23,11 +23,11 @@ func NewQuerier(k Keeper, legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
 		case types.QueryGetInvite:
 			return getInvite(ctx, path[1], k, legacyQuerierCdc)
 
-		case types.QueryListInvite:
-			return listInvite(ctx, k, legacyQuerierCdc)
-
 		case types.QueryGetIdentity:
 			return getIdentity(ctx, path[1], k, legacyQuerierCdc)
+
+		case types.QueryAddrToId:
+			return addr2id(ctx, path[1], k, legacyQuerierCdc)
 
 		case types.QueryListIdentity:
 			return listIdentity(ctx, k, legacyQuerierCdc)

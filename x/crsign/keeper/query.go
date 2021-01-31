@@ -23,6 +23,10 @@ func NewQuerier(k Keeper, legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
 		// this line is used by starport scaffolding # 1
 		case types.QueryGetAuth:
 			return getAuth(ctx, path[1], k, legacyQuerierCdc)
+		case types.QueryGetSignature:
+			return getSignature(ctx, path[1], k, legacyQuerierCdc)
+		case types.QueryGetId2Service:
+			return getId2Service(ctx, path[1], k, legacyQuerierCdc)
 
 		default:
 			err = sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unknown %s query endpoint: %s", types.ModuleName, path[0])

@@ -42,12 +42,21 @@ func CmdDecrypt() *cobra.Command {
 				return err
 			}
 
-			encrypted, err := base64.URLEncoding.DecodeString(payload)
+			encrypted, err := base64.StdEncoding.DecodeString(payload)
 			if err != nil {
 				return err
 			}
 
-			data, err := mbutils.DecryptPayload(pk.Bytes(), encrypted)
+			nodeScript, err := cmd.Flags().GetString(mbutils.MBFlagCrypt)
+			if err != nil {
+				return err
+			}
+
+			data, err := mbutils.DecryptPayload(
+				nodeScript,
+				pk.Bytes(),
+				encrypted,
+			)
 			if err != nil {
 				return err
 			}
@@ -57,6 +66,7 @@ func CmdDecrypt() *cobra.Command {
 	}
 
 	flags.AddTxFlagsToCmd(cmd)
+	mbutils.AddMbCryptFlags(cmd)
 
 	return cmd
 }

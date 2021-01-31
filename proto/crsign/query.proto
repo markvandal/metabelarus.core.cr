@@ -14,9 +14,6 @@ service Query {
 	rpc Auth(QueryGetAuthRequest) returns (QueryGetAuthResponse) {
 		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auths/{id}";
 	}
-	rpc AuthAll(QueryAllAuthRequest) returns (QueryAllAuthResponse) {
-		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/auths";
-	}
 
 	rpc Id2Service(QueryGetId2ServiceRequest) returns (QueryGetId2ServiceResponse) {
 		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2services/{id}";
@@ -25,10 +22,6 @@ service Query {
 	rpc Signature(QueryGetSignatureRequest) returns (QueryGetSignatureResponse) {
 		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/signature/{id}";
 	}
-	rpc SignatureAll(QueryAllSignatureRequest) returns (QueryAllSignatureResponse) {
-		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/signature";
-	}
-
 }
 
 
@@ -48,28 +41,10 @@ message QueryGetId2ServiceResponse {
 	Id2Service Id2Service = 1;
 }
 
-message QueryAllAuthRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllAuthResponse {
-	repeated Auth Auth = 1;
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
 message QueryGetSignatureRequest {
 	string id = 1;
 }
 
 message QueryGetSignatureResponse {
 	Signature Signature = 1;
-}
-
-message QueryAllSignatureRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllSignatureResponse {
-	repeated Signature Signature = 1;
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
