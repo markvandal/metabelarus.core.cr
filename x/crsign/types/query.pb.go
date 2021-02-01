@@ -205,22 +205,22 @@ func (m *QueryGetId2ServiceResponse) GetId2Service() *Id2Service {
 	return nil
 }
 
-type QueryGetSignatureRequest struct {
+type QueryGetRecordRequest struct {
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (m *QueryGetSignatureRequest) Reset()         { *m = QueryGetSignatureRequest{} }
-func (m *QueryGetSignatureRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetSignatureRequest) ProtoMessage()    {}
-func (*QueryGetSignatureRequest) Descriptor() ([]byte, []int) {
+func (m *QueryGetRecordRequest) Reset()         { *m = QueryGetRecordRequest{} }
+func (m *QueryGetRecordRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetRecordRequest) ProtoMessage()    {}
+func (*QueryGetRecordRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a5f593c6c4e647fb, []int{4}
 }
-func (m *QueryGetSignatureRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryGetRecordRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetSignatureRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryGetRecordRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetSignatureRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryGetRecordRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -230,41 +230,41 @@ func (m *QueryGetSignatureRequest) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *QueryGetSignatureRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetSignatureRequest.Merge(m, src)
+func (m *QueryGetRecordRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetRecordRequest.Merge(m, src)
 }
-func (m *QueryGetSignatureRequest) XXX_Size() int {
+func (m *QueryGetRecordRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetSignatureRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetSignatureRequest.DiscardUnknown(m)
+func (m *QueryGetRecordRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetRecordRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetSignatureRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryGetRecordRequest proto.InternalMessageInfo
 
-func (m *QueryGetSignatureRequest) GetId() string {
+func (m *QueryGetRecordRequest) GetId() string {
 	if m != nil {
 		return m.Id
 	}
 	return ""
 }
 
-type QueryGetSignatureResponse struct {
-	Signature *Signature `protobuf:"bytes,1,opt,name=Signature,proto3" json:"Signature,omitempty"`
+type QueryGetRecordResponse struct {
+	Record *Record `protobuf:"bytes,1,opt,name=Record,proto3" json:"Record,omitempty"`
 }
 
-func (m *QueryGetSignatureResponse) Reset()         { *m = QueryGetSignatureResponse{} }
-func (m *QueryGetSignatureResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetSignatureResponse) ProtoMessage()    {}
-func (*QueryGetSignatureResponse) Descriptor() ([]byte, []int) {
+func (m *QueryGetRecordResponse) Reset()         { *m = QueryGetRecordResponse{} }
+func (m *QueryGetRecordResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetRecordResponse) ProtoMessage()    {}
+func (*QueryGetRecordResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a5f593c6c4e647fb, []int{5}
 }
-func (m *QueryGetSignatureResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryGetRecordResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetSignatureResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryGetRecordResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetSignatureResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryGetRecordResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -274,21 +274,109 @@ func (m *QueryGetSignatureResponse) XXX_Marshal(b []byte, deterministic bool) ([
 		return b[:n], nil
 	}
 }
-func (m *QueryGetSignatureResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetSignatureResponse.Merge(m, src)
+func (m *QueryGetRecordResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetRecordResponse.Merge(m, src)
 }
-func (m *QueryGetSignatureResponse) XXX_Size() int {
+func (m *QueryGetRecordResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetSignatureResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetSignatureResponse.DiscardUnknown(m)
+func (m *QueryGetRecordResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetRecordResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetSignatureResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryGetRecordResponse proto.InternalMessageInfo
 
-func (m *QueryGetSignatureResponse) GetSignature() *Signature {
+func (m *QueryGetRecordResponse) GetRecord() *Record {
 	if m != nil {
-		return m.Signature
+		return m.Record
+	}
+	return nil
+}
+
+type QueryGetId2RecordRequest struct {
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *QueryGetId2RecordRequest) Reset()         { *m = QueryGetId2RecordRequest{} }
+func (m *QueryGetId2RecordRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetId2RecordRequest) ProtoMessage()    {}
+func (*QueryGetId2RecordRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a5f593c6c4e647fb, []int{6}
+}
+func (m *QueryGetId2RecordRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetId2RecordRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetId2RecordRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetId2RecordRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetId2RecordRequest.Merge(m, src)
+}
+func (m *QueryGetId2RecordRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetId2RecordRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetId2RecordRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetId2RecordRequest proto.InternalMessageInfo
+
+func (m *QueryGetId2RecordRequest) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type QueryGetId2RecordResponse struct {
+	Id2Record *Id2Record `protobuf:"bytes,1,opt,name=Id2Record,proto3" json:"Id2Record,omitempty"`
+}
+
+func (m *QueryGetId2RecordResponse) Reset()         { *m = QueryGetId2RecordResponse{} }
+func (m *QueryGetId2RecordResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetId2RecordResponse) ProtoMessage()    {}
+func (*QueryGetId2RecordResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a5f593c6c4e647fb, []int{7}
+}
+func (m *QueryGetId2RecordResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetId2RecordResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetId2RecordResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetId2RecordResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetId2RecordResponse.Merge(m, src)
+}
+func (m *QueryGetId2RecordResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetId2RecordResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetId2RecordResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetId2RecordResponse proto.InternalMessageInfo
+
+func (m *QueryGetId2RecordResponse) GetId2Record() *Id2Record {
+	if m != nil {
+		return m.Id2Record
 	}
 	return nil
 }
@@ -298,43 +386,48 @@ func init() {
 	proto.RegisterType((*QueryGetAuthResponse)(nil), "metabelarus.mbcorecr.crsign.QueryGetAuthResponse")
 	proto.RegisterType((*QueryGetId2ServiceRequest)(nil), "metabelarus.mbcorecr.crsign.QueryGetId2ServiceRequest")
 	proto.RegisterType((*QueryGetId2ServiceResponse)(nil), "metabelarus.mbcorecr.crsign.QueryGetId2ServiceResponse")
-	proto.RegisterType((*QueryGetSignatureRequest)(nil), "metabelarus.mbcorecr.crsign.QueryGetSignatureRequest")
-	proto.RegisterType((*QueryGetSignatureResponse)(nil), "metabelarus.mbcorecr.crsign.QueryGetSignatureResponse")
+	proto.RegisterType((*QueryGetRecordRequest)(nil), "metabelarus.mbcorecr.crsign.QueryGetRecordRequest")
+	proto.RegisterType((*QueryGetRecordResponse)(nil), "metabelarus.mbcorecr.crsign.QueryGetRecordResponse")
+	proto.RegisterType((*QueryGetId2RecordRequest)(nil), "metabelarus.mbcorecr.crsign.QueryGetId2RecordRequest")
+	proto.RegisterType((*QueryGetId2RecordResponse)(nil), "metabelarus.mbcorecr.crsign.QueryGetId2RecordResponse")
 }
 
 func init() { proto.RegisterFile("crsign/query.proto", fileDescriptor_a5f593c6c4e647fb) }
 
 var fileDescriptor_a5f593c6c4e647fb = []byte{
-	// 456 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0xcf, 0x8a, 0xd3, 0x40,
-	0x1c, 0xc7, 0x3b, 0x65, 0x15, 0x76, 0x04, 0xc1, 0x51, 0x64, 0x8d, 0x12, 0x34, 0xa0, 0xab, 0xbb,
-	0x6c, 0xc6, 0x66, 0xe9, 0x7a, 0x56, 0x84, 0xd5, 0x83, 0x07, 0xb7, 0x37, 0x6f, 0x93, 0xe4, 0x47,
-	0x3a, 0xd0, 0x64, 0xd2, 0x99, 0x49, 0xb1, 0x88, 0x17, 0x5f, 0x40, 0xc1, 0xab, 0xef, 0xe0, 0xc5,
-	0x87, 0xf0, 0x58, 0xf0, 0xe2, 0x51, 0x5a, 0x1f, 0x44, 0x3a, 0x99, 0x34, 0x51, 0xdb, 0xd0, 0x5e,
-	0x0a, 0xfd, 0xf1, 0xfd, 0xf3, 0xc9, 0xfc, 0x66, 0x30, 0x89, 0xa4, 0xe2, 0x49, 0x46, 0xc7, 0x05,
-	0xc8, 0xa9, 0x9f, 0x4b, 0xa1, 0x05, 0xb9, 0x9d, 0x82, 0x66, 0x21, 0x8c, 0x98, 0x2c, 0x94, 0x9f,
-	0x86, 0x91, 0x90, 0x10, 0x49, 0xbf, 0x14, 0x3a, 0x77, 0x12, 0x21, 0x92, 0x11, 0x50, 0x96, 0x73,
-	0xca, 0xb2, 0x4c, 0x68, 0xa6, 0xb9, 0xc8, 0x54, 0x69, 0x75, 0x8e, 0x22, 0xa1, 0x52, 0xa1, 0x68,
-	0xc8, 0x14, 0x94, 0x99, 0x74, 0xd2, 0x0b, 0x41, 0xb3, 0x1e, 0xcd, 0x59, 0xc2, 0x33, 0x23, 0xb6,
-	0xda, 0x6b, 0xb6, 0x9a, 0x15, 0x7a, 0x68, 0x47, 0x37, 0xed, 0x68, 0xf9, 0xc3, 0x74, 0x21, 0xa1,
-	0x9c, 0x7b, 0xf7, 0xf1, 0xf5, 0xd7, 0xcb, 0xb0, 0x73, 0xd0, 0x4f, 0x0b, 0x3d, 0xbc, 0x80, 0x71,
-	0x01, 0x4a, 0x93, 0xab, 0xb8, 0xcb, 0xe3, 0x03, 0x74, 0x17, 0x3d, 0xdc, 0xbf, 0xe8, 0xf2, 0xd8,
-	0x7b, 0x85, 0x6f, 0xfc, 0x2d, 0x53, 0xb9, 0xc8, 0x14, 0x90, 0x3e, 0xde, 0x5b, 0xfe, 0x37, 0xca,
-	0x2b, 0xc1, 0x3d, 0xbf, 0xe5, 0xfb, 0x7c, 0x63, 0x34, 0x72, 0xef, 0x18, 0xdf, 0xaa, 0xe2, 0x5e,
-	0xc6, 0xc1, 0x00, 0xe4, 0x84, 0x47, 0xb0, 0xa9, 0x1b, 0xb0, 0xb3, 0x4e, 0x6c, 0x09, 0xce, 0x31,
-	0xae, 0xa7, 0x96, 0xe3, 0xb0, 0x95, 0xa3, 0x11, 0xd2, 0xb0, 0x7a, 0x47, 0xf8, 0xa0, 0xaa, 0x19,
-	0x54, 0x87, 0xb4, 0x09, 0x89, 0xd5, 0xfc, 0x0d, 0xad, 0x25, 0x7a, 0x8e, 0xf7, 0x57, 0x43, 0x0b,
-	0xf4, 0xa0, 0x15, 0xa8, 0x8e, 0xa8, 0x8d, 0xc1, 0xc7, 0x3d, 0x7c, 0xc9, 0x74, 0x90, 0x2f, 0xa8,
-	0x3c, 0x64, 0xf2, 0xb8, 0x35, 0x65, 0xcd, 0x1a, 0x9d, 0xde, 0x0e, 0x8e, 0x92, 0xde, 0xa3, 0x1f,
-	0x7e, 0xfc, 0xfe, 0xdc, 0x7d, 0x44, 0x0e, 0x69, 0xc3, 0x4a, 0x2b, 0x2b, 0x6d, 0xdc, 0x2c, 0x45,
-	0xdf, 0xf1, 0xf8, 0x3d, 0xf9, 0x86, 0x9a, 0x1b, 0x20, 0x67, 0x5b, 0x55, 0xfe, 0xb7, 0x75, 0xe7,
-	0xc9, 0xce, 0x3e, 0x0b, 0xdc, 0x37, 0xc0, 0x94, 0x9c, 0xb4, 0x02, 0xf3, 0x38, 0x50, 0xa5, 0xd1,
-	0x62, 0x7f, 0x45, 0x8d, 0x35, 0x91, 0xfe, 0x56, 0xed, 0xff, 0xde, 0x0b, 0xe7, 0x6c, 0x57, 0x9b,
-	0x65, 0x3e, 0x35, 0xcc, 0x27, 0xe4, 0xb8, 0x95, 0x79, 0xf5, 0x56, 0x0d, 0xf1, 0xb3, 0x17, 0xdf,
-	0xe7, 0x2e, 0x9a, 0xcd, 0x5d, 0xf4, 0x6b, 0xee, 0xa2, 0x4f, 0x0b, 0xb7, 0x33, 0x5b, 0xb8, 0x9d,
-	0x9f, 0x0b, 0xb7, 0xf3, 0xc6, 0x4f, 0xb8, 0x1e, 0x16, 0xa1, 0x1f, 0x89, 0x74, 0x7d, 0xe0, 0xdb,
-	0x2a, 0x52, 0x4f, 0x73, 0x50, 0xe1, 0x65, 0xf3, 0xf6, 0x4f, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff,
-	0x8d, 0x82, 0x03, 0xc3, 0xa3, 0x04, 0x00, 0x00,
+	// 510 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0xc1, 0x6e, 0xd3, 0x30,
+	0x1c, 0xc6, 0xeb, 0x8a, 0x4d, 0x9a, 0x91, 0x90, 0xf0, 0x00, 0x8d, 0x80, 0x22, 0x08, 0x82, 0x8e,
+	0x4e, 0x8b, 0xd7, 0x54, 0x1d, 0x07, 0x4e, 0x20, 0xa4, 0xc1, 0x81, 0x03, 0x45, 0x5c, 0xb8, 0x39,
+	0x89, 0x95, 0x5a, 0x5a, 0xe3, 0xcc, 0x76, 0x26, 0x26, 0xc4, 0x85, 0x27, 0x40, 0xe2, 0xca, 0x8d,
+	0x07, 0xe0, 0x02, 0xef, 0xc0, 0x71, 0x12, 0x17, 0x8e, 0xa8, 0xe5, 0x41, 0xd0, 0x6c, 0x87, 0xb9,
+	0x5b, 0x97, 0x36, 0xc7, 0xfe, 0xf5, 0x7d, 0xdf, 0xff, 0x97, 0x7f, 0x3f, 0x19, 0xa2, 0x44, 0x48,
+	0x96, 0xe5, 0xf8, 0xa0, 0xa4, 0xe2, 0x28, 0x2c, 0x04, 0x57, 0x1c, 0xdd, 0x1a, 0x53, 0x45, 0x62,
+	0xba, 0x4f, 0x44, 0x29, 0xc3, 0x71, 0x9c, 0x70, 0x41, 0x13, 0x11, 0x1a, 0xa1, 0x77, 0x3b, 0xe3,
+	0x3c, 0xdb, 0xa7, 0x98, 0x14, 0x0c, 0x93, 0x3c, 0xe7, 0x8a, 0x28, 0xc6, 0x73, 0x69, 0xac, 0x5e,
+	0x37, 0xe1, 0x72, 0xcc, 0x25, 0x8e, 0x89, 0xa4, 0x26, 0x13, 0x1f, 0xf6, 0x62, 0xaa, 0x48, 0x0f,
+	0x17, 0x24, 0x63, 0xb9, 0x16, 0x5b, 0xed, 0x55, 0xbb, 0x9a, 0x94, 0x6a, 0x64, 0x47, 0xeb, 0x76,
+	0x24, 0x68, 0xc2, 0x45, 0x6a, 0x86, 0xc1, 0x7d, 0xb8, 0xfe, 0xea, 0x24, 0x69, 0x8f, 0xaa, 0x27,
+	0xa5, 0x1a, 0x0d, 0xe9, 0x41, 0x49, 0xa5, 0x42, 0x57, 0x60, 0x9b, 0xa5, 0x1b, 0xe0, 0x0e, 0xd8,
+	0x5c, 0x1b, 0xb6, 0x59, 0x1a, 0xbc, 0x84, 0xd7, 0x66, 0x65, 0xb2, 0xe0, 0xb9, 0xa4, 0x68, 0x00,
+	0x2f, 0x9d, 0xfc, 0xd6, 0xca, 0xcb, 0xd1, 0xdd, 0xb0, 0xe6, 0xe3, 0x42, 0x6d, 0xd4, 0xf2, 0x60,
+	0x0b, 0xde, 0xac, 0xe2, 0x5e, 0xa4, 0xd1, 0x6b, 0x2a, 0x0e, 0x59, 0x42, 0x2f, 0xda, 0x4d, 0xa1,
+	0x37, 0x4f, 0x6c, 0x09, 0xf6, 0x20, 0x3c, 0x9d, 0x5a, 0x8e, 0x4e, 0x2d, 0x87, 0x13, 0xe2, 0x58,
+	0x83, 0x0e, 0xbc, 0x5e, 0xad, 0x19, 0xea, 0x0b, 0x5d, 0xc4, 0xf3, 0x06, 0xde, 0x38, 0x2b, 0xb4,
+	0x2c, 0x8f, 0xe1, 0xaa, 0x99, 0x58, 0x8e, 0x7b, 0xb5, 0x1c, 0xd6, 0x6c, 0x2d, 0x41, 0x17, 0x6e,
+	0x38, 0x9f, 0x59, 0x8f, 0x40, 0x66, 0xee, 0x77, 0x86, 0xe2, 0x19, 0x5c, 0xfb, 0x3f, 0xb4, 0x20,
+	0x0f, 0x16, 0x1d, 0xc4, 0x46, 0x9c, 0x1a, 0xa3, 0x1f, 0x2b, 0x70, 0x45, 0xef, 0x40, 0x5f, 0x80,
+	0xf9, 0x93, 0xd1, 0x4e, 0x6d, 0xca, 0x9c, 0x1a, 0x79, 0xbd, 0x06, 0x0e, 0x43, 0x1f, 0xe0, 0x8f,
+	0xbf, 0xfe, 0x7e, 0x6e, 0x3f, 0x44, 0x1d, 0xec, 0x58, 0x71, 0x65, 0xc5, 0x4e, 0xad, 0x25, 0x7e,
+	0xcf, 0xd2, 0x0f, 0xe8, 0x3b, 0x70, 0x1b, 0x80, 0x76, 0x97, 0x5a, 0x79, 0xae, 0x75, 0xde, 0xa3,
+	0xc6, 0x3e, 0x0b, 0x3c, 0xd0, 0xc0, 0x18, 0x6d, 0xd7, 0x02, 0xb3, 0x34, 0x92, 0xc6, 0x68, 0xb1,
+	0xbf, 0x82, 0xaa, 0x2c, 0x28, 0x5a, 0x6a, 0xf5, 0x4c, 0x23, 0xbc, 0x7e, 0x23, 0x8f, 0x45, 0xdd,
+	0xd1, 0xa8, 0x5d, 0xb4, 0x59, 0x8b, 0x6a, 0xde, 0x07, 0x43, 0xf9, 0x0d, 0x38, 0x65, 0x42, 0x83,
+	0x65, 0x6f, 0x34, 0xcb, 0xba, 0xdb, 0xd4, 0x66, 0x71, 0xfb, 0x1a, 0x77, 0x1b, 0x6d, 0x2d, 0xba,
+	0xac, 0x43, 0xfc, 0xf4, 0xf9, 0xcf, 0x89, 0x0f, 0x8e, 0x27, 0x3e, 0xf8, 0x33, 0xf1, 0xc1, 0xa7,
+	0xa9, 0xdf, 0x3a, 0x9e, 0xfa, 0xad, 0xdf, 0x53, 0xbf, 0xf5, 0x36, 0xcc, 0x98, 0x1a, 0x95, 0x71,
+	0x98, 0xf0, 0xf1, 0xfc, 0xc0, 0x77, 0x55, 0xa4, 0x3a, 0x2a, 0xa8, 0x8c, 0x57, 0xf5, 0x0b, 0xd9,
+	0xff, 0x17, 0x00, 0x00, 0xff, 0xff, 0xcb, 0x55, 0xa9, 0x81, 0xc6, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -351,7 +444,8 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	Auth(ctx context.Context, in *QueryGetAuthRequest, opts ...grpc.CallOption) (*QueryGetAuthResponse, error)
 	Id2Service(ctx context.Context, in *QueryGetId2ServiceRequest, opts ...grpc.CallOption) (*QueryGetId2ServiceResponse, error)
-	Signature(ctx context.Context, in *QueryGetSignatureRequest, opts ...grpc.CallOption) (*QueryGetSignatureResponse, error)
+	Record(ctx context.Context, in *QueryGetRecordRequest, opts ...grpc.CallOption) (*QueryGetRecordResponse, error)
+	Id2Record(ctx context.Context, in *QueryGetId2RecordRequest, opts ...grpc.CallOption) (*QueryGetId2RecordResponse, error)
 }
 
 type queryClient struct {
@@ -380,9 +474,18 @@ func (c *queryClient) Id2Service(ctx context.Context, in *QueryGetId2ServiceRequ
 	return out, nil
 }
 
-func (c *queryClient) Signature(ctx context.Context, in *QueryGetSignatureRequest, opts ...grpc.CallOption) (*QueryGetSignatureResponse, error) {
-	out := new(QueryGetSignatureResponse)
-	err := c.cc.Invoke(ctx, "/metabelarus.mbcorecr.crsign.Query/Signature", in, out, opts...)
+func (c *queryClient) Record(ctx context.Context, in *QueryGetRecordRequest, opts ...grpc.CallOption) (*QueryGetRecordResponse, error) {
+	out := new(QueryGetRecordResponse)
+	err := c.cc.Invoke(ctx, "/metabelarus.mbcorecr.crsign.Query/Record", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Id2Record(ctx context.Context, in *QueryGetId2RecordRequest, opts ...grpc.CallOption) (*QueryGetId2RecordResponse, error) {
+	out := new(QueryGetId2RecordResponse)
+	err := c.cc.Invoke(ctx, "/metabelarus.mbcorecr.crsign.Query/Id2Record", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -393,7 +496,8 @@ func (c *queryClient) Signature(ctx context.Context, in *QueryGetSignatureReques
 type QueryServer interface {
 	Auth(context.Context, *QueryGetAuthRequest) (*QueryGetAuthResponse, error)
 	Id2Service(context.Context, *QueryGetId2ServiceRequest) (*QueryGetId2ServiceResponse, error)
-	Signature(context.Context, *QueryGetSignatureRequest) (*QueryGetSignatureResponse, error)
+	Record(context.Context, *QueryGetRecordRequest) (*QueryGetRecordResponse, error)
+	Id2Record(context.Context, *QueryGetId2RecordRequest) (*QueryGetId2RecordResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -406,8 +510,11 @@ func (*UnimplementedQueryServer) Auth(ctx context.Context, req *QueryGetAuthRequ
 func (*UnimplementedQueryServer) Id2Service(ctx context.Context, req *QueryGetId2ServiceRequest) (*QueryGetId2ServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Id2Service not implemented")
 }
-func (*UnimplementedQueryServer) Signature(ctx context.Context, req *QueryGetSignatureRequest) (*QueryGetSignatureResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Signature not implemented")
+func (*UnimplementedQueryServer) Record(ctx context.Context, req *QueryGetRecordRequest) (*QueryGetRecordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Record not implemented")
+}
+func (*UnimplementedQueryServer) Id2Record(ctx context.Context, req *QueryGetId2RecordRequest) (*QueryGetId2RecordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Id2Record not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -450,20 +557,38 @@ func _Query_Id2Service_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Signature_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetSignatureRequest)
+func _Query_Record_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Signature(ctx, in)
+		return srv.(QueryServer).Record(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/metabelarus.mbcorecr.crsign.Query/Signature",
+		FullMethod: "/metabelarus.mbcorecr.crsign.Query/Record",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Signature(ctx, req.(*QueryGetSignatureRequest))
+		return srv.(QueryServer).Record(ctx, req.(*QueryGetRecordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Id2Record_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetId2RecordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Id2Record(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/metabelarus.mbcorecr.crsign.Query/Id2Record",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Id2Record(ctx, req.(*QueryGetId2RecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -481,8 +606,12 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Id2Service_Handler,
 		},
 		{
-			MethodName: "Signature",
-			Handler:    _Query_Signature_Handler,
+			MethodName: "Record",
+			Handler:    _Query_Record_Handler,
+		},
+		{
+			MethodName: "Id2Record",
+			Handler:    _Query_Id2Record_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -619,7 +748,7 @@ func (m *QueryGetId2ServiceResponse) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetSignatureRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryGetRecordRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -629,12 +758,12 @@ func (m *QueryGetSignatureRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetSignatureRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryGetRecordRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetSignatureRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryGetRecordRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -649,7 +778,7 @@ func (m *QueryGetSignatureRequest) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetSignatureResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryGetRecordResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -659,19 +788,84 @@ func (m *QueryGetSignatureResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetSignatureResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryGetRecordResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetSignatureResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryGetRecordResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Signature != nil {
+	if m.Record != nil {
 		{
-			size, err := m.Signature.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetId2RecordRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetId2RecordRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetId2RecordRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		i -= len(m.Id)
+		copy(dAtA[i:], m.Id)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Id)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetId2RecordResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetId2RecordResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetId2RecordResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id2Record != nil {
+		{
+			size, err := m.Id2Record.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -747,7 +941,7 @@ func (m *QueryGetId2ServiceResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetSignatureRequest) Size() (n int) {
+func (m *QueryGetRecordRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -760,14 +954,40 @@ func (m *QueryGetSignatureRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetSignatureResponse) Size() (n int) {
+func (m *QueryGetRecordResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Signature != nil {
-		l = m.Signature.Size()
+	if m.Record != nil {
+		l = m.Record.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGetId2RecordRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGetId2RecordResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id2Record != nil {
+		l = m.Id2Record.Size()
 		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
@@ -1127,7 +1347,7 @@ func (m *QueryGetId2ServiceResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetSignatureRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryGetRecordRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1150,10 +1370,10 @@ func (m *QueryGetSignatureRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetSignatureRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryGetRecordRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetSignatureRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryGetRecordRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1212,7 +1432,7 @@ func (m *QueryGetSignatureRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetSignatureResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryGetRecordResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1235,15 +1455,15 @@ func (m *QueryGetSignatureResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetSignatureResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryGetRecordResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetSignatureResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryGetRecordResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signature", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1270,10 +1490,184 @@ func (m *QueryGetSignatureResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Signature == nil {
-				m.Signature = &Signature{}
+			if m.Record == nil {
+				m.Record = &Record{}
 			}
-			if err := m.Signature.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetId2RecordRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetId2RecordRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetId2RecordRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetId2RecordResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetId2RecordResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetId2RecordResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id2Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Id2Record == nil {
+				m.Id2Record = &Id2Record{}
+			}
+			if err := m.Id2Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

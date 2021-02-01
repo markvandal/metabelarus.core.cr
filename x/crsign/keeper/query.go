@@ -23,8 +23,10 @@ func NewQuerier(k Keeper, legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
 		// this line is used by starport scaffolding # 1
 		case types.QueryGetAuth:
 			return getAuth(ctx, path[1], k, legacyQuerierCdc)
-		case types.QueryGetSignature:
-			return getSignature(ctx, path[1], k, legacyQuerierCdc)
+		case types.QueryGetRecord:
+			return getRecord(ctx, path[1], k, legacyQuerierCdc)
+		case types.QueryGetId2Record:
+			return getId2Record(ctx, path[1], k, legacyQuerierCdc)
 		case types.QueryGetId2Service:
 			return getId2Service(ctx, path[1], k, legacyQuerierCdc)
 

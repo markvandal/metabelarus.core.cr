@@ -25,9 +25,9 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdRequestAuth())
 	cmd.AddCommand(CmdConfirmAuth())
 
-	cmd.AddCommand(CmdCreateSignature())
-	cmd.AddCommand(CmdUpdateSignature())
-	cmd.AddCommand(CmdDeleteSignature())
+	cmd.AddCommand(CmdCreateRecord())
+	cmd.AddCommand(CmdUpdateRecord())
+	cmd.AddCommand(CmdDeleteRecord())
 
 	return cmd
 }

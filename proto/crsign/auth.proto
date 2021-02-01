@@ -22,10 +22,10 @@ message Auth {
 }
 
 message MsgRequestAuth {
-  string service = 2;
-  string identity = 3;
-  string key = 4;
-  google.protobuf.Timestamp creationDt = 5 [(gogoproto.stdtime) = true];
+  string service = 1;
+  string identity = 2;
+  string key = 3;
+  google.protobuf.Timestamp creationDt = 4 [(gogoproto.stdtime) = true];
 }
 
 message MsgConfirmAuth {

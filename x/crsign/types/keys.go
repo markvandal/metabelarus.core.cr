@@ -22,8 +22,10 @@ func KeyPrefix(p string) []byte {
 }
 
 const (
-	SignatureKey      = "signature-value-"
-	SignatureCountKey = "signature-count-"
+	RecordKey      = "record-value-"
+	RecordCountKey = "record-count-"
+
+	Id2RecordKey = "id2record-value-"
 )
 
 const (

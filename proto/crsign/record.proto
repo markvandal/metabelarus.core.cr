@@ -1,0 +1,86 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crsign;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+enum RecordType {
+  IDENTITY_RECORD = 0;
+  IDENTITY_PERMANENT_RECORD = 1;
+  PROVIDER_RECORD = 2;
+  PROVIDER_SIGNABLE_RECORD = 3;
+  IDENTITY_MUTUAL_RECORD = 4;
+  PROVIDER_PERMISSION = 5;
+}
+
+enum RecordUpdate {
+  RECORD_UPDATE_SIGN = 0;
+  RECORD_UPDATE_STORE = 1;
+  REOCRD_UPDATE_EXTEND = 2;
+  REOCRD_UPDATE_REJECT = 3;
+  REOCRD_UPDATE_WITHDRAW = 4;
+  REOCRD_UPDATE_SEAL = 5;
+  REOCRD_UPDATE_REOPEN = 6;
+}
+
+enum PublicityType {
+  PRIVATE = 0;
+  PUBLIC = 1;
+  ANONYMOUS = 2;
+}
+
+enum RecordStatus {
+  RECORD_OPEN = 0;
+  RECORD_SIGNED = 1; // <- OPEN
+  RECORD_WITHDRAWN = 2; // <- SIGNED, OPEN
+  RECORD_REJECTED = 3; // <- SIGNED, OPEN
+  RECORD_SEALED = 4; // <- OPEN
+}
+
+message Record {
+  string id = 1;
+  string identity = 2;
+  string provider = 3;
+  string key = 4;
+  string data = 5;
+  string signature = 6;
+  RecordType recordType = 7;
+  PublicityType publicity = 8;
+  RecordStatus status = 9;
+  int32 liveTime = 10;
+  google.protobuf.Timestamp creationDt = 11 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp signatureDt = 12 [(gogoproto.stdtime) = true]; 
+}
+
+message MsgCreateRecord {
+  string creator = 1;
+  string provider = 2;
+  string key = 3;
+  string data = 4;
+  string signature = 5; 
+  RecordType recordType = 6; 
+  PublicityType publicity = 7; 
+  int32 liveTime = 8;
+  google.protobuf.Timestamp creationDt = 9 [(gogoproto.stdtime) = true]; 
+}
+
+message MsgUpdateRecord {
+  string updater = 1;
+  string id = 2;
+  string data = 3;
+  string signature = 4;
+  int32 liveTime = 5;
+  RecordUpdate action = 6;
+  google.protobuf.Timestamp updateDt = 7 [(gogoproto.stdtime) = true]; 
+}
+
+message MsgDeleteRecord {
+  string deleter = 1;
+  string id = 2;
+}
+
+message Id2Record {
+  repeated string records = 1;
+}
