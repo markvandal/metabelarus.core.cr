@@ -37,7 +37,7 @@ func (k Keeper) SetRecordCount(ctx sdk.Context, count int64) {
 	store.Set(byteKey, bz)
 }
 
-func (k Keeper) CreateRecord(ctx sdk.Context, msg types.Record) {
+func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) types.Record {
 	// Create the record
 	var status types.RecordStatus
 	switch msg.RecordType {
@@ -47,19 +47,18 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg types.Record) {
 		status = types.RecordStatus_RECORD_OPEN
 	}
 
-	incrementRecord := false
 	var id string
-	if msg.Id != "" && msg.RecordType == types.RecordType_IDENTITY_MUTUAL_RECORD {
-		id = msg.Id + "." + msg.Provider
+	var count int64
+	if msg.Id != "" && msg.RecordType == types.RecordType_PROVIDER_MUTUAL_RECORD {
+		id = msg.GetChildId()
+		msg.RecordType = types.RecordType_PROVIDER_RECORD
 	} else {
-		id = strconv.FormatInt(k.GetRecordCount(ctx), 10)
-		incrementRecord = true
+		count = k.GetRecordCount(ctx)
+		id = strconv.FormatInt(count, 10)
 	}
 
 	// TODO Check signature for ownership
-
-	count := k.GetRecordCount(ctx)
-	var record = types.Record{
+	record := types.Record{
 		Id:          id,
 		Identity:    msg.Identity,
 		Provider:    msg.Provider,
@@ -72,6 +71,7 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg types.Record) {
 		LiveTime:    msg.LiveTime,
 		CreationDt:  msg.CreationDt,
 		SignatureDt: msg.CreationDt,
+		UpdateDt:    msg.CreationDt,
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecordKey))
@@ -80,22 +80,24 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg types.Record) {
 	store.Set(key, value)
 
 	// Update record count
-	if incrementRecord {
+	if record.IsChildRecord() {
 		k.SetRecordCount(ctx, count+1)
 	}
+
+	return record
 }
 
-func (k Keeper) UpdateRecord(ctx sdk.Context, record types.Record) {
+func (k Keeper) UpdateRecord(ctx sdk.Context, record *types.Record) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecordKey))
-	b := k.cdc.MustMarshalBinaryBare(&record)
+	b := k.cdc.MustMarshalBinaryBare(record)
 	store.Set(types.KeyPrefix(types.RecordKey+record.Id), b)
 }
 
-func (k Keeper) GetRecord(ctx sdk.Context, id string) types.Record {
+func (k Keeper) GetRecord(ctx sdk.Context, id string) *types.Record {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecordKey))
 	var record types.Record
 	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.RecordKey+id)), &record)
-	return record
+	return &record
 }
 
 func (k Keeper) HasRecord(ctx sdk.Context, id string) bool {

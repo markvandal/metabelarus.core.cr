@@ -1,12 +1,12 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
@@ -25,6 +25,7 @@ type createRecordRequest struct {
 	RecordType string       `json:"type"`
 	Publicity  string       `json:"publicity"`
 	LiveTime   string       `json:"livetime"`
+	ParentId   string       `json:"parent"`
 }
 
 func createRecordHandler(clientCtx client.Context) http.HandlerFunc {
@@ -40,22 +41,48 @@ func createRecordHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		_, err := sdk.AccAddressFromBech32(req.Creator)
+		liveTime, err := strconv.ParseInt(req.LiveTime, 10, 32)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
+		publicity, ok := types.PublicityType_value[req.Publicity]
+		if !ok {
+			rest.WriteErrorResponse(
+				w, http.StatusBadRequest,
+				fmt.Errorf("Publicity type: %s does not exist", req.Publicity).Error(),
+			)
+			return
+		}
+
+		recordType, ok := types.RecordType_value[req.RecordType]
+		if !ok {
+			rest.WriteErrorResponse(
+				w, http.StatusBadRequest,
+				fmt.Errorf("Record type: %s does not exist", req.RecordType).Error(),
+			)
+
+			return
+		}
+
 		msg := types.NewMsgCreateRecord(
 			req.Creator,
-			req.Provider,
 			req.Key,
 			req.Data,
 			req.Signature,
-			req.RecordType,
-			req.Publicity,
-			req.LiveTime,
+			types.RecordType(recordType),
+			types.PublicityType(publicity),
+			int32(liveTime),
+			req.Provider,
+			req.ParentId,
 		)
+
+		err = msg.ValidateBasic()
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}
@@ -85,9 +112,18 @@ func updateRecordHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		_, err := sdk.AccAddressFromBech32(req.Updater)
+		liveTime, err := strconv.ParseInt(req.LiveTime, 10, 32)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		action, ok := types.PublicityType_value[req.Action]
+		if !ok {
+			rest.WriteErrorResponse(
+				w, http.StatusBadRequest,
+				fmt.Errorf("Action type: %s does not exist", req.Action).Error(),
+			)
 			return
 		}
 
@@ -96,9 +132,15 @@ func updateRecordHandler(clientCtx client.Context) http.HandlerFunc {
 			id,
 			req.Data,
 			req.Signature,
-			req.LiveTime,
-			req.Action,
+			int32(liveTime),
+			types.RecordUpdate(action),
 		)
+
+		err = msg.ValidateBasic()
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}
@@ -124,16 +166,16 @@ func deleteRecordHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		_, err := sdk.AccAddressFromBech32(req.Deleter)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
-
 		msg := types.NewMsgDeleteRecord(
 			req.Deleter,
 			id,
 		)
+
+		err := msg.ValidateBasic()
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}

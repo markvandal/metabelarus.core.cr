@@ -14,11 +14,18 @@ func (m Record) GetParentId() string {
 }
 
 func (m Record) GetChildId() string {
-	if m.RecordType == RecordType_IDENTITY_MUTUAL_RECORD {
-		if m.GetParentId() == "" {
-			return m.GetIdentity()
-		}
+	if m.RecordType == RecordType_PROVIDER_MUTUAL_RECORD {
+		return m.GetId() + "."
 	}
 
 	return ""
+}
+
+func (m Record) IsChildRecord() bool {
+	parts := strings.Split(m.Id, ".")
+	if len(parts) == 1 {
+		return false
+	}
+
+	return true
 }

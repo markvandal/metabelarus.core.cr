@@ -10,17 +10,16 @@ var _ sdk.Msg = &MsgCreateRecord{}
 
 func NewMsgCreateRecord(
 	creator string,
-	provider string,
 	key string,
 	data string,
 	signature string,
 	recordType RecordType,
 	publicity PublicityType,
 	liveTime int32,
+	ids ...string,
 ) *MsgCreateRecord {
-	return &MsgCreateRecord{
+	recordMsg := &MsgCreateRecord{
 		Creator:    creator,
-		Provider:   provider,
 		Key:        key,
 		Data:       data,
 		Signature:  signature,
@@ -29,6 +28,36 @@ func NewMsgCreateRecord(
 		LiveTime:   liveTime,
 		CreationDt: mbutils.CreateCurrentDate(),
 	}
+
+	idCount := len(ids)
+	if idCount != 0 {
+		recordMsg.Provider = ids[0]
+		if idCount == 2 {
+			recordMsg.ParentId = ids[1]
+		}
+	}
+
+	return recordMsg
+}
+
+func (msg *MsgCreateRecord) ToRecord(identity string) *Record {
+	record := &Record{
+		Identity:   identity,
+		Provider:   msg.Provider,
+		Key:        msg.Key,
+		Data:       msg.Data,
+		Signature:  msg.Signature,
+		RecordType: msg.RecordType,
+		Publicity:  msg.Publicity,
+		LiveTime:   msg.LiveTime,
+		CreationDt: msg.CreationDt,
+	}
+
+	if msg.ParentId != "" {
+		record.Id = msg.ParentId
+	}
+
+	return record
 }
 
 func (msg *MsgCreateRecord) Route() string {

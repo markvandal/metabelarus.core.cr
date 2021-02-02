@@ -15,16 +15,23 @@ import (
 
 func CmdCreateRecord() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-record [provider] [key] [data] [record type] [publicity] [live time]",
+		Use:   "create-record [key] [data] [record type] [publicity] [live time] [provider - optional] [parent record id - optional]",
 		Short: "Creates a new reacord",
-		Args:  cobra.ExactArgs(6),
+		Args:  cobra.RangeArgs(5, 7),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsProvider := string(args[0])
-			argsKey := string(args[1])
-			argsData := string(args[2])
-			argsType := string(args[3])
-			argsPublicity := string(args[4])
-			argsLiveTime := string(args[5])
+			argsKey := string(args[0])
+			argsData := string(args[1])
+			argsType := string(args[2])
+			argsPublicity := string(args[3])
+			argsLiveTime := string(args[4])
+			argsProvider := ""
+			argsParentId := ""
+			if len(args) > 5 {
+				argsProvider = args[5]
+			}
+			if len(args) == 7 {
+				argsParentId = args[6]
+			}
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -54,13 +61,14 @@ func CmdCreateRecord() *cobra.Command {
 
 			msg := types.NewMsgCreateRecord(
 				clientCtx.GetFromAddress().String(),
-				string(argsProvider),
 				string(argsKey),
 				string(argsData),
 				hex.EncodeToString(signature),
 				types.RecordType(recordType),
 				types.PublicityType(publicity),
 				int32(liveTime),
+				string(argsProvider),
+				argsParentId,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

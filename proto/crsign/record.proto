@@ -11,7 +11,7 @@ enum RecordType {
   IDENTITY_PERMANENT_RECORD = 1;
   PROVIDER_RECORD = 2;
   PROVIDER_SIGNABLE_RECORD = 3;
-  IDENTITY_MUTUAL_RECORD = 4;
+  PROVIDER_MUTUAL_RECORD = 4;
   PROVIDER_PERMISSION = 5;
 }
 
@@ -52,6 +52,7 @@ message Record {
   int32 liveTime = 10;
   google.protobuf.Timestamp creationDt = 11 [(gogoproto.stdtime) = true]; 
   google.protobuf.Timestamp signatureDt = 12 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp updateDt = 13 [(gogoproto.stdtime) = true]; 
 }
 
 message MsgCreateRecord {
@@ -63,7 +64,8 @@ message MsgCreateRecord {
   RecordType recordType = 6; 
   PublicityType publicity = 7; 
   int32 liveTime = 8;
-  google.protobuf.Timestamp creationDt = 9 [(gogoproto.stdtime) = true]; 
+  string parentId = 9;
+  google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true]; 
 }
 
 message MsgUpdateRecord {

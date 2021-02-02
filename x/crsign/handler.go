@@ -22,14 +22,14 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgConfirmAuth:
 			return handleMsgConfirmAuth(ctx, k, msg)
 
-		case *types.MsgCreateSignature:
-			return handleMsgCreateSignature(ctx, k, msg)
+		case *types.MsgCreateRecord:
+			return handleMsgCreateRecord(ctx, k, msg)
 
-		case *types.MsgUpdateSignature:
-			return handleMsgUpdateSignature(ctx, k, msg)
+		case *types.MsgUpdateRecord:
+			return handleMsgUpdateRecord(ctx, k, msg)
 
-		case *types.MsgDeleteSignature:
-			return handleMsgDeleteSignature(ctx, k, msg)
+		case *types.MsgDeleteRecord:
+			return handleMsgDeleteRecord(ctx, k, msg)
 
 		default:
 			errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)
