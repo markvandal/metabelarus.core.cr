@@ -49,9 +49,13 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) types.Record {
 
 	var id string
 	var count int64
-	if msg.Id != "" && msg.RecordType == types.RecordType_PROVIDER_MUTUAL_RECORD {
+	if msg.Id != "" && types.IsMutualRecord(msg.RecordType) {
 		id = msg.GetChildId()
-		msg.RecordType = types.RecordType_PROVIDER_RECORD
+		if msg.RecordType == types.RecordType_IDENTITY_MUTUAL_RECORD {
+			msg.RecordType = types.RecordType_PROVIDER_RECORD
+		} else {
+			msg.RecordType = types.RecordType_IDENTITY_RECORD
+		}
 	} else {
 		count = k.GetRecordCount(ctx)
 		id = strconv.FormatInt(count, 10)

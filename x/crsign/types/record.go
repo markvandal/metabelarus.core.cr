@@ -29,3 +29,7 @@ func (m Record) IsChildRecord() bool {
 
 	return true
 }
+
+func (m Record) IsParentRecord() bool {
+	return IsMutualRecord(m.RecordType)
+}

@@ -16,7 +16,7 @@ func (k Keeper) Record(c context.Context, req *types.QueryGetRecordRequest) (*ty
 
 	record := k.GetRecord(sdk.UnwrapSDKContext(c), req.Id)
 
-	return &types.QueryGetRecordResponse{Record: &record}, nil
+	return &types.QueryGetRecordResponse{Record: record}, nil
 }
 
 func (k Keeper) Id2Record(c context.Context, req *types.QueryGetId2RecordRequest) (*types.QueryGetId2RecordResponse, error) {

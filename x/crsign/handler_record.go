@@ -69,26 +69,66 @@ func handleMsgUpdateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgUpdat
 		return nil, sdkerrors.Wrap(types.ErrNoRecord, "No record")
 	}
 
-	update, err := update.CreateUpdateStatus(record, updaterIdentityId)
+	updater, err := update.CreateUpdateStatus(record, updaterIdentityId)
 	if err != nil {
 		return nil, err
 	}
-	if err = update.Dispatch(msg); err != nil {
+	if err = updater.Dispatch(msg); err != nil {
 		return nil, err
 	}
 
+	var mutualRecord *types.Record
+	if updater.IsMutualUpdateRequired() {
+		mutualMsg := &types.MsgUpdateRecord{
+			LiveTime: msg.LiveTime,
+			Action:   msg.Action,
+			UpdateDt: msg.UpdateDt,
+		}
+		var mutualIdentity string
+		if updater.IsChildUpdate() {
+			mutualMsg.Id = record.GetParentId()
+			if record.RecordType == types.RecordType_IDENTITY_RECORD {
+				mutualIdentity = record.Provider
+			} else {
+				mutualIdentity = record.Identity
+			}
+		} else {
+			mutualMsg.Id = record.GetChildId()
+			if record.RecordType == types.RecordType_IDENTITY_MUTUAL_RECORD {
+				mutualIdentity = record.Provider
+			} else {
+				mutualIdentity = record.Identity
+			}
+		}
+		mutualMsg.Updater = k.IdKeeper.GetAddressFromId(ctx, mutualIdentity)
+		mutualRecord = k.GetRecord(ctx, mutualMsg.Id)
+		mutualUpdater, err := update.CreateUpdateStatus(mutualRecord, mutualIdentity)
+		if err != nil {
+			return nil, err
+		}
+		if err = mutualUpdater.Dispatch(mutualMsg); err != nil {
+			return nil, err
+		}
+	}
+
 	k.UpdateRecord(ctx, record)
+	if mutualRecord != nil {
+		k.UpdateRecord(ctx, mutualRecord)
+	}
 
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }
 
 func handleMsgDeleteRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgDeleteRecord) (*sdk.Result, error) {
+	deleterIdentityId := k.IdKeeper.GetIdFromAddress(ctx, msg.Deleter)
+	if deleterIdentityId == "" {
+		return nil, sdkerrors.Wrap(types.ErrNoIdentity, "No user identity")
+	}
 	if !k.HasRecord(ctx, msg.Id) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, msg.Id)
 	}
-	if msg.Creator != k.GetRecordOwner(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Incorrect owner")
-	}
+
+	// @TODO Valide if user may delete the record, e.g. if the record is opened
 
 	k.DeleteRecord(ctx, msg.Id)
 
