@@ -40,6 +40,7 @@ func handleMsgCreateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 	}
 
 	record := k.CreateRecord(ctx, msg.ToRecord(identityId))
+	k.IdKeeper.TouchId(ctx, creatorIdentityId, msg.CreationDt)
 
 	// Produce response
 	ctx.EventManager().EmitEvent(
@@ -116,6 +117,22 @@ func handleMsgUpdateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgUpdat
 		k.UpdateRecord(ctx, mutualRecord)
 	}
 
+	k.IdKeeper.TouchId(ctx, record.Identity, msg.UpdateDt)
+	if record.Identity != record.Provider {
+		k.IdKeeper.TouchId(ctx, record.Provider, msg.UpdateDt)
+	}
+
+	// Produce response
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventUpdateRecord,
+			sdk.NewAttribute(
+				types.EventAttrRecordId,
+				record.GetId(),
+			),
+		),
+	)
+
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }
 
@@ -128,9 +145,52 @@ func handleMsgDeleteRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgDelet
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, msg.Id)
 	}
 
-	// @TODO Valide if user may delete the record, e.g. if the record is opened
+	record := k.GetRecord(ctx, msg.Id)
+	switch record.Status {
+	default:
+		return nil, sdkerrors.Wrap(
+			types.ErrDelete,
+			fmt.Sprintf(
+				"Can't delete record from %s status",
+				record.Status.String(),
+			),
+		)
+	case types.RecordStatus_RECORD_OPEN:
+	case types.RecordStatus_RECORD_WITHDRAWN:
+	case types.RecordStatus_RECORD_REJECTED:
+	}
+
+	updater, err := update.CreateUpdateStatus(record, deleterIdentityId)
+	if err != nil {
+		return nil, err
+	}
+
+	err = updater.CheckUpdate()
+	if err != nil {
+		return nil, err
+	}
+	updater.RequireMutualUpdate()
+
+	if updater.IsMutualUpdateRequired() {
+		if updater.IsChildUpdate() {
+			k.DeleteRecord(ctx, record.GetParentId())
+		} else {
+			k.DeleteRecord(ctx, record.GetChildId())
+		}
+	}
 
 	k.DeleteRecord(ctx, msg.Id)
+
+	// Produce response
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventDeleteRecord,
+			sdk.NewAttribute(
+				types.EventAttrRecordId,
+				record.GetId(),
+			),
+		),
+	)
 
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }

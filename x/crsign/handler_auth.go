@@ -37,6 +37,8 @@ func handleMsgRequestAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgReques
 
 	k.CreateAuth(ctx, auth)
 
+	k.IdKeeper.TouchId(ctx, serviceId, msg.CreationDt)
+
 	// Produce response
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
@@ -73,6 +75,9 @@ func handleMsgConfirmAuth(ctx sdk.Context, k keeper.Keeper, msg *types.MsgConfir
 	auth.AvailabilityDt = &newDuration
 
 	k.UpdateAuth(ctx, &auth)
+
+	k.IdKeeper.TouchId(ctx, identityId, msg.ConfirmationDt)
+	k.IdKeeper.TouchId(ctx, msg.Service, msg.ConfirmationDt)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

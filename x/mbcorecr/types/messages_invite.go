@@ -21,7 +21,7 @@ func NewMsgCreateInvite(
 		IdentityType: identityType,
 		Address:      address,
 		PubKey:       pubKey,
-		CreationDt:   mbutils.CreateCurrentDate(),
+		CreationDt:   mbutils.CreateCurrentTime(),
 	}
 }
 
@@ -57,9 +57,9 @@ func (msg *MsgCreateInvite) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidPubKey, "Invalid public key (%s)", err)
 	}
 
-	created := mbutils.Created{CreationDt: msg.CreationDt}
+	created := mbutils.TimePoint{msg.CreationDt}
 
-	if err := created.ValidateBasic(); err != nil {
+	if err := created.Validate(); err != nil {
 		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
 	}
 
@@ -74,7 +74,7 @@ func NewMsgAcceptInvite(inviteId string, tmpAddress string, address string, pubK
 		TmpAddress:   tmpAddress,
 		Address:      address,
 		PubKey:       pubKey,
-		AcceptanceDt: mbutils.CreateCurrentDate(),
+		AcceptanceDt: mbutils.CreateCurrentTime(),
 	}
 }
 
@@ -115,9 +115,9 @@ func (msg *MsgAcceptInvite) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidPubKey, "Invalid public key (%s)", err)
 	}
 
-	created := mbutils.Created{CreationDt: msg.AcceptanceDt}
+	created := mbutils.TimePoint{msg.AcceptanceDt}
 
-	if err := created.ValidateBasic(); err != nil {
+	if err := created.Validate(); err != nil {
 		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
 	}
 

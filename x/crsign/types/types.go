@@ -5,6 +5,8 @@ const (
 	EventConfirmAuth = "mbcorecr.crsign:confirm.auth"
 
 	EventCreateRecord = "mbcorecr.crsign:create.record"
+	EventUpdateRecord = "mbcorecr.crsign:update.record"
+	EventDeleteRecord = "mbcorecr.crsign:delete.record"
 )
 
 const (

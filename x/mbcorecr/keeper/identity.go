@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -35,6 +36,15 @@ func (k Keeper) SetIdentityCount(ctx sdk.Context, count int64) {
 	byteKey := types.KeyPrefix(types.IdentityCountKey)
 	bz := []byte(strconv.FormatInt(count, 10))
 	store.Set(byteKey, bz)
+}
+
+func (k Keeper) TouchId(ctx sdk.Context, id string, changeDt *time.Time) {
+	identity := k.GetIdentity(ctx, id)
+	if identity.Id == "" {
+		return
+	}
+	identity.UpdatedDt = changeDt
+	k.UpdateIdentity(ctx, identity)
 }
 
 func (k Keeper) CreateIdentity(ctx sdk.Context, identity types.Identity, address ...string) string {

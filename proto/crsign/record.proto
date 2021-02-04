@@ -82,6 +82,7 @@ message MsgUpdateRecord {
 message MsgDeleteRecord {
   string deleter = 1;
   string id = 2;
+  google.protobuf.Timestamp deletionDt = 3 [(gogoproto.stdtime) = true];
 }
 
 message Id2Record {

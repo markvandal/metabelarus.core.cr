@@ -1,6 +1,8 @@
 package record_update
 
 import (
+	"fmt"
+
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -10,6 +12,8 @@ type UpdateStatus interface {
 	Dispatch(msg *types.MsgUpdateRecord) error
 	IsMutualUpdateRequired() bool
 	IsChildUpdate() bool
+	CheckUpdate() error
+	RequireMutualUpdate()
 }
 
 type StatusAbstract struct {
@@ -71,6 +75,31 @@ func (status *StatusAbstract) Cancel(newStatus types.RecordStatus) {
 	status.record.UpdateDt = status.action.UpdateDt
 
 	status.RequireMutualUpdate()
+}
+
+func (status *StatusAbstract) DispatchCanceled(msg *types.MsgUpdateRecord) error {
+	status.action = msg
+	switch msg.Action {
+	case types.RecordUpdate_REOCRD_UPDATE_REOPEN:
+		err := status.CheckUpdate()
+		if err != nil {
+			return err
+		}
+		status.record.Status = types.RecordStatus_RECORD_OPEN
+		status.record.UpdateDt = status.action.UpdateDt
+		status.RequireMutualUpdate()
+		break
+	default:
+		return sdkerrors.Wrap(
+			types.ErrUpdateCancel,
+			fmt.Sprintf(
+				"Action: %s",
+				types.RecordUpdate_name[int32(status.action.Action)],
+			),
+		)
+	}
+
+	return nil
 }
 
 func (status *StatusAbstract) CheckUpdate() error {

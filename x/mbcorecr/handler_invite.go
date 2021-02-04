@@ -57,6 +57,9 @@ func handleMsgAcceptInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgAccep
 		ctx, k.AuthKeeper.GetAccount(ctx, tmpAddr),
 	)
 
+	k.TouchId(ctx, invite.Invitee, msg.AcceptanceDt)
+	k.TouchId(ctx, invite.Inviter, msg.AcceptanceDt)
+
 	// Build response
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
@@ -119,6 +122,7 @@ func handleMsgCreateInvite(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 	}
 
 	k.CreateInvite(ctx, invite)
+	k.TouchId(ctx, inviterId, msg.CreationDt)
 
 	// Provide response
 	ctx.EventManager().EmitEvent(

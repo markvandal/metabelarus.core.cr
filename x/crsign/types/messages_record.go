@@ -26,7 +26,7 @@ func NewMsgCreateRecord(
 		RecordType: recordType,
 		Publicity:  publicity,
 		LiveTime:   liveTime,
-		CreationDt: mbutils.CreateCurrentDate(),
+		CreationDt: mbutils.CreateCurrentTime(),
 	}
 
 	idCount := len(ids)
@@ -87,9 +87,9 @@ func (msg *MsgCreateRecord) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	created := mbutils.Created{CreationDt: msg.CreationDt}
+	created := mbutils.TimePoint{msg.CreationDt}
 
-	if err := created.ValidateBasic(); err != nil {
+	if err := created.Validate(); err != nil {
 		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
 	}
 
@@ -113,7 +113,7 @@ func NewMsgUpdateRecord(
 		Signature: signature,
 		LiveTime:  liveTime,
 		Action:    action,
-		UpdateDt:  mbutils.CreateCurrentDate(),
+		UpdateDt:  mbutils.CreateCurrentTime(),
 	}
 }
 
@@ -144,9 +144,9 @@ func (msg *MsgUpdateRecord) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	created := mbutils.Created{CreationDt: msg.UpdateDt}
+	created := mbutils.TimePoint{msg.UpdateDt}
 
-	if err := created.ValidateBasic(); err != nil {
+	if err := created.Validate(); err != nil {
 		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
 	}
 
@@ -157,8 +157,9 @@ var _ sdk.Msg = &MsgDeleteRecord{}
 
 func NewMsgDeleteRecord(deleter string, id string) *MsgDeleteRecord {
 	return &MsgDeleteRecord{
-		Id:      id,
-		Deleter: deleter,
+		Id:         id,
+		Deleter:    deleter,
+		DeletionDt: mbutils.CreateCurrentTime(),
 	}
 }
 func (msg *MsgDeleteRecord) Route() string {
@@ -183,6 +184,12 @@ func (msg *MsgDeleteRecord) GetSignBytes() []byte {
 }
 
 func (msg *MsgDeleteRecord) ValidateBasic() error {
+	created := mbutils.TimePoint{msg.DeletionDt}
+
+	if err := created.Validate(); err != nil {
+		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	}
+
 	_, err := sdk.AccAddressFromBech32(msg.Deleter)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)

@@ -21,4 +21,6 @@ var (
 	ErrUpdateData          = sdkerrors.Register(ModuleName, 2900, "Can't update data without setting signature")
 	ErrUpdateSign          = sdkerrors.Register(ModuleName, 2720, "Can't sign record")
 	ErrUpdateStore         = sdkerrors.Register(ModuleName, 2730, "Can't store in record")
+	ErrUpdateCancel        = sdkerrors.Register(ModuleName, 2740, "Can't perform action with canceled record")
+	ErrDelete              = sdkerrors.Register(ModuleName, 2810, "Can't delete record")
 )

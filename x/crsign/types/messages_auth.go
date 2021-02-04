@@ -13,7 +13,7 @@ func NewMsgRequestAuth(service string, identity string, key string) *MsgRequestA
 		Identity:   identity,
 		Service:    service,
 		Key:        key,
-		CreationDt: mbutils.CreateCurrentDate(),
+		CreationDt: mbutils.CreateCurrentTime(),
 	}
 }
 
@@ -44,9 +44,9 @@ func (msg *MsgRequestAuth) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	created := mbutils.Created{CreationDt: msg.CreationDt}
+	created := mbutils.TimePoint{msg.CreationDt}
 
-	if err := created.ValidateBasic(); err != nil {
+	if err := created.Validate(); err != nil {
 		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
 	}
 
@@ -57,8 +57,9 @@ var _ sdk.Msg = &MsgConfirmAuth{}
 
 func NewMsgConfirmAuth(identity string, service string) *MsgConfirmAuth {
 	return &MsgConfirmAuth{
-		Identity: identity,
-		Service:  service,
+		Identity:       identity,
+		Service:        service,
+		ConfirmationDt: mbutils.CreateCurrentTime(),
 	}
 }
 
@@ -85,6 +86,12 @@ func (msg *MsgConfirmAuth) GetSignBytes() []byte {
 
 func (msg *MsgConfirmAuth) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Identity)
+
+	created := mbutils.TimePoint{msg.ConfirmationDt}
+
+	if err := created.Validate(); err != nil {
+		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	}
 
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)

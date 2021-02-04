@@ -18,6 +18,7 @@ type IdentityKeeper interface {
 	GetIdFromAddress(ctx sdk.Context, address string) string
 	EnsureIdFromAddress(ctx sdk.Context, address string, creationDt *time.Time) (string, error)
 	GetAddressFromId(ctx sdk.Context, id string) string
+	TouchId(ctx sdk.Context, id string, changeDt *time.Time)
 }
 
 // AccountKeeper is the interface contract that x/auth's keeper implements.
