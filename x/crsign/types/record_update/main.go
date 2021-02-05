@@ -38,7 +38,6 @@ func (status *StatusAbstract) Seal() error {
 		return sdkerrors.Wrap(types.ErrUpdateSeal, "Can't seal open record")
 	case types.RecordType_PROVIDER_RECORD:
 	case types.RecordType_IDENTITY_RECORD:
-	case types.RecordType_IDENTITY_PERMANENT_RECORD:
 	}
 	status.record.Status = types.RecordStatus_RECORD_SEALED
 	status.record.UpdateDt = status.action.UpdateDt
@@ -111,7 +110,7 @@ func (status *StatusAbstract) CheckUpdate() error {
 	status.providerUpdate = false
 
 	if status.record.Publicity == types.PublicityType_PRIVATE {
-		if (status.action.Data != status.record.Data) != (status.action.Signature == "") {
+		if (status.action.Data != status.record.Data) && (status.action.Signature == "") {
 			return sdkerrors.Wrap(types.ErrUpdateData, "Data is changed without signature")
 		}
 	}
@@ -213,12 +212,16 @@ func CreateUpdateStatus(record *types.Record, actor string) (UpdateStatus, error
 		ret = &StatusOpen{StatusAbstract: abstractStatus}
 		break
 	case types.RecordStatus_RECORD_SIGNED:
+		ret = &StatusSigned{StatusAbstract: abstractStatus}
 		break
 	case types.RecordStatus_RECORD_WITHDRAWN:
+		ret = &StatusWithdrawn{StatusAbstract: abstractStatus}
 		break
 	case types.RecordStatus_RECORD_REJECTED:
+		ret = &StatusRejected{StatusAbstract: abstractStatus}
 		break
 	case types.RecordStatus_RECORD_SEALED:
+		ret = &StatusSealed{StatusAbstract: abstractStatus}
 		break
 	default:
 		return nil, sdkerrors.Wrap(types.ErrUpdateAction, "Unkwnown status")

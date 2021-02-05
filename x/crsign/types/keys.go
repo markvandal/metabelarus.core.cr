@@ -25,7 +25,8 @@ const (
 	RecordKey      = "record-value-"
 	RecordCountKey = "record-count-"
 
-	Id2RecordKey = "id2record-value-"
+	Id2RecordKey    = "id2record-value-"
+	Id2KeyRecordKey = "id2keyrecord-value-"
 )
 
 const (

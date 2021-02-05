@@ -39,7 +39,10 @@ func handleMsgCreateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 		)
 	}
 
-	record := k.CreateRecord(ctx, msg.ToRecord(identityId))
+	record, err := k.CreateRecord(ctx, msg.ToRecord(identityId))
+	if err != nil {
+		return nil, err
+	}
 	k.IdKeeper.TouchId(ctx, creatorIdentityId, msg.CreationDt)
 
 	// Produce response

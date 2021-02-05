@@ -1,10 +1,13 @@
 package keeper
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
 )
 
@@ -37,16 +40,7 @@ func (k Keeper) SetRecordCount(ctx sdk.Context, count int64) {
 	store.Set(byteKey, bz)
 }
 
-func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) types.Record {
-	// Create the record
-	var status types.RecordStatus
-	switch msg.RecordType {
-	case types.RecordType_IDENTITY_PERMANENT_RECORD:
-		status = types.RecordStatus_RECORD_SEALED
-	default:
-		status = types.RecordStatus_RECORD_OPEN
-	}
-
+func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) (*types.Record, error) {
 	var id string
 	var count int64
 	if msg.Id != "" && types.IsMutualRecord(msg.RecordType) {
@@ -61,8 +55,20 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) types.Record {
 		id = strconv.FormatInt(count, 10)
 	}
 
+	var recordKey types.Id2KeyRecord
+	keyStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.Id2KeyRecordKey))
+	id2KeyRecordKey := types.KeyPrefix(types.Id2KeyRecordKey + msg.Identity + "-" + msg.Key)
+	k.cdc.MustUnmarshalBinaryBare(keyStore.Get(id2KeyRecordKey), &recordKey)
+	if recordKey.Id != "" {
+		return nil, sdkerrors.Wrap(
+			types.ErrRecordExists,
+			fmt.Sprintf("Record with key %s already exist in identity %s", msg.Key, msg.Identity),
+		)
+	}
+	recordKey = types.Id2KeyRecord{Id: id}
+
 	// TODO Check signature for ownership
-	record := types.Record{
+	record := &types.Record{
 		Id:          id,
 		Identity:    msg.Identity,
 		Provider:    msg.Provider,
@@ -71,7 +77,7 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) types.Record {
 		Signature:   msg.Signature,
 		RecordType:  msg.RecordType,
 		Publicity:   msg.Publicity,
-		Status:      status,
+		Status:      types.RecordStatus_RECORD_OPEN,
 		LiveTime:    msg.LiveTime,
 		CreationDt:  msg.CreationDt,
 		SignatureDt: msg.CreationDt,
@@ -80,15 +86,17 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) types.Record {
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecordKey))
 	key := types.KeyPrefix(types.RecordKey + record.Id)
-	value := k.cdc.MustMarshalBinaryBare(&record)
+	value := k.cdc.MustMarshalBinaryBare(record)
 	store.Set(key, value)
+
+	keyStore.Set(id2KeyRecordKey, k.cdc.MustMarshalBinaryBare(&recordKey))
 
 	// Update record count
 	if !record.IsChildRecord() {
 		k.SetRecordCount(ctx, count+1)
 	}
 
-	return record
+	return record, nil
 }
 
 func (k Keeper) UpdateRecord(ctx sdk.Context, record *types.Record) {
@@ -125,6 +133,12 @@ func (k Keeper) DeleteRecord(ctx sdk.Context, key string) {
 	record := k.GetRecord(ctx, key)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecordKey))
 	store.Delete(types.KeyPrefix(types.RecordKey + key))
+
+	keyStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.Id2KeyRecordKey))
+	keyStore.Delete(
+		types.KeyPrefix(types.Id2KeyRecordKey + record.Identity + "-" + record.Key),
+	)
+
 	if parent := record.GetParentId(); "" != parent {
 		k.DeleteRecord(ctx, parent)
 	} else if child := record.GetChildId(); "" != child {

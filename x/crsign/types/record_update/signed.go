@@ -33,7 +33,6 @@ func (status *StatusSigned) Dispatch(msg *types.MsgUpdateRecord) error {
 			return err
 		}
 		switch status.record.RecordType {
-		case types.RecordType_IDENTITY_PERMANENT_RECORD:
 		case types.RecordType_PROVIDER_PERMISSION:
 			return sdkerrors.Wrap(
 				types.ErrUpdateSign,
