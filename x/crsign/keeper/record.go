@@ -84,7 +84,7 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) types.Record {
 	store.Set(key, value)
 
 	// Update record count
-	if record.IsChildRecord() {
+	if !record.IsChildRecord() {
 		k.SetRecordCount(ctx, count+1)
 	}
 

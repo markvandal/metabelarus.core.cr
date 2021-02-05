@@ -110,8 +110,10 @@ func (status *StatusAbstract) CheckUpdate() error {
 	status._providerUpdateChecked = true
 	status.providerUpdate = false
 
-	if (status.action.Data != status.record.Data) != (status.action.Signature == "") {
-		return sdkerrors.Wrap(types.ErrUpdateData, "Data is changed without signature")
+	if status.record.Publicity == types.PublicityType_PRIVATE {
+		if (status.action.Data != status.record.Data) != (status.action.Signature == "") {
+			return sdkerrors.Wrap(types.ErrUpdateData, "Data is changed without signature")
+		}
 	}
 
 	if types.IsIdentityRecord(status.record.RecordType) {
