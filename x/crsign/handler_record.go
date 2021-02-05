@@ -7,6 +7,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/metabelarus/mbcorecr/x/crsign/keeper"
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
+	corecrtypes "github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 
 	update "github.com/metabelarus/mbcorecr/x/crsign/types/record_update"
 )
@@ -32,11 +33,21 @@ func handleMsgCreateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 		identityId = creatorIdentityId
 	}
 
-	if types.IsIdentityRecord(msg.RecordType) != (msg.Provider == identityId) {
+	if types.IsIdentityRecord(msg.RecordType) && (creatorIdentityId != identityId) {
 		return nil, sdkerrors.Wrap(
 			types.ErrRecIdentityProvider,
 			fmt.Sprintf("Provided %s: %s %s", msg.RecordType.String(), msg.Provider, identityId),
 		)
+	}
+
+	if types.IsProviderRecord(msg.RecordType) && (creatorIdentityId == identityId) {
+		service := k.IdKeeper.ExportIdentity(ctx, creatorIdentityId)
+		if !service.VerifyIdentityType(corecrtypes.IdentityType_SERVICE) {
+			return nil, sdkerrors.Wrap(
+				types.ErrRecIdentityProvider,
+				fmt.Sprintf("Provided %s: %s %s", msg.RecordType.String(), msg.Provider, identityId),
+			)
+		}
 	}
 
 	record, err := k.CreateRecord(ctx, msg.ToRecord(identityId))
