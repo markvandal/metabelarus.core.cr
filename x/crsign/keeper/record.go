@@ -41,19 +41,8 @@ func (k Keeper) SetRecordCount(ctx sdk.Context, count int64) {
 }
 
 func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) (*types.Record, error) {
-	var id string
-	var count int64
-	if msg.Id != "" && types.IsMutualRecord(msg.RecordType) {
-		id = msg.GetChildId()
-		if msg.RecordType == types.RecordType_IDENTITY_MUTUAL_RECORD {
-			msg.RecordType = types.RecordType_PROVIDER_RECORD
-		} else {
-			msg.RecordType = types.RecordType_IDENTITY_RECORD
-		}
-	} else {
-		count = k.GetRecordCount(ctx)
-		id = strconv.FormatInt(count, 10)
-	}
+	count := k.GetRecordCount(ctx)
+	id := strconv.FormatInt(count, 10)
 
 	var recordKey types.Id2KeyRecord
 	keyStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.Id2KeyRecordKey))
@@ -92,9 +81,7 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) (*types.Record,
 	keyStore.Set(id2KeyRecordKey, k.cdc.MustMarshalBinaryBare(&recordKey))
 
 	// Update record count
-	if !record.IsChildRecord() {
-		k.SetRecordCount(ctx, count+1)
-	}
+	k.SetRecordCount(ctx, count+1)
 
 	return record, nil
 }
@@ -121,7 +108,9 @@ func (k Keeper) GetRecordOwner(ctx sdk.Context, key string) string {
 	record := k.GetRecord(ctx, key)
 	switch record.RecordType {
 	case types.RecordType_PROVIDER_PERMISSION:
+		return record.Provider
 	case types.RecordType_PROVIDER_RECORD:
+		return record.Provider
 	case types.RecordType_PROVIDER_SIGNABLE_RECORD:
 		return record.Provider
 	}
@@ -134,14 +123,10 @@ func (k Keeper) DeleteRecord(ctx sdk.Context, key string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecordKey))
 	store.Delete(types.KeyPrefix(types.RecordKey + key))
 
-	keyStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.Id2KeyRecordKey))
-	keyStore.Delete(
+	prefix.NewStore(
+		ctx.KVStore(k.storeKey),
+		types.KeyPrefix(types.Id2KeyRecordKey),
+	).Delete(
 		types.KeyPrefix(types.Id2KeyRecordKey + record.Identity + "-" + record.Key),
 	)
-
-	if parent := record.GetParentId(); "" != parent {
-		k.DeleteRecord(ctx, parent)
-	} else if child := record.GetChildId(); "" != child {
-		k.DeleteRecord(ctx, child)
-	}
 }

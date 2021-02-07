@@ -24,7 +24,6 @@ func (status *StatusSealed) Dispatch(msg *types.MsgUpdateRecord) error {
 		return sdkerrors.Wrap(types.ErrUpdateSign, "Can't reject a sealed record")
 	case types.RecordUpdate_REOCRD_UPDATE_WITHDRAW:
 		status.Withdraw()
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_REOPEN:
 		err := status.CheckUpdate()
 		if err != nil {
@@ -39,14 +38,11 @@ func (status *StatusSealed) Dispatch(msg *types.MsgUpdateRecord) error {
 					types.RecordType_name[int32(status.record.RecordType)],
 				),
 			)
-		case types.RecordType_PROVIDER_MUTUAL_RECORD:
 		case types.RecordType_PROVIDER_RECORD:
 		case types.RecordType_PROVIDER_SIGNABLE_RECORD:
 		}
 		status.record.Status = types.RecordStatus_RECORD_OPEN
 		status.record.UpdateDt = status.action.UpdateDt
-		status.RequireMutualUpdate()
-		break
 	default:
 		return sdkerrors.Wrap(types.ErrUpdateAction, "Unkwnown action")
 	}

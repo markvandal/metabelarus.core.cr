@@ -10,10 +10,8 @@ import (
 
 type UpdateStatus interface {
 	Dispatch(msg *types.MsgUpdateRecord) error
-	IsMutualUpdateRequired() bool
 	IsChildUpdate() bool
 	CheckUpdate() error
-	RequireMutualUpdate()
 }
 
 type StatusAbstract struct {
@@ -41,8 +39,6 @@ func (status *StatusAbstract) Seal() error {
 	}
 	status.record.Status = types.RecordStatus_RECORD_SEALED
 	status.record.UpdateDt = status.action.UpdateDt
-
-	status.RequireMutualUpdate()
 
 	return nil
 }
@@ -72,8 +68,6 @@ func (status *StatusAbstract) Cancel(newStatus types.RecordStatus) {
 	status.record.Signature = ""
 	status.record.Status = newStatus
 	status.record.UpdateDt = status.action.UpdateDt
-
-	status.RequireMutualUpdate()
 }
 
 func (status *StatusAbstract) DispatchCanceled(msg *types.MsgUpdateRecord) error {
@@ -86,8 +80,6 @@ func (status *StatusAbstract) DispatchCanceled(msg *types.MsgUpdateRecord) error
 		}
 		status.record.Status = types.RecordStatus_RECORD_OPEN
 		status.record.UpdateDt = status.action.UpdateDt
-		status.RequireMutualUpdate()
-		break
 	default:
 		return sdkerrors.Wrap(
 			types.ErrUpdateCancel,
@@ -127,27 +119,6 @@ func (status *StatusAbstract) CheckUpdate() error {
 		return sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Incorrect updater")
 	}
 
-	err := status.CheckMutualRecordChangability()
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (status *StatusAbstract) CheckMutualRecordChangability() error {
-	if status.providerUpdate {
-		if status.record.IsChildRecord() &&
-			status.record.RecordType == types.RecordType_IDENTITY_RECORD {
-			return sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Impossible to change identity record by provider")
-		}
-	} else {
-		if status.record.IsChildRecord() &&
-			status.record.RecordType == types.RecordType_PROVIDER_RECORD {
-			return sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Impossible to change provider record by identity")
-		}
-	}
-
 	return nil
 }
 
@@ -156,11 +127,6 @@ func (status *StatusAbstract) CheckReject() error {
 		if status.record.Identity != status.actor {
 			return sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Only personal record can be rejected")
 		}
-	}
-
-	err := status.CheckMutualRecordChangability()
-	if err != nil {
-		return err
 	}
 
 	return nil
@@ -173,25 +139,7 @@ func (status *StatusAbstract) CheckWithdraw() error {
 		}
 	}
 
-	err := status.CheckMutualRecordChangability()
-	if err != nil {
-		return err
-	}
-
 	return nil
-}
-
-func (status *StatusAbstract) RequireMutualUpdate() {
-	if status.record.IsChildRecord() {
-		status.IsParentUpdateRequired = true
-	}
-	if status.record.IsParentRecord() {
-		status.IsChildUpdateRequired = true
-	}
-}
-
-func (status *StatusAbstract) IsMutualUpdateRequired() bool {
-	return status.IsParentUpdateRequired || status.IsChildUpdateRequired
 }
 
 func (status *StatusAbstract) IsChildUpdate() bool {
@@ -210,19 +158,14 @@ func CreateUpdateStatus(record *types.Record, actor string) (UpdateStatus, error
 	switch record.Status {
 	case types.RecordStatus_RECORD_OPEN:
 		ret = &StatusOpen{StatusAbstract: abstractStatus}
-		break
 	case types.RecordStatus_RECORD_SIGNED:
 		ret = &StatusSigned{StatusAbstract: abstractStatus}
-		break
 	case types.RecordStatus_RECORD_WITHDRAWN:
 		ret = &StatusWithdrawn{StatusAbstract: abstractStatus}
-		break
 	case types.RecordStatus_RECORD_REJECTED:
 		ret = &StatusRejected{StatusAbstract: abstractStatus}
-		break
 	case types.RecordStatus_RECORD_SEALED:
 		ret = &StatusSealed{StatusAbstract: abstractStatus}
-		break
 	default:
 		return nil, sdkerrors.Wrap(types.ErrUpdateAction, "Unkwnown status")
 	}

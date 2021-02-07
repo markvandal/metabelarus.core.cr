@@ -2,18 +2,9 @@
 
 SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-NODECRYPT=$SCRIPTPATH/../../../node/crypt.js
-
 # [SETUP TEST] Create service and user identities
 
-SERVICE=$(. $SCRIPTPATH/../invite/test_all.sh)
-IDENTITY=$(. $SCRIPTPATH/../invite/test_all.sh)
-
-SERV_ADDR=$(echo $SERVICE | jq -r '.address')
-SERV_ID=$(echo $SERVICE | jq -r '.id')
-
-IDEN_ADDR=$(echo $IDENTITY | jq -r '.address')
-IDEN_ID=$(echo $IDENTITY | jq -r '.id')
+. $SCRIPTPATH/../auth/test_all.sh
 
 # [TEST]
 
@@ -49,6 +40,7 @@ echo "Shouldn't be able to reopen the record: "$ERROR
 
 # Only service, that an Idnetity autheticated in, should be able to 
 # create public records, for example, to store KYC badges 
+
 RECORD_REQ=$(mbcorecrd tx crsign create-record \
  service-passport-record$RANDOM some-ecnrypted-record-value \
  PROVIDER_RECORD PUBLIC 0 $IDEN_ID \

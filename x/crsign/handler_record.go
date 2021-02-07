@@ -40,6 +40,11 @@ func handleMsgCreateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgCreat
 		)
 	}
 
+	err = authorizeProvider(ctx, k, msg.Provider, identityId)
+	if err != nil {
+		return nil, err
+	}
+
 	if types.IsProviderRecord(msg.RecordType) && (creatorIdentityId == identityId) {
 		service := k.IdKeeper.ExportIdentity(ctx, creatorIdentityId)
 		if !service.VerifyIdentityType(corecrtypes.IdentityType_SERVICE) {
@@ -84,6 +89,11 @@ func handleMsgUpdateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgUpdat
 		return nil, sdkerrors.Wrap(types.ErrNoRecord, "No record")
 	}
 
+	err = authorizeProvider(ctx, k, record.Provider, record.Identity)
+	if err != nil {
+		return nil, err
+	}
+
 	updater, err := update.CreateUpdateStatus(record, updaterIdentityId)
 	if err != nil {
 		return nil, err
@@ -92,44 +102,7 @@ func handleMsgUpdateRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgUpdat
 		return nil, err
 	}
 
-	var mutualRecord *types.Record
-	if updater.IsMutualUpdateRequired() {
-		mutualMsg := &types.MsgUpdateRecord{
-			LiveTime: msg.LiveTime,
-			Action:   msg.Action,
-			UpdateDt: msg.UpdateDt,
-		}
-		var mutualIdentity string
-		if updater.IsChildUpdate() {
-			mutualMsg.Id = record.GetParentId()
-			if record.RecordType == types.RecordType_IDENTITY_RECORD {
-				mutualIdentity = record.Provider
-			} else {
-				mutualIdentity = record.Identity
-			}
-		} else {
-			mutualMsg.Id = record.GetChildId()
-			if record.RecordType == types.RecordType_IDENTITY_MUTUAL_RECORD {
-				mutualIdentity = record.Provider
-			} else {
-				mutualIdentity = record.Identity
-			}
-		}
-		mutualMsg.Updater = k.IdKeeper.GetAddressFromId(ctx, mutualIdentity)
-		mutualRecord = k.GetRecord(ctx, mutualMsg.Id)
-		mutualUpdater, err := update.CreateUpdateStatus(mutualRecord, mutualIdentity)
-		if err != nil {
-			return nil, err
-		}
-		if err = mutualUpdater.Dispatch(mutualMsg); err != nil {
-			return nil, err
-		}
-	}
-
 	k.UpdateRecord(ctx, record)
-	if mutualRecord != nil {
-		k.UpdateRecord(ctx, mutualRecord)
-	}
 
 	k.IdKeeper.TouchId(ctx, record.Identity, msg.UpdateDt)
 	if record.Identity != record.Provider {
@@ -160,6 +133,11 @@ func handleMsgDeleteRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgDelet
 	}
 
 	record := k.GetRecord(ctx, msg.Id)
+	err := authorizeProvider(ctx, k, record.Provider, record.Identity)
+	if err != nil {
+		return nil, err
+	}
+
 	switch record.Status {
 	default:
 		return nil, sdkerrors.Wrap(
@@ -183,15 +161,6 @@ func handleMsgDeleteRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgDelet
 	if err != nil {
 		return nil, err
 	}
-	updater.RequireMutualUpdate()
-
-	if updater.IsMutualUpdateRequired() {
-		if updater.IsChildUpdate() {
-			k.DeleteRecord(ctx, record.GetParentId())
-		} else {
-			k.DeleteRecord(ctx, record.GetChildId())
-		}
-	}
 
 	k.DeleteRecord(ctx, msg.Id)
 
@@ -207,4 +176,11 @@ func handleMsgDeleteRecord(ctx sdk.Context, k keeper.Keeper, msg *types.MsgDelet
 	)
 
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
+}
+
+func authorizeProvider(ctx sdk.Context, k keeper.Keeper, provider string, identity string) error {
+	if provider == identity {
+		return nil
+	}
+	return k.CheckAuthorization(ctx, provider, identity)
 }

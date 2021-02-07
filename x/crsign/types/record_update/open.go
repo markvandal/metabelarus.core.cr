@@ -18,7 +18,6 @@ func (status *StatusOpen) Dispatch(msg *types.MsgUpdateRecord) error {
 			return err
 		}
 		status.UpdateData()
-		break
 	case types.RecordUpdate_RECORD_UPDATE_SIGN:
 		err := status.CheckUpdate()
 		if err != nil {
@@ -27,16 +26,12 @@ func (status *StatusOpen) Dispatch(msg *types.MsgUpdateRecord) error {
 		status.record.Status = types.RecordStatus_RECORD_SIGNED
 		status.record.SignatureDt = status.action.UpdateDt
 		status.record.UpdateDt = status.action.UpdateDt
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_SEAL:
 		status.Seal()
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_REJECT:
 		status.Reject()
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_WITHDRAW:
 		status.Withdraw()
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_REOPEN:
 		return sdkerrors.Wrap(types.ErrUpdateAction, "Can't reopen opened record")
 	default:

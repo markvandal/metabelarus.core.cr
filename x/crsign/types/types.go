@@ -20,8 +20,8 @@ const (
 
 func IsProviderRecord(recordType RecordType) bool {
 	switch recordType {
-	case RecordType_PROVIDER_MUTUAL_RECORD:
 	case RecordType_PROVIDER_RECORD:
+		return true
 	case RecordType_PROVIDER_SIGNABLE_RECORD:
 		return true
 	}
@@ -31,14 +31,4 @@ func IsProviderRecord(recordType RecordType) bool {
 
 func IsIdentityRecord(recordType RecordType) bool {
 	return !IsProviderRecord(recordType)
-}
-
-func IsMutualRecord(recordType RecordType) bool {
-	switch recordType {
-	case RecordType_PROVIDER_MUTUAL_RECORD:
-	case RecordType_IDENTITY_MUTUAL_RECORD:
-		return true
-	}
-
-	return false
 }

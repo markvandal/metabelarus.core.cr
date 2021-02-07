@@ -20,13 +20,10 @@ func (status *StatusSigned) Dispatch(msg *types.MsgUpdateRecord) error {
 		return sdkerrors.Wrap(types.ErrUpdateSign, "Can't sign signed record")
 	case types.RecordUpdate_REOCRD_UPDATE_SEAL:
 		status.Seal()
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_REJECT:
 		status.Reject()
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_WITHDRAW:
 		status.Withdraw()
-		break
 	case types.RecordUpdate_REOCRD_UPDATE_REOPEN:
 		err := status.CheckUpdate()
 		if err != nil {
@@ -44,8 +41,6 @@ func (status *StatusSigned) Dispatch(msg *types.MsgUpdateRecord) error {
 		}
 		status.record.Status = types.RecordStatus_RECORD_OPEN
 		status.record.UpdateDt = status.action.UpdateDt
-		status.RequireMutualUpdate()
-		break
 	default:
 		return sdkerrors.Wrap(types.ErrUpdateAction, "Unkwnown action")
 	}
