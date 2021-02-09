@@ -62,8 +62,7 @@ message MsgCreateRecord {
   RecordType recordType = 6; 
   PublicityType publicity = 7; 
   int32 liveTime = 8;
-  string parentId = 9;
-  google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp creationDt = 9 [(gogoproto.stdtime) = true]; 
 }
 
 message MsgUpdateRecord {

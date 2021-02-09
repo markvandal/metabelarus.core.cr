@@ -476,7 +476,7 @@ var (
 
 	pattern_Query_Id2Service_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"metabelarus", "mbcorecr", "crsign", "id2services", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Record_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"metabelarus", "mbcorecr", "crsign", "record", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Record_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"metabelarus", "mbcorecr", "crsign", "records", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_Id2Record_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"metabelarus", "mbcorecr", "crsign", "id2record", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 )

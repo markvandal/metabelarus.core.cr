@@ -25,7 +25,6 @@ type createRecordRequest struct {
 	RecordType string       `json:"type"`
 	Publicity  string       `json:"publicity"`
 	LiveTime   string       `json:"livetime"`
-	ParentId   string       `json:"parent"`
 }
 
 func createRecordHandler(clientCtx client.Context) http.HandlerFunc {
@@ -75,7 +74,6 @@ func createRecordHandler(clientCtx client.Context) http.HandlerFunc {
 			types.PublicityType(publicity),
 			int32(liveTime),
 			req.Provider,
-			req.ParentId,
 		)
 
 		err = msg.ValidateBasic()

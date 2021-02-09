@@ -32,9 +32,6 @@ func NewMsgCreateRecord(
 	idCount := len(ids)
 	if idCount != 0 {
 		recordMsg.Provider = ids[0]
-		if idCount == 2 {
-			recordMsg.ParentId = ids[1]
-		}
 	}
 
 	return recordMsg
@@ -51,10 +48,6 @@ func (msg *MsgCreateRecord) ToRecord(identity string) *Record {
 		Publicity:  msg.Publicity,
 		LiveTime:   msg.LiveTime,
 		CreationDt: msg.CreationDt,
-	}
-
-	if msg.ParentId != "" {
-		record.Id = msg.ParentId
 	}
 
 	return record

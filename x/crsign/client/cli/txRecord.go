@@ -15,9 +15,9 @@ import (
 
 func CmdCreateRecord() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-record [key] [data] [record type] [publicity] [live time] [provider - optional] [parent record id - optional]",
+		Use:   "create-record [key] [data] [record type] [publicity] [live time] [provider - optional]",
 		Short: "Creates a new reacord",
-		Args:  cobra.RangeArgs(5, 7),
+		Args:  cobra.RangeArgs(5, 6),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsKey := string(args[0])
 			argsData := string(args[1])
@@ -25,12 +25,8 @@ func CmdCreateRecord() *cobra.Command {
 			argsPublicity := string(args[3])
 			argsLiveTime := string(args[4])
 			argsProvider := ""
-			argsParentId := ""
 			if len(args) > 5 {
 				argsProvider = args[5]
-			}
-			if len(args) == 7 {
-				argsParentId = args[6]
 			}
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
@@ -68,7 +64,6 @@ func CmdCreateRecord() *cobra.Command {
 				types.PublicityType(publicity),
 				int32(liveTime),
 				string(argsProvider),
-				argsParentId,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
