@@ -83,6 +83,8 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) (*types.Record,
 	// Update record count
 	k.SetRecordCount(ctx, count+1)
 
+	k.AddRecord2Id(ctx, msg.Identity, id)
+
 	return record, nil
 }
 
