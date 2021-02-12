@@ -3,6 +3,7 @@ package helper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/metabelarus/mbcorecr/x/mbcorecr/keeper"
 	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 )
 
@@ -18,8 +19,7 @@ type InviteHelper struct {
 func NewInviteHelper(
 	InviterBech32 string,
 	ctx *sdk.Context,
-	bank *types.BankKeeper,
-	auth *types.AccountKeeper,
+	k *keeper.Keeper,
 ) (*InviteHelper, error) {
 	inviterAddr, err := sdk.AccAddressFromBech32(InviterBech32)
 	if err != nil {
@@ -28,8 +28,8 @@ func NewInviteHelper(
 
 	inviteHelper := &InviteHelper{
 		InviterAddress: sdk.AccAddress(inviterAddr),
-		bankKeeper:     bank,
-		authKeeper:     auth,
+		bankKeeper:     &k.BankKeeper,
+		authKeeper:     &k.AuthKeeper,
 		ctx:            ctx,
 	}
 

@@ -5,6 +5,7 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	coretype "github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 )
@@ -12,6 +13,8 @@ import (
 type IdentityKeeper interface {
 	ExportIdentity(ctx sdk.Context, key string) coretype.IdentityI
 	HasIdentity(ctx sdk.Context, id string) bool
+	GetIdFromAddress(ctx sdk.Context, address string) string
+	GetAddressFromId(ctx sdk.Context, id string) string
 }
 
 // AccountKeeper is the interface contract that x/auth's keeper implements.
@@ -42,4 +45,20 @@ type AccountKeeper interface {
 
 	// Fetch the next account number, and increment the internal counter.
 	GetNextAccountNumber(sdk.Context) uint64
+}
+
+// BankViewKeeper defines a module interface that facilitates read only access to
+// account balances.
+type BankViewKeeper interface {
+	ValidateBalance(ctx sdk.Context, addr sdk.AccAddress) error
+	HasBalance(ctx sdk.Context, addr sdk.AccAddress, amt sdk.Coin) bool
+
+	GetAllBalances(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
+	GetAccountsBalances(ctx sdk.Context) []types.Balance
+	GetBalance(ctx sdk.Context, addr sdk.AccAddress, denom string) sdk.Coin
+	LockedCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
+	SpendableCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
+
+	IterateAccountBalances(ctx sdk.Context, addr sdk.AccAddress, cb func(coin sdk.Coin) (stop bool))
+	IterateAllBalances(ctx sdk.Context, cb func(address sdk.AccAddress, coin sdk.Coin) (stop bool))
 }

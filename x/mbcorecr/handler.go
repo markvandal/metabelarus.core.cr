@@ -22,9 +22,6 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgAcceptInvite:
 			return handleMsgAcceptInvite(ctx, k, msg)
 
-		case *types.MsgUpdateIdentity:
-			return handleMsgUpdateIdentity(ctx, k, msg)
-
 		// Manually created handlers
 
 		default:

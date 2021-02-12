@@ -1,21 +1,13 @@
 package types
 
 const (
-	QueryGetSignature  = "get-signature"
-	QueryListSignature = "list-signature"
+	QueryGetSignature = "get-signature"
 )
 
 const (
-	QueryGetId2Sign  = "get-id2sign"
-	QueryListId2Sign = "list-id2sign"
+	QueryGetAuth = "get-auth"
 )
 
 const (
-	QueryGetAuth  = "get-auth"
-	QueryListAuth = "list-auth"
-)
-
-const (
-	QueryGetId2Auth  = "get-id2auth"
-	QueryListId2Auth = "list-id2auth"
+	QueryGetId2Service = "get-id2service"
 )

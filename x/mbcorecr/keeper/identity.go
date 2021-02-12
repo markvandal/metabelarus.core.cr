@@ -37,7 +37,7 @@ func (k Keeper) SetIdentityCount(ctx sdk.Context, count int64) {
 	store.Set(byteKey, bz)
 }
 
-func (k Keeper) CreateIdentity(ctx sdk.Context, identity types.Identity) string {
+func (k Keeper) CreateIdentity(ctx sdk.Context, identity types.Identity, address ...string) string {
 	// Create the identity
 	count := k.GetIdentityCount(ctx)
 	identity.Id = strconv.FormatInt(count, 10)
@@ -49,6 +49,13 @@ func (k Keeper) CreateIdentity(ctx sdk.Context, identity types.Identity) string 
 
 	// Update identity count
 	k.SetIdentityCount(ctx, count+1)
+
+	if len(address) > 0 {
+		k.SetId2Addr(ctx, identity.Id, types.Addr{
+			Address: address[0],
+			Main:    true},
+		)
+	}
 
 	return identity.Id
 }
@@ -75,8 +82,8 @@ func (k Keeper) HasIdentity(ctx sdk.Context, id string) bool {
 	return store.Has(types.KeyPrefix(types.IdentityKey + id))
 }
 
-func (k Keeper) GetIdentityOwner(ctx sdk.Context, key string) string {
-	return k.GetIdentity(ctx, key).Address
+func (k Keeper) GetIdentityOwner(ctx sdk.Context, id string) string {
+	return k.GetAddressFromId(ctx, id)
 }
 
 // DeleteIdentity deletes a identity

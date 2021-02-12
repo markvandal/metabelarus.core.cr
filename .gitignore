@@ -28,6 +28,8 @@ secret.yml
 vue/node_modules
 vue/dist
 vue/.cache
+node/node_modules
+node/package-lock.json
 frontend/node_modules
 frontend/dist
 frontend/.cache

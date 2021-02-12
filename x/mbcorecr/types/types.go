@@ -16,7 +16,7 @@ const (
 	EventAttrInviteId        = "invite_id"
 	EventAttrIentityId       = "identity_id"
 
-	DefaultWalletPath             = "0'"
+	DefaultWalletPath             = "44'/118'/0'/0/0" // @TODO should be read from config
 	UnsecureNewAcctountPKPassword = "11112222"
 
 	SuperInviteDenom = "invitesuper"

@@ -10,8 +10,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
 	cdc.RegisterConcrete(&MsgCreateInvite{}, "mbcorecr/CreateInvite", nil)
 	cdc.RegisterConcrete(&MsgAcceptInvite{}, "mbcorecr/AcceptInvite", nil)
-
-	cdc.RegisterConcrete(&MsgUpdateIdentity{}, "mbcorecr/UpdateIdentity", nil)
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -19,9 +17,6 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreateInvite{},
 		&MsgAcceptInvite{},
-	)
-	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgUpdateIdentity{},
 	)
 }
 

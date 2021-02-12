@@ -1,49 +1,13 @@
 package cli
 
 import (
-    "context"
+	"context"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 	"github.com/spf13/cobra"
-    "github.com/metabelarus/mbcorecr/x/mbcorecr/types"
 )
-
-func CmdListInvite() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "list-invite",
-		Short: "list all invite",
-		RunE: func(cmd *cobra.Command, args []string) error {
-            clientCtx := client.GetClientContextFromCmd(cmd)
-            clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
-            if err != nil {
-                return err
-            }
-
-            pageReq, err := client.ReadPageRequest(cmd.Flags())
-            if err != nil {
-                return err
-            }
-
-            queryClient := types.NewQueryClient(clientCtx)
-
-            params := &types.QueryAllInviteRequest{
-                Pagination: pageReq,
-            }
-
-            res, err := queryClient.InviteAll(context.Background(), params)
-            if err != nil {
-                return err
-            }
-
-            return clientCtx.PrintOutput(res)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-    return cmd
-}
 
 func CmdShowInvite() *cobra.Command {
 	cmd := &cobra.Command{
@@ -51,28 +15,28 @@ func CmdShowInvite() *cobra.Command {
 		Short: "shows a invite",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-            clientCtx := client.GetClientContextFromCmd(cmd)
-            clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
-            if err != nil {
-                return err
-            }
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			if err != nil {
+				return err
+			}
 
-            queryClient := types.NewQueryClient(clientCtx)
+			queryClient := types.NewQueryClient(clientCtx)
 
-            params := &types.QueryGetInviteRequest{
-                Id: args[0],
-            }
+			params := &types.QueryGetInviteRequest{
+				Id: args[0],
+			}
 
-            res, err := queryClient.Invite(context.Background(), params)
-            if err != nil {
-                return err
-            }
+			res, err := queryClient.Invite(context.Background(), params)
+			if err != nil {
+				return err
+			}
 
-            return clientCtx.PrintOutput(res)
+			return clientCtx.PrintOutput(res)
 		},
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
 
-    return cmd
+	return cmd
 }

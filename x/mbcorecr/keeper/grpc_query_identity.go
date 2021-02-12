@@ -48,7 +48,31 @@ func (k Keeper) Identity(c context.Context, req *types.QueryGetIdentityRequest) 
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.IdentityKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.IdentityKey + req.Id)), &identity)
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.IdentityKey+req.Id)), &identity)
 
 	return &types.QueryGetIdentityResponse{Identity: &identity}, nil
+}
+
+func (k Keeper) AddrToId(c context.Context, req *types.QueryAddrToIdRequest) (*types.QueryAddrToIdResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	addrToId := &types.Addr2Id{
+		Id: k.GetIdFromAddress(sdk.UnwrapSDKContext(c), req.Address),
+	}
+
+	return &types.QueryAddrToIdResponse{Addr2Id: addrToId}, nil
+}
+
+func (k Keeper) IdToAddr(c context.Context, req *types.QueryIdToAddrRequest) (*types.QueryIdToAddrResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	addr := &types.Addr{
+		Address: k.GetAddressFromId(sdk.UnwrapSDKContext(c), req.Id),
+	}
+
+	return &types.QueryIdToAddrResponse{Addr: addr}, nil
 }

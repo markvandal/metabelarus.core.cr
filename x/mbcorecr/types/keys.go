@@ -24,6 +24,8 @@ func KeyPrefix(p string) []byte {
 const (
 	IdentityKey      = "identity-value-"
 	IdentityCountKey = "identity-count-"
+	IdToAddrKey      = "id2addr-"
+	AddrToIdKey      = "addr2id-"
 )
 
 const (

@@ -8,9 +8,8 @@ import (
 
 var _ sdk.Msg = &MsgRequestAuth{}
 
-func NewMsgRequestAuth(creator string, service string, identity string, key string) *MsgRequestAuth {
+func NewMsgRequestAuth(service string, identity string, key string) *MsgRequestAuth {
 	return &MsgRequestAuth{
-		Creator:    creator,
 		Identity:   identity,
 		Service:    service,
 		Key:        key,
@@ -27,7 +26,7 @@ func (msg *MsgRequestAuth) Type() string {
 }
 
 func (msg *MsgRequestAuth) GetSigners() []sdk.AccAddress {
-	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	creator, err := sdk.AccAddressFromBech32(msg.Service)
 	if err != nil {
 		panic(err)
 	}
@@ -40,19 +39,24 @@ func (msg *MsgRequestAuth) GetSignBytes() []byte {
 }
 
 func (msg *MsgRequestAuth) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	_, err := sdk.AccAddressFromBech32(msg.Service)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-	// @TODO CreationDt should be checked for an hour +\-
+
+	created := mbutils.Created{CreationDt: msg.CreationDt}
+
+	if err := created.ValidateBasic(); err != nil {
+		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	}
+
 	return nil
 }
 
 var _ sdk.Msg = &MsgConfirmAuth{}
 
-func NewMsgConfirmAuth(creator string, service string, identity string) *MsgConfirmAuth {
+func NewMsgConfirmAuth(identity string, service string) *MsgConfirmAuth {
 	return &MsgConfirmAuth{
-		Creator:  creator,
 		Identity: identity,
 		Service:  service,
 	}
@@ -67,7 +71,7 @@ func (msg *MsgConfirmAuth) Type() string {
 }
 
 func (msg *MsgConfirmAuth) GetSigners() []sdk.AccAddress {
-	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	creator, err := sdk.AccAddressFromBech32(msg.Identity)
 	if err != nil {
 		panic(err)
 	}
@@ -80,7 +84,8 @@ func (msg *MsgConfirmAuth) GetSignBytes() []byte {
 }
 
 func (msg *MsgConfirmAuth) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	_, err := sdk.AccAddressFromBech32(msg.Identity)
+
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}

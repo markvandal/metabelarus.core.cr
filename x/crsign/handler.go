@@ -22,15 +22,6 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgConfirmAuth:
 			return handleMsgConfirmAuth(ctx, k, msg)
 
-		case *types.MsgCreateId2Sign:
-			return handleMsgCreateId2Sign(ctx, k, msg)
-
-		case *types.MsgUpdateId2Sign:
-			return handleMsgUpdateId2Sign(ctx, k, msg)
-
-		case *types.MsgDeleteId2Sign:
-			return handleMsgDeleteId2Sign(ctx, k, msg)
-
 		case *types.MsgCreateSignature:
 			return handleMsgCreateSignature(ctx, k, msg)
 
