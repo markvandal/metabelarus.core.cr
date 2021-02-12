@@ -5,7 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
 import "crsign/auth.proto";
-import "crsign/signature.proto";
+import "crsign/record.proto";
 
 option go_package = "github.com/metabelarus/mbcorecr/x/crsign/types";
 
@@ -19,8 +19,12 @@ service Query {
 		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2services/{id}";
 	}
 
-	rpc Signature(QueryGetSignatureRequest) returns (QueryGetSignatureResponse) {
-		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/signature/{id}";
+	rpc Record(QueryGetRecordRequest) returns (QueryGetRecordResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/records/{id}";
+	}
+
+	rpc Id2Record(QueryGetId2RecordRequest) returns (QueryGetId2RecordResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crsign/id2record/{id}";
 	}
 }
 
@@ -41,10 +45,18 @@ message QueryGetId2ServiceResponse {
 	Id2Service Id2Service = 1;
 }
 
-message QueryGetSignatureRequest {
+message QueryGetRecordRequest {
 	string id = 1;
 }
 
-message QueryGetSignatureResponse {
-	Signature Signature = 1;
+message QueryGetRecordResponse {
+	Record Record = 1;
+}
+
+message QueryGetId2RecordRequest {
+	string id = 1;
+}
+
+message QueryGetId2RecordResponse {
+	Id2Record Id2Record = 1;
 }

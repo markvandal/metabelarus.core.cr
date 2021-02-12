@@ -1,7 +1,8 @@
 package types
 
 const (
-	QueryGetSignature = "get-signature"
+	QueryGetRecord    = "get-record"
+	QueryGetId2Record = "get-id2record"
 )
 
 const (

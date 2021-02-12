@@ -9,10 +9,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func CmdShowSignature() *cobra.Command {
+func CmdShowRecord() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "show-signature [id]",
-		Short: "shows a signature",
+		Use:   "show-record [id]",
+		Short: "shows a record",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
@@ -23,11 +23,11 @@ func CmdShowSignature() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetSignatureRequest{
+			params := &types.QueryGetRecordRequest{
 				Id: args[0],
 			}
 
-			res, err := queryClient.Signature(context.Background(), params)
+			res, err := queryClient.Record(context.Background(), params)
 			if err != nil {
 				return err
 			}

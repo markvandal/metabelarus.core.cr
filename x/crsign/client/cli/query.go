@@ -29,7 +29,7 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	cmd.AddCommand(CmdShowAuth())
 	cmd.AddCommand(CmdShowId2Service())
 
-	cmd.AddCommand(CmdShowSignature())
+	cmd.AddCommand(CmdShowRecord())
 
 	return cmd
 }

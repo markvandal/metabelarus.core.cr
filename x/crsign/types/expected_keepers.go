@@ -1,6 +1,8 @@
 package types
 
 import (
+	time "time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
 
@@ -14,7 +16,9 @@ type IdentityKeeper interface {
 	ExportIdentity(ctx sdk.Context, key string) coretype.IdentityI
 	HasIdentity(ctx sdk.Context, id string) bool
 	GetIdFromAddress(ctx sdk.Context, address string) string
+	EnsureIdFromAddress(ctx sdk.Context, address string, creationDt *time.Time) (string, error)
 	GetAddressFromId(ctx sdk.Context, id string) string
+	TouchId(ctx sdk.Context, id string, changeDt *time.Time)
 }
 
 // AccountKeeper is the interface contract that x/auth's keeper implements.

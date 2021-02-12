@@ -17,7 +17,8 @@ message Identity {
   string id = 1;
   IdentityType identityType = 2; 
   string invitationId = 3;
-  google.protobuf.Timestamp creationDt = 4  [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp creationDt = 4 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp updatedDt = 5 [(gogoproto.stdtime) = true]; 
 }
 
 message Addr {

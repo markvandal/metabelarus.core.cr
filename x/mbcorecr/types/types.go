@@ -24,45 +24,38 @@ const (
 	Invite1Denom     = "invite1"
 	Invite2Denom     = "invite2"
 	Invite3Denom     = "invite3"
-	Invite4Denom     = "invite4"
+
+//	Invite4Denom     = "invite4"
 )
 
 var (
-	SuperIdentityCoinsPack = sdk.Coins{
-		sdk.Coin{Denom: Invite0Denom, Amount: sdk.NewInt(150)},
-		sdk.Coin{Denom: Invite1Denom, Amount: sdk.NewInt(100)},
-		sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
-		sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
-		sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
-	}
-
 	IndentityCoinPacks = map[IdentityLevel]sdk.Coins{
 		IdentityLevel_LevelSuper: sdk.Coins{
-			sdk.Coin{Denom: Invite0Denom, Amount: sdk.NewInt(150)},
-			sdk.Coin{Denom: Invite1Denom, Amount: sdk.NewInt(100)},
-			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
-			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
-			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+			sdk.Coin{Denom: Invite0Denom, Amount: sdk.NewInt(50)},
+			sdk.Coin{Denom: Invite1Denom, Amount: sdk.NewInt(50)},
+			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(150)},
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(150)},
+			//			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
 		},
 		IdentityLevel_Level0: sdk.Coins{
-			sdk.Coin{Denom: Invite1Denom, Amount: sdk.NewInt(100)},
-			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
-			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
-			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+			sdk.Coin{Denom: Invite1Denom, Amount: sdk.NewInt(50)},
+			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(150)},
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(1000)},
+			//			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
 		},
 		IdentityLevel_Level1: sdk.Coins{
-			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(50)},
-			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
-			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+			sdk.Coin{Denom: Invite2Denom, Amount: sdk.NewInt(15)},
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(1000)},
+			//			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
 		},
 		IdentityLevel_Level2: sdk.Coins{
-			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(15)},
-			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(5)},
+			//			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
 		},
 		IdentityLevel_Level3: sdk.Coins{
-			sdk.Coin{Denom: Invite4Denom, Amount: sdk.NewInt(5)},
+			//			sdk.Coin{Denom: Invite3Denom, Amount: sdk.NewInt(0)},
 		},
-		IdentityLevel_Level4: sdk.Coins{},
+		//		IdentityLevel_Level4: sdk.Coins{},
 	}
 
 	IdentityLevelToDenom = map[IdentityLevel]string{
@@ -71,6 +64,6 @@ var (
 		IdentityLevel_Level1:     Invite1Denom,
 		IdentityLevel_Level2:     Invite2Denom,
 		IdentityLevel_Level3:     Invite3Denom,
-		IdentityLevel_Level4:     Invite4Denom,
+		//		IdentityLevel_Level4:     Invite4Denom,
 	}
 )

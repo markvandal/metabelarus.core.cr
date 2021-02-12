@@ -4,12 +4,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
-func (k Keeper) CreateAuth(ctx sdk.Context, auth *types.Auth) {
+func (k Keeper) CreateAuth(ctx sdk.Context, auth types.Auth) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AuthKey))
 	key := types.KeyPrefix(types.AuthKey + auth.GetId())
-	value := k.cdc.MustMarshalBinaryBare(auth)
+	value := k.cdc.MustMarshalBinaryBare(&auth)
 	store.Set(key, value)
 	k.AddService2Id(ctx, auth.Identity, auth.Service)
 }
@@ -30,20 +33,40 @@ func (k Keeper) GetAuthByKey(ctx sdk.Context, key string) types.Auth {
 }
 
 func (k Keeper) GetAuth(ctx sdk.Context, service string, identity string) types.Auth {
-	auth := &types.Auth{
-		Identity: identity,
-		Service:  service,
-	}
+	auth := types.Auth{}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AuthKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(types.AuthKey+auth.GetId())), auth)
+	k.cdc.MustUnmarshalBinaryBare(
+		store.Get(types.KeyPrefix(types.AuthKey+identity+"."+service)),
+		&auth,
+	)
 
-	return *auth
+	return auth
 }
 
-func (k Keeper) HasAuth(ctx sdk.Context, id string) bool {
+func (k Keeper) CheckAuthorization(ctx sdk.Context, service string, identity string) error {
+	auth := k.GetAuth(ctx, service, identity)
+	if auth.Status != types.AuthStatus_AUTH_SIGNED {
+		return sdkerrors.Wrap(
+			sdkerrors.ErrUnauthorized,
+			"Provider isn't authorized to create a record for identity",
+		)
+	}
+
+	now := mbutils.CreateCurrentTime()
+	if now.After(*auth.AvailabilityDt) {
+		return sdkerrors.Wrap(
+			types.ErrAuthDuration,
+			"Provider authentication is expired",
+		)
+	}
+
+	return nil
+}
+
+func (k Keeper) HasAuth(ctx sdk.Context, key string) bool {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AuthKey))
-	return store.Has(types.KeyPrefix(types.AuthKey + id))
+	return store.Has(types.KeyPrefix(types.AuthKey + key))
 }
 
 // DeleteAuth deletes a auth

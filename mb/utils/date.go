@@ -16,34 +16,45 @@ func _createLocation() *time.Location {
 }
 
 var (
-	// BelarusLocation - Time location of Balarus for time functions
-	BelarusLocation = _createLocation()
+	UTCLocation = _createLocation()
 )
 
-type Created struct {
-	CreationDt *time.Time
+type TimePoint struct {
+	Time *time.Time
 }
 
-func CreateCurrentDate() *time.Time {
+func CreateCurrentTime() *time.Time {
 	nowTime := time.Now()
-	nowDate := time.Date(nowTime.Year(), nowTime.Month(), nowTime.Day(), 0, 0, 0, 0, BelarusLocation)
+	utcTime := time.Date(
+		nowTime.Year(), nowTime.Month(), nowTime.Day(),
+		nowTime.Hour(),
+		nowTime.Minute(),
+		nowTime.Second(),
+		0, UTCLocation,
+	)
 
-	return &nowDate
+	return &utcTime
 }
 
-func (msg *Created) ValidateBasic() error {
-	nowTime := time.Now()
-	nowDate := time.Date(nowTime.Year(), nowTime.Month(), nowTime.Day(), 0, 0, 0, 0, BelarusLocation)
+func (msg *TimePoint) Validate() error {
+	highTime := time.Now().Add(time.Second)
+	highDate := time.Date(
+		highTime.Year(), highTime.Month(), highTime.Day(),
+		highTime.Hour(), highTime.Minute(), highTime.Second(),
+		0, UTCLocation,
+	)
+	lowTime := time.Now().Add(time.Duration(-10) * time.Minute)
+	lowDate := time.Date(
+		lowTime.Year(), lowTime.Month(), lowTime.Day(),
+		lowTime.Hour(), lowTime.Minute(), lowTime.Second(),
+		0, UTCLocation,
+	)
 
-	if msg.CreationDt.After(nowDate) {
+	if msg.Time.After(highDate) || msg.Time.Before(lowDate) {
 		return errors.New(fmt.Sprintf(
-			"Try to create indentity after the current time n:%s a:%s",
-			nowDate, msg.CreationDt,
+			"Transaction is older than 10 minutes b:%s n:%s a:%s",
+			lowDate, msg.Time, highDate,
 		))
-	}
-
-	if nowDate.Before(*msg.CreationDt) && nowTime.After(nowDate.Add(time.Minute*5)) {
-		return errors.New("Try to create identity that was created long ago")
 	}
 
 	return nil
