@@ -16,6 +16,7 @@ var (
 	ErrRecIdentityProvider = sdkerrors.Register(ModuleName, 2500, "For self identity records provider and identity should match and otherwise")
 	ErrNoRecord            = sdkerrors.Register(ModuleName, 2600, "No such record")
 	ErrRecordExists        = sdkerrors.Register(ModuleName, 2610, "Recod already exists")
+	ErrRecordLimit         = sdkerrors.Register(ModuleName, 2620, "Record number reached (256).")
 	ErrUpdateAction        = sdkerrors.Register(ModuleName, 2700, "Bad action")
 	ErrUpdateImmutable     = sdkerrors.Register(ModuleName, 2800, "Can't update immutable record")
 	ErrUpdateSeal          = sdkerrors.Register(ModuleName, 2710, "Can't seal record")

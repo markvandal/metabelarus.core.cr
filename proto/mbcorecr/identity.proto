@@ -9,8 +9,7 @@ import "gogoproto/gogo.proto";
 enum IdentityType {
   CITIZEN = 0;
   FOREIGNER = 1;
-  DIASPORA_MEMBER = 2;
-  SERVICE = 3;
+  SERVICE = 2;
 }
 
 message Identity {

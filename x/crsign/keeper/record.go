@@ -83,7 +83,10 @@ func (k Keeper) CreateRecord(ctx sdk.Context, msg *types.Record) (*types.Record,
 	// Update record count
 	k.SetRecordCount(ctx, count+1)
 
-	k.AddRecord2Id(ctx, msg.Identity, id)
+	err := k.AddRecord2Id(ctx, msg.Identity, id)
+	if err != nil {
+		return nil, err
+	}
 
 	return record, nil
 }
@@ -119,16 +122,10 @@ func (k Keeper) GetRecordOwner(ctx sdk.Context, key string) string {
 	return record.Identity
 }
 
-// DeleteRecord deletes a signature
+// DeleteRecord deletes a record
 func (k Keeper) DeleteRecord(ctx sdk.Context, key string) {
 	record := k.GetRecord(ctx, key)
+	k.DeleteRecordFromId(ctx, record.Identity, record.Id)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecordKey))
 	store.Delete(types.KeyPrefix(types.RecordKey + key))
-
-	prefix.NewStore(
-		ctx.KVStore(k.storeKey),
-		types.KeyPrefix(types.Id2KeyRecordKey),
-	).Delete(
-		types.KeyPrefix(types.Id2KeyRecordKey + record.Identity + "-" + record.Key),
-	)
 }
