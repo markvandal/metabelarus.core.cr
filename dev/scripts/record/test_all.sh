@@ -65,3 +65,15 @@ REOPEN_REQ=$(mbcorecrd tx crsign update-record \
 REOPEN_RES=$(echo $SEAL_REQ | jq -r '.logs[0].events[1].attributes[0].value')
 
 echo "Reopen result: "$REOPEN_RES
+
+mbcorecrd query crsign show-id2records $IDEN_ID
+
+DELETE_REQ=$(mbcorecrd tx crsign delete-record \
+ $RECORD_ID --from $(mbcorecrd keys show $SERV_ADDR -a) -y)
+
+DELETE_RES=$(echo $DELETE_REQ | jq -r '.logs[0].events[1].attributes[0].value')
+
+echo "Delete result: "$DELETE_RES
+
+mbcorecrd query crsign show-id2records $IDEN_ID
+
