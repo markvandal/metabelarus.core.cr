@@ -80,6 +80,21 @@ func (msg *MsgCreateRecord) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
+	if msg.Provider != "" {
+		if err := mbutils.ValidateId(msg.Provider, "Provider"); err != nil {
+			return err
+		}
+	}
+	if err := mbutils.ValidateData(msg.Data, "Data"); err != nil {
+		return err
+	}
+	if err := mbutils.ValidateKey(msg.Signature, "Signature"); err != nil {
+		return err
+	}
+	if err := mbutils.ValidateKey(msg.Key, "Record Key"); err != nil {
+		return err
+	}
+
 	created := mbutils.TimePoint{msg.CreationDt}
 
 	if err := created.Validate(); err != nil {
@@ -135,6 +150,13 @@ func (msg *MsgUpdateRecord) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Updater)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if err := mbutils.ValidateData(msg.Data, "Data"); err != nil {
+		return err
+	}
+	if err := mbutils.ValidateKey(msg.Signature, "Signature"); err != nil {
+		return err
 	}
 
 	created := mbutils.TimePoint{msg.UpdateDt}

@@ -9,6 +9,7 @@ import (
 // x/crsign module sentinel errors
 var (
 	ErrSample              = sdkerrors.Register(ModuleName, 2100, "sample error")
+	ErrSizeLimit           = sdkerrors.Register(ModuleName, 2110, "Value size limit is reached")
 	ErrNoIdentity          = sdkerrors.Register(ModuleName, 2200, "no identity")
 	ErrIdNotService        = sdkerrors.Register(ModuleName, 2210, "requesting auth identity isn't the service")
 	ErrAuthDuration        = sdkerrors.Register(ModuleName, 2300, "bad auth duration")

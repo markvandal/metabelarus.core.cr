@@ -57,6 +57,13 @@ func (msg *MsgCreateInvite) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidPubKey, "Invalid public key (%s)", err)
 	}
 
+	if err := mbutils.ValidateKey(msg.Address, "Address"); err != nil {
+		return err
+	}
+	if err := mbutils.ValidateKey(msg.PubKey, "Pub Key"); err != nil {
+		return err
+	}
+
 	created := mbutils.TimePoint{msg.CreationDt}
 
 	if err := created.Validate(); err != nil {
@@ -113,6 +120,13 @@ func (msg *MsgAcceptInvite) ValidateBasic() error {
 	_, err = sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeAccPub, msg.PubKey)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidPubKey, "Invalid public key (%s)", err)
+	}
+
+	if err := mbutils.ValidateKey(msg.Address, "Address"); err != nil {
+		return err
+	}
+	if err := mbutils.ValidateKey(msg.PubKey, "Pub Key"); err != nil {
+		return err
 	}
 
 	created := mbutils.TimePoint{msg.AcceptanceDt}

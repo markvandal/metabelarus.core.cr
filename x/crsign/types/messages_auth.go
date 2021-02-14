@@ -44,8 +44,14 @@ func (msg *MsgRequestAuth) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	created := mbutils.TimePoint{msg.CreationDt}
+	if err := mbutils.ValidateKey(msg.Key, "Auth Key"); err != nil {
+		return err
+	}
+	if err := mbutils.ValidateId(msg.Identity, "Identity ID"); err != nil {
+		return err
+	}
 
+	created := mbutils.TimePoint{msg.CreationDt}
 	if err := created.Validate(); err != nil {
 		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
 	}
