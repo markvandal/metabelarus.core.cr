@@ -36,3 +36,6 @@ frontend/.cache
 /tmpinvited
 /tmppk
 /tmppk2
+
+# Build
+build/**/*
