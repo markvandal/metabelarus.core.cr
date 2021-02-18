@@ -3,17 +3,11 @@ ROOT_SCRIPTPATH=$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )
 CMD=$ROOT_SCRIPTPATH/../build/mbcorecrd
 HOME=$ROOT_SCRIPTPATH/../build/
 
-#MNEMONIC=$1
 MONIKER=$1
-CHAINID=$2
-PORTSHIFT=$3
-HOMESUFFIX=$4
+PORTSHIFT=$2
+HOMESUFFIX=$3
 
-#if [ -z "$MNEMONIC" ]
-#  then
-#    echo "Mnemonic of mainuser should be provided as first argument"
-#    exit
-#fi
+. $ROOT_SCRIPTPATH/.env
 
 if [ -z "$MONIKER" ]
   then
@@ -75,8 +69,8 @@ if [ -z "$HOMESUFFIX" ]
     1000token,100000000stake,20invitesuper,50invite0,50invite1,150invite2,150invite3 \
     --home $HOME --trace
 
-    $CMD gentx mainuser --from mainuser --chain-id $CHAINID --keyring-backend file \
-    -y --home $HOME --trace
+    $CMD gentx mainuser --from mainuser --chain-id $CHAINID --amount 1000000stake \
+    --keyring-backend file --home $HOME -y --trace
 
     $CMD collect-gentxs --home $HOME --trace
 fi

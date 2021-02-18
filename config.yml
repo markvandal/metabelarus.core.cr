@@ -3,19 +3,15 @@ accounts:
   - name: user1
     mnemonic: "tomato father silver rebuild volume guard donor tattoo spike staff want inherit diagram wrap teach furnace spring squeeze tuition march card foil random west"
     coins: [
-      "1000token", 
       "100000000stake", 
-      "100invitesuper",
-      "150invite0",
-      "100invite1",
-      "50invite2",
-      "15invite3",
-      "5invite4"
+      "20invitesuper",
+      "50invite0",
+      "50invite1",
+      "150invite2",
+      "150invite3",
     ]
   - name: user2
     mnemonic: "liberty pass grain minute silent green crazy come pitch undo soup liberty bone flush exchange ladder gap grocery key load must panther honey person"
-    coins: ["500token"]
-  - name: user3
 validator:
   name: user1
-  staked: "100000000stake"
+  staked: "1000000stake"
