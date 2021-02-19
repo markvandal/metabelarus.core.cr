@@ -87,6 +87,9 @@ import (
 	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
+	"github.com/metabelarus/mbcorecr/x/crconsent"
+	crconsentkeeper "github.com/metabelarus/mbcorecr/x/crconsent/keeper"
+	crconsenttypes "github.com/metabelarus/mbcorecr/x/crconsent/types"
 	"github.com/metabelarus/mbcorecr/x/crsign"
 	crsignkeeper "github.com/metabelarus/mbcorecr/x/crsign/keeper"
 	crsigntypes "github.com/metabelarus/mbcorecr/x/crsign/types"
@@ -122,6 +125,7 @@ var (
 		vesting.AppModuleBasic{},
 		mbcorecr.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
+		crconsent.AppModuleBasic{},
 		crsign.AppModuleBasic{},
 	)
 
@@ -188,7 +192,8 @@ type App struct {
 
 	mbcorecrKeeper mbcorecrkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
-	crsignKeeper crsignkeeper.Keeper
+	crconsentKeeper crconsentkeeper.Keeper
+	crsignKeeper    crsignkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -218,6 +223,7 @@ func New(
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		mbcorecrtypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
+		crconsenttypes.StoreKey,
 		crsigntypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -327,6 +333,11 @@ func New(
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
+	app.crconsentKeeper = *crconsentkeeper.NewKeeper(
+		appCodec,
+		keys[crconsenttypes.StoreKey],
+		keys[crconsenttypes.MemStoreKey],
+	)
 	app.crsignKeeper = *crsignkeeper.NewKeeper(
 		appCodec,
 		keys[crsigntypes.StoreKey],
@@ -366,6 +377,7 @@ func New(
 		transferModule,
 		mbcorecr.NewAppModule(appCodec, app.mbcorecrKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
+		crconsent.NewAppModule(appCodec, app.crconsentKeeper),
 		crsign.NewAppModule(appCodec, app.crsignKeeper),
 	)
 
@@ -400,6 +412,7 @@ func New(
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
+		crconsenttypes.ModuleName,
 		crsigntypes.ModuleName,
 	)
 
@@ -598,6 +611,7 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
+	paramsKeeper.Subspace(crconsenttypes.ModuleName)
 	paramsKeeper.Subspace(crsigntypes.ModuleName)
 
 	return paramsKeeper

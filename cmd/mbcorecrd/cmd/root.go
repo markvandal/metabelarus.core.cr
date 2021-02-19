@@ -12,7 +12,7 @@ import (
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-    "github.com/spf13/pflag"
+	"github.com/spf13/pflag"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
@@ -244,7 +244,7 @@ func overwriteFlagDefaults(c *cobra.Command, defaults map[string]string) {
 	set := func(s *pflag.FlagSet, key, val string) {
 		if f := s.Lookup(key); f != nil {
 			f.DefValue = val
-            f.Value.Set(val)
+			f.Value.Set(val)
 		}
 	}
 	for key, val := range defaults {

@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	AccountAddressPrefix   = "metabel"
+	AccountAddressPrefix = "metabel"
 )
 
 var (

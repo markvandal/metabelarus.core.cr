@@ -1,9 +1,9 @@
-package mbcorecr
+package crconsent
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
+	// this line is used by starport scaffolding # 1
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -16,10 +16,10 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/metabelarus/mbcorecr/x/mbcorecr/client/cli"
-	"github.com/metabelarus/mbcorecr/x/mbcorecr/client/rest"
-	"github.com/metabelarus/mbcorecr/x/mbcorecr/keeper"
-	"github.com/metabelarus/mbcorecr/x/mbcorecr/types"
+	"github.com/metabelarus/mbcorecr/x/crconsent/client/cli"
+	"github.com/metabelarus/mbcorecr/x/crconsent/client/rest"
+	"github.com/metabelarus/mbcorecr/x/crconsent/keeper"
+	"github.com/metabelarus/mbcorecr/x/crconsent/types"
 )
 
 var (
@@ -79,7 +79,7 @@ func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Rout
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+	// this line is used by starport scaffolding # 2
 }
 
 // GetTxCmd returns the capability module's root tx command.
@@ -103,10 +103,7 @@ type AppModule struct {
 	keeper keeper.Keeper
 }
 
-func NewAppModule(
-	cdc codec.Marshaler,
-	keeper keeper.Keeper,
-) AppModule {
+func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
