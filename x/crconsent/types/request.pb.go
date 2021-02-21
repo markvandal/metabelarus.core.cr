@@ -23,18 +23,71 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type RequestType int32
+
+const (
+	RequestType_INVITE_PACK         RequestType = 0
+	RequestType_SERVICE_PERMISSIONS RequestType = 1
+)
+
+var RequestType_name = map[int32]string{
+	0: "INVITE_PACK",
+	1: "SERVICE_PERMISSIONS",
+}
+
+var RequestType_value = map[string]int32{
+	"INVITE_PACK":         0,
+	"SERVICE_PERMISSIONS": 1,
+}
+
+func (x RequestType) String() string {
+	return proto.EnumName(RequestType_name, int32(x))
+}
+
+func (RequestType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_447d003a5a80b564, []int{0}
+}
+
+type Status int32
+
+const (
+	Status_ISSUED   Status = 0
+	Status_REJECTED Status = 1
+	Status_ACCEPTED Status = 2
+)
+
+var Status_name = map[int32]string{
+	0: "ISSUED",
+	1: "REJECTED",
+	2: "ACCEPTED",
+}
+
+var Status_value = map[string]int32{
+	"ISSUED":   0,
+	"REJECTED": 1,
+	"ACCEPTED": 2,
+}
+
+func (x Status) String() string {
+	return proto.EnumName(Status_name, int32(x))
+}
+
+func (Status) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_447d003a5a80b564, []int{1}
+}
+
 type Request struct {
-	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Id          string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Initiator   string `protobuf:"bytes,3,opt,name=initiator,proto3" json:"initiator,omitempty"`
-	Recipient   string `protobuf:"bytes,4,opt,name=recipient,proto3" json:"recipient,omitempty"`
-	RequestType string `protobuf:"bytes,5,opt,name=requestType,proto3" json:"requestType,omitempty"`
-	Status      string `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
-	Value       int32  `protobuf:"varint,7,opt,name=value,proto3" json:"value,omitempty"`
-	Memo        string `protobuf:"bytes,8,opt,name=memo,proto3" json:"memo,omitempty"`
-	PromoUrl    string `protobuf:"bytes,9,opt,name=promoUrl,proto3" json:"promoUrl,omitempty"`
-	CreationDt  string `protobuf:"bytes,10,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
-	FinalDt     string `protobuf:"bytes,11,opt,name=finalDt,proto3" json:"finalDt,omitempty"`
+	Creator     string      `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Id          string      `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Initiator   string      `protobuf:"bytes,3,opt,name=initiator,proto3" json:"initiator,omitempty"`
+	Recipient   string      `protobuf:"bytes,4,opt,name=recipient,proto3" json:"recipient,omitempty"`
+	RequestType RequestType `protobuf:"varint,5,opt,name=requestType,proto3,enum=metabelarus.mbcorecr.crconsent.RequestType" json:"requestType,omitempty"`
+	Status      Status      `protobuf:"varint,6,opt,name=status,proto3,enum=metabelarus.mbcorecr.crconsent.Status" json:"status,omitempty"`
+	Value       int32       `protobuf:"varint,7,opt,name=value,proto3" json:"value,omitempty"`
+	Memo        string      `protobuf:"bytes,8,opt,name=memo,proto3" json:"memo,omitempty"`
+	PromoUrl    string      `protobuf:"bytes,9,opt,name=promoUrl,proto3" json:"promoUrl,omitempty"`
+	CreationDt  string      `protobuf:"bytes,10,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
+	FinalDt     string      `protobuf:"bytes,11,opt,name=finalDt,proto3" json:"finalDt,omitempty"`
 }
 
 func (m *Request) Reset()         { *m = Request{} }
@@ -98,18 +151,18 @@ func (m *Request) GetRecipient() string {
 	return ""
 }
 
-func (m *Request) GetRequestType() string {
+func (m *Request) GetRequestType() RequestType {
 	if m != nil {
 		return m.RequestType
 	}
-	return ""
+	return RequestType_INVITE_PACK
 }
 
-func (m *Request) GetStatus() string {
+func (m *Request) GetStatus() Status {
 	if m != nil {
 		return m.Status
 	}
-	return ""
+	return Status_ISSUED
 }
 
 func (m *Request) GetValue() int32 {
@@ -148,16 +201,16 @@ func (m *Request) GetFinalDt() string {
 }
 
 type MsgCreateRequest struct {
-	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Initiator   string `protobuf:"bytes,2,opt,name=initiator,proto3" json:"initiator,omitempty"`
-	Recipient   string `protobuf:"bytes,3,opt,name=recipient,proto3" json:"recipient,omitempty"`
-	RequestType string `protobuf:"bytes,4,opt,name=requestType,proto3" json:"requestType,omitempty"`
-	Status      string `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
-	Value       int32  `protobuf:"varint,6,opt,name=value,proto3" json:"value,omitempty"`
-	Memo        string `protobuf:"bytes,7,opt,name=memo,proto3" json:"memo,omitempty"`
-	PromoUrl    string `protobuf:"bytes,8,opt,name=promoUrl,proto3" json:"promoUrl,omitempty"`
-	CreationDt  string `protobuf:"bytes,9,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
-	FinalDt     string `protobuf:"bytes,10,opt,name=finalDt,proto3" json:"finalDt,omitempty"`
+	Creator     string      `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Initiator   string      `protobuf:"bytes,2,opt,name=initiator,proto3" json:"initiator,omitempty"`
+	Recipient   string      `protobuf:"bytes,3,opt,name=recipient,proto3" json:"recipient,omitempty"`
+	RequestType RequestType `protobuf:"varint,4,opt,name=requestType,proto3,enum=metabelarus.mbcorecr.crconsent.RequestType" json:"requestType,omitempty"`
+	Status      Status      `protobuf:"varint,5,opt,name=status,proto3,enum=metabelarus.mbcorecr.crconsent.Status" json:"status,omitempty"`
+	Value       int32       `protobuf:"varint,6,opt,name=value,proto3" json:"value,omitempty"`
+	Memo        string      `protobuf:"bytes,7,opt,name=memo,proto3" json:"memo,omitempty"`
+	PromoUrl    string      `protobuf:"bytes,8,opt,name=promoUrl,proto3" json:"promoUrl,omitempty"`
+	CreationDt  string      `protobuf:"bytes,9,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
+	FinalDt     string      `protobuf:"bytes,10,opt,name=finalDt,proto3" json:"finalDt,omitempty"`
 }
 
 func (m *MsgCreateRequest) Reset()         { *m = MsgCreateRequest{} }
@@ -214,18 +267,18 @@ func (m *MsgCreateRequest) GetRecipient() string {
 	return ""
 }
 
-func (m *MsgCreateRequest) GetRequestType() string {
+func (m *MsgCreateRequest) GetRequestType() RequestType {
 	if m != nil {
 		return m.RequestType
 	}
-	return ""
+	return RequestType_INVITE_PACK
 }
 
-func (m *MsgCreateRequest) GetStatus() string {
+func (m *MsgCreateRequest) GetStatus() Status {
 	if m != nil {
 		return m.Status
 	}
-	return ""
+	return Status_ISSUED
 }
 
 func (m *MsgCreateRequest) GetValue() int32 {
@@ -264,17 +317,17 @@ func (m *MsgCreateRequest) GetFinalDt() string {
 }
 
 type MsgUpdateRequest struct {
-	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Id          string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Initiator   string `protobuf:"bytes,3,opt,name=initiator,proto3" json:"initiator,omitempty"`
-	Recipient   string `protobuf:"bytes,4,opt,name=recipient,proto3" json:"recipient,omitempty"`
-	RequestType string `protobuf:"bytes,5,opt,name=requestType,proto3" json:"requestType,omitempty"`
-	Status      string `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
-	Value       int32  `protobuf:"varint,7,opt,name=value,proto3" json:"value,omitempty"`
-	Memo        string `protobuf:"bytes,8,opt,name=memo,proto3" json:"memo,omitempty"`
-	PromoUrl    string `protobuf:"bytes,9,opt,name=promoUrl,proto3" json:"promoUrl,omitempty"`
-	CreationDt  string `protobuf:"bytes,10,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
-	FinalDt     string `protobuf:"bytes,11,opt,name=finalDt,proto3" json:"finalDt,omitempty"`
+	Creator     string      `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Id          string      `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Initiator   string      `protobuf:"bytes,3,opt,name=initiator,proto3" json:"initiator,omitempty"`
+	Recipient   string      `protobuf:"bytes,4,opt,name=recipient,proto3" json:"recipient,omitempty"`
+	RequestType RequestType `protobuf:"varint,5,opt,name=requestType,proto3,enum=metabelarus.mbcorecr.crconsent.RequestType" json:"requestType,omitempty"`
+	Status      Status      `protobuf:"varint,6,opt,name=status,proto3,enum=metabelarus.mbcorecr.crconsent.Status" json:"status,omitempty"`
+	Value       int32       `protobuf:"varint,7,opt,name=value,proto3" json:"value,omitempty"`
+	Memo        string      `protobuf:"bytes,8,opt,name=memo,proto3" json:"memo,omitempty"`
+	PromoUrl    string      `protobuf:"bytes,9,opt,name=promoUrl,proto3" json:"promoUrl,omitempty"`
+	CreationDt  string      `protobuf:"bytes,10,opt,name=creationDt,proto3" json:"creationDt,omitempty"`
+	FinalDt     string      `protobuf:"bytes,11,opt,name=finalDt,proto3" json:"finalDt,omitempty"`
 }
 
 func (m *MsgUpdateRequest) Reset()         { *m = MsgUpdateRequest{} }
@@ -338,18 +391,18 @@ func (m *MsgUpdateRequest) GetRecipient() string {
 	return ""
 }
 
-func (m *MsgUpdateRequest) GetRequestType() string {
+func (m *MsgUpdateRequest) GetRequestType() RequestType {
 	if m != nil {
 		return m.RequestType
 	}
-	return ""
+	return RequestType_INVITE_PACK
 }
 
-func (m *MsgUpdateRequest) GetStatus() string {
+func (m *MsgUpdateRequest) GetStatus() Status {
 	if m != nil {
 		return m.Status
 	}
-	return ""
+	return Status_ISSUED
 }
 
 func (m *MsgUpdateRequest) GetValue() int32 {
@@ -440,6 +493,8 @@ func (m *MsgDeleteRequest) GetId() string {
 }
 
 func init() {
+	proto.RegisterEnum("metabelarus.mbcorecr.crconsent.RequestType", RequestType_name, RequestType_value)
+	proto.RegisterEnum("metabelarus.mbcorecr.crconsent.Status", Status_name, Status_value)
 	proto.RegisterType((*Request)(nil), "metabelarus.mbcorecr.crconsent.Request")
 	proto.RegisterType((*MsgCreateRequest)(nil), "metabelarus.mbcorecr.crconsent.MsgCreateRequest")
 	proto.RegisterType((*MsgUpdateRequest)(nil), "metabelarus.mbcorecr.crconsent.MsgUpdateRequest")
@@ -449,32 +504,39 @@ func init() {
 func init() { proto.RegisterFile("crconsent/request.proto", fileDescriptor_447d003a5a80b564) }
 
 var fileDescriptor_447d003a5a80b564 = []byte{
-	// 392 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x94, 0xbf, 0x6a, 0xdb, 0x40,
-	0x1c, 0xc7, 0x2d, 0xd9, 0x92, 0xac, 0x9f, 0xa1, 0x94, 0xc3, 0xb4, 0x87, 0x29, 0x87, 0xf1, 0xe4,
-	0x49, 0xa2, 0x74, 0xed, 0xd4, 0x7a, 0x2b, 0x5d, 0x4c, 0xbd, 0x74, 0x93, 0xe4, 0x5f, 0x94, 0x03,
-	0x49, 0xa7, 0x9c, 0x4e, 0x21, 0x7e, 0x8b, 0x3c, 0x43, 0xb6, 0xac, 0x79, 0x8a, 0x8c, 0x1e, 0x33,
-	0x06, 0xfb, 0x45, 0x82, 0x4e, 0xfe, 0x0b, 0x8e, 0x1c, 0x32, 0x67, 0xbb, 0xef, 0x1f, 0x09, 0xe9,
-	0xc3, 0xf1, 0x85, 0xaf, 0x91, 0x8c, 0x44, 0x56, 0x60, 0xa6, 0x7c, 0x89, 0x57, 0x25, 0x16, 0xca,
-	0xcb, 0xa5, 0x50, 0x82, 0xb0, 0x14, 0x55, 0x10, 0x62, 0x12, 0xc8, 0xb2, 0xf0, 0xd2, 0x30, 0x12,
-	0x12, 0x23, 0xe9, 0xed, 0xda, 0x83, 0x7e, 0x2c, 0x62, 0xa1, 0xab, 0x7e, 0x75, 0xaa, 0x9f, 0x1a,
-	0xdd, 0x9b, 0xe0, 0x4c, 0xeb, 0xf7, 0x10, 0x0a, 0x4e, 0x24, 0x31, 0x50, 0x42, 0x52, 0x63, 0x68,
-	0x8c, 0xdd, 0xe9, 0x56, 0x92, 0x4f, 0x60, 0xf2, 0x39, 0x35, 0xb5, 0x69, 0xf2, 0x39, 0xf9, 0x06,
-	0x2e, 0xcf, 0xb8, 0xe2, 0xba, 0xdb, 0xd6, 0xf6, 0xde, 0xa8, 0x52, 0x89, 0x11, 0xcf, 0x39, 0x66,
-	0x8a, 0x76, 0xea, 0x74, 0x67, 0x90, 0x21, 0xf4, 0x36, 0x1f, 0xfe, 0x6f, 0x91, 0x23, 0xb5, 0x74,
-	0x7e, 0x68, 0x91, 0x2f, 0x60, 0x17, 0x2a, 0x50, 0x65, 0x41, 0x6d, 0x1d, 0x6e, 0x14, 0xe9, 0x83,
-	0x75, 0x1d, 0x24, 0x25, 0x52, 0x67, 0x68, 0x8c, 0xad, 0x69, 0x2d, 0x08, 0x81, 0x4e, 0x8a, 0xa9,
-	0xa0, 0x5d, 0xdd, 0xd5, 0x67, 0x32, 0x80, 0x6e, 0x2e, 0x45, 0x2a, 0x66, 0x32, 0xa1, 0xae, 0xf6,
-	0x77, 0x9a, 0x30, 0x00, 0xfd, 0x5b, 0x5c, 0x64, 0x13, 0x45, 0x41, 0xa7, 0x07, 0x4e, 0x45, 0xe1,
-	0x82, 0x67, 0x41, 0x32, 0x51, 0xb4, 0x57, 0x53, 0xd8, 0xc8, 0xd1, 0x9d, 0x09, 0x9f, 0xff, 0x16,
-	0xf1, 0xef, 0xaa, 0x8b, 0xe7, 0xa1, 0x1d, 0x41, 0x32, 0x1b, 0x21, 0xb5, 0xcf, 0x40, 0xea, 0x34,
-	0x41, 0xb2, 0x4e, 0x43, 0xb2, 0x4f, 0x41, 0x72, 0x5e, 0x81, 0xd4, 0x6d, 0x84, 0xe4, 0x36, 0x41,
-	0x82, 0x63, 0x48, 0x0f, 0x35, 0xa4, 0x59, 0x3e, 0x7f, 0x13, 0xa4, 0x8f, 0x9b, 0x55, 0x41, 0xfb,
-	0xa9, 0x99, 0x4d, 0x30, 0xc1, 0x77, 0x30, 0xfb, 0xf5, 0xe7, 0x71, 0xc5, 0x8c, 0xe5, 0x8a, 0x19,
-	0xcf, 0x2b, 0x66, 0xdc, 0xae, 0x59, 0x6b, 0xb9, 0x66, 0xad, 0xa7, 0x35, 0x6b, 0xfd, 0xff, 0x1e,
-	0x73, 0x75, 0x59, 0x86, 0x5e, 0x24, 0x52, 0xff, 0x60, 0x1e, 0xfc, 0xed, 0x3c, 0xf8, 0x37, 0xfe,
-	0x7e, 0x4e, 0xd4, 0x22, 0xc7, 0x22, 0xb4, 0xf5, 0x2e, 0xfc, 0x78, 0x09, 0x00, 0x00, 0xff, 0xff,
-	0x1e, 0x60, 0xc5, 0xf9, 0x68, 0x04, 0x00, 0x00,
+	// 504 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x94, 0x4f, 0x8b, 0xd3, 0x40,
+	0x18, 0xc6, 0x9b, 0xb4, 0x4d, 0xdb, 0xb7, 0xb2, 0x86, 0x71, 0x61, 0x87, 0x45, 0x42, 0xd9, 0x83,
+	0x94, 0x15, 0x12, 0xff, 0x1c, 0xbc, 0x88, 0xb0, 0x26, 0x39, 0xc4, 0xa5, 0x6b, 0x49, 0xda, 0x3d,
+	0x78, 0x59, 0xd2, 0x74, 0xac, 0x03, 0x49, 0x26, 0x4e, 0x26, 0xe2, 0x7e, 0x02, 0xaf, 0x7e, 0x2c,
+	0x8f, 0x7b, 0xf4, 0x28, 0xed, 0x87, 0xf0, 0x26, 0x92, 0x49, 0xb7, 0xed, 0x82, 0xb6, 0xe2, 0x9f,
+	0x9b, 0xb7, 0x79, 0x9e, 0x79, 0xde, 0x97, 0x97, 0xdf, 0xcb, 0x0c, 0x1c, 0x44, 0x3c, 0x62, 0x69,
+	0x4e, 0x52, 0x61, 0x71, 0xf2, 0xb6, 0x20, 0xb9, 0x30, 0x33, 0xce, 0x04, 0x43, 0x46, 0x42, 0x44,
+	0x38, 0x21, 0x71, 0xc8, 0x8b, 0xdc, 0x4c, 0x26, 0x11, 0xe3, 0x24, 0xe2, 0xe6, 0x2a, 0x7d, 0xb8,
+	0x3f, 0x63, 0x33, 0x26, 0xa3, 0x56, 0x79, 0xaa, 0xaa, 0x8e, 0xbe, 0xa9, 0xd0, 0xf2, 0xab, 0x3e,
+	0x08, 0x43, 0x2b, 0xe2, 0x24, 0x14, 0x8c, 0x63, 0xa5, 0xa7, 0xf4, 0x3b, 0xfe, 0xb5, 0x44, 0x7b,
+	0xa0, 0xd2, 0x29, 0x56, 0xa5, 0xa9, 0xd2, 0x29, 0xba, 0x0b, 0x1d, 0x9a, 0x52, 0x41, 0x65, 0xb6,
+	0x2e, 0xed, 0xb5, 0x51, 0xde, 0x72, 0x12, 0xd1, 0x8c, 0x92, 0x54, 0xe0, 0x46, 0x75, 0xbb, 0x32,
+	0xd0, 0x00, 0xba, 0xcb, 0xc1, 0x47, 0x97, 0x19, 0xc1, 0xcd, 0x9e, 0xd2, 0xdf, 0x7b, 0x74, 0xdf,
+	0xdc, 0x3e, 0xbd, 0xe9, 0xaf, 0x4b, 0xfc, 0xcd, 0x7a, 0xf4, 0x0c, 0xb4, 0x5c, 0x84, 0xa2, 0xc8,
+	0xb1, 0x26, 0x3b, 0xdd, 0xdb, 0xd5, 0x29, 0x90, 0x69, 0x7f, 0x59, 0x85, 0xf6, 0xa1, 0xf9, 0x2e,
+	0x8c, 0x0b, 0x82, 0x5b, 0x3d, 0xa5, 0xdf, 0xf4, 0x2b, 0x81, 0x10, 0x34, 0x12, 0x92, 0x30, 0xdc,
+	0x96, 0xd3, 0xcb, 0x33, 0x3a, 0x84, 0x76, 0xc6, 0x59, 0xc2, 0xc6, 0x3c, 0xc6, 0x1d, 0xe9, 0xaf,
+	0x34, 0x32, 0x00, 0x24, 0x2b, 0xca, 0x52, 0x47, 0x60, 0x90, 0xb7, 0x1b, 0x4e, 0x89, 0xf6, 0x35,
+	0x4d, 0xc3, 0xd8, 0x11, 0xb8, 0x5b, 0xa1, 0x5d, 0xca, 0xa3, 0xaf, 0x2a, 0xe8, 0x83, 0x7c, 0x66,
+	0x97, 0x59, 0xb2, 0x7b, 0x13, 0x37, 0xc8, 0xab, 0x5b, 0xc9, 0xd7, 0x77, 0x90, 0x6f, 0xfc, 0x35,
+	0xf2, 0xcd, 0x3f, 0x23, 0xaf, 0xfd, 0x88, 0x7c, 0xeb, 0x27, 0xe4, 0xdb, 0x5b, 0xc9, 0x77, 0xb6,
+	0x91, 0x87, 0x9b, 0xe4, 0x3f, 0xd4, 0x25, 0xf9, 0x71, 0x36, 0xfd, 0x25, 0xf2, 0xff, 0xdf, 0xc0,
+	0x3f, 0x7b, 0x03, 0x4f, 0xe5, 0x22, 0x1c, 0x12, 0x93, 0xdf, 0x58, 0xc4, 0xf1, 0x13, 0xe8, 0x6e,
+	0x90, 0x41, 0xb7, 0xa1, 0xeb, 0x9d, 0x9d, 0x7b, 0x23, 0xf7, 0x62, 0x78, 0x62, 0x9f, 0xea, 0x35,
+	0x74, 0x00, 0x77, 0x02, 0xd7, 0x3f, 0xf7, 0x6c, 0xf7, 0x62, 0xe8, 0xfa, 0x03, 0x2f, 0x08, 0xbc,
+	0x97, 0x67, 0x81, 0xae, 0x1c, 0x3f, 0x00, 0xad, 0x02, 0x81, 0x00, 0x34, 0x2f, 0x08, 0xc6, 0xae,
+	0xa3, 0xd7, 0xd0, 0x2d, 0x68, 0xfb, 0xee, 0x0b, 0xd7, 0x1e, 0xb9, 0x8e, 0xae, 0x94, 0xea, 0xc4,
+	0xb6, 0xdd, 0x61, 0xa9, 0xd4, 0xe7, 0xa7, 0x9f, 0xe6, 0x86, 0x72, 0x35, 0x37, 0x94, 0x2f, 0x73,
+	0x43, 0xf9, 0xb8, 0x30, 0x6a, 0x57, 0x0b, 0xa3, 0xf6, 0x79, 0x61, 0xd4, 0x5e, 0x3d, 0x9c, 0x51,
+	0xf1, 0xa6, 0x98, 0x98, 0x11, 0x4b, 0xac, 0x0d, 0xf8, 0xd6, 0x35, 0x7c, 0xeb, 0xbd, 0xb5, 0xfe,
+	0xb8, 0xc5, 0x65, 0x46, 0xf2, 0x89, 0x26, 0x7f, 0xe0, 0xc7, 0xdf, 0x03, 0x00, 0x00, 0xff, 0xff,
+	0xc7, 0x3b, 0x62, 0x4e, 0xd2, 0x05, 0x00, 0x00,
 }
 
 func (m *Request) Marshal() (dAtA []byte, err error) {
@@ -530,19 +592,15 @@ func (m *Request) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x38
 	}
-	if len(m.Status) > 0 {
-		i -= len(m.Status)
-		copy(dAtA[i:], m.Status)
-		i = encodeVarintRequest(dAtA, i, uint64(len(m.Status)))
+	if m.Status != 0 {
+		i = encodeVarintRequest(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x30
 	}
-	if len(m.RequestType) > 0 {
-		i -= len(m.RequestType)
-		copy(dAtA[i:], m.RequestType)
-		i = encodeVarintRequest(dAtA, i, uint64(len(m.RequestType)))
+	if m.RequestType != 0 {
+		i = encodeVarintRequest(dAtA, i, uint64(m.RequestType))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x28
 	}
 	if len(m.Recipient) > 0 {
 		i -= len(m.Recipient)
@@ -628,19 +686,15 @@ func (m *MsgCreateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x30
 	}
-	if len(m.Status) > 0 {
-		i -= len(m.Status)
-		copy(dAtA[i:], m.Status)
-		i = encodeVarintRequest(dAtA, i, uint64(len(m.Status)))
+	if m.Status != 0 {
+		i = encodeVarintRequest(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x28
 	}
-	if len(m.RequestType) > 0 {
-		i -= len(m.RequestType)
-		copy(dAtA[i:], m.RequestType)
-		i = encodeVarintRequest(dAtA, i, uint64(len(m.RequestType)))
+	if m.RequestType != 0 {
+		i = encodeVarintRequest(dAtA, i, uint64(m.RequestType))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x20
 	}
 	if len(m.Recipient) > 0 {
 		i -= len(m.Recipient)
@@ -719,19 +773,15 @@ func (m *MsgUpdateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x38
 	}
-	if len(m.Status) > 0 {
-		i -= len(m.Status)
-		copy(dAtA[i:], m.Status)
-		i = encodeVarintRequest(dAtA, i, uint64(len(m.Status)))
+	if m.Status != 0 {
+		i = encodeVarintRequest(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x30
 	}
-	if len(m.RequestType) > 0 {
-		i -= len(m.RequestType)
-		copy(dAtA[i:], m.RequestType)
-		i = encodeVarintRequest(dAtA, i, uint64(len(m.RequestType)))
+	if m.RequestType != 0 {
+		i = encodeVarintRequest(dAtA, i, uint64(m.RequestType))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x28
 	}
 	if len(m.Recipient) > 0 {
 		i -= len(m.Recipient)
@@ -834,13 +884,11 @@ func (m *Request) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovRequest(uint64(l))
 	}
-	l = len(m.RequestType)
-	if l > 0 {
-		n += 1 + l + sovRequest(uint64(l))
+	if m.RequestType != 0 {
+		n += 1 + sovRequest(uint64(m.RequestType))
 	}
-	l = len(m.Status)
-	if l > 0 {
-		n += 1 + l + sovRequest(uint64(l))
+	if m.Status != 0 {
+		n += 1 + sovRequest(uint64(m.Status))
 	}
 	if m.Value != 0 {
 		n += 1 + sovRequest(uint64(m.Value))
@@ -882,13 +930,11 @@ func (m *MsgCreateRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovRequest(uint64(l))
 	}
-	l = len(m.RequestType)
-	if l > 0 {
-		n += 1 + l + sovRequest(uint64(l))
+	if m.RequestType != 0 {
+		n += 1 + sovRequest(uint64(m.RequestType))
 	}
-	l = len(m.Status)
-	if l > 0 {
-		n += 1 + l + sovRequest(uint64(l))
+	if m.Status != 0 {
+		n += 1 + sovRequest(uint64(m.Status))
 	}
 	if m.Value != 0 {
 		n += 1 + sovRequest(uint64(m.Value))
@@ -934,13 +980,11 @@ func (m *MsgUpdateRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovRequest(uint64(l))
 	}
-	l = len(m.RequestType)
-	if l > 0 {
-		n += 1 + l + sovRequest(uint64(l))
+	if m.RequestType != 0 {
+		n += 1 + sovRequest(uint64(m.RequestType))
 	}
-	l = len(m.Status)
-	if l > 0 {
-		n += 1 + l + sovRequest(uint64(l))
+	if m.Status != 0 {
+		n += 1 + sovRequest(uint64(m.Status))
 	}
 	if m.Value != 0 {
 		n += 1 + sovRequest(uint64(m.Value))
@@ -1145,10 +1189,10 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 			m.Recipient = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RequestType", wireType)
 			}
-			var stringLen uint64
+			m.RequestType = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowRequest
@@ -1158,29 +1202,16 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.RequestType |= RequestType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRequest
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRequest
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RequestType = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
-			var stringLen uint64
+			m.Status = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowRequest
@@ -1190,24 +1221,11 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Status |= Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRequest
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRequest
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Status = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
@@ -1505,10 +1523,10 @@ func (m *MsgCreateRequest) Unmarshal(dAtA []byte) error {
 			m.Recipient = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RequestType", wireType)
 			}
-			var stringLen uint64
+			m.RequestType = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowRequest
@@ -1518,29 +1536,16 @@ func (m *MsgCreateRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.RequestType |= RequestType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRequest
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRequest
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RequestType = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 5:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
-			var stringLen uint64
+			m.Status = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowRequest
@@ -1550,24 +1555,11 @@ func (m *MsgCreateRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Status |= Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRequest
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRequest
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Status = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
@@ -1897,10 +1889,10 @@ func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
 			m.Recipient = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RequestType", wireType)
 			}
-			var stringLen uint64
+			m.RequestType = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowRequest
@@ -1910,29 +1902,16 @@ func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.RequestType |= RequestType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRequest
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRequest
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RequestType = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
-			var stringLen uint64
+			m.Status = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowRequest
@@ -1942,24 +1921,11 @@ func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Status |= Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRequest
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRequest
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Status = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
