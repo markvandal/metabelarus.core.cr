@@ -1,0 +1,42 @@
+- name: Fake init node to avoid local bugs
+  shell:
+    cmd: "{{ project_dir }}/build/mbcorecrd init test --chain-id test --overwrite"
+    chdir: "{{ project_dir }}"
+  tags:
+    - init
+    - ubuntu
+
+- name: Init node
+  shell:
+    cmd: "{{ project_dir }}/build/mbcorecrd init {{ moniker }} --chain-id {{ chainid }} --overwrite --home {{ project_dir }}/build/home &"
+    chdir: "{{ project_dir }}"
+  tags:
+    - init
+    - ubuntu
+
+- name: Init chain node with default configs
+  copy:
+    src: "{{ playbook_dir }}/build/{{ localhome }}/{{ item.src }}"
+    dest: "{{ project_dir }}/build/home/{{ item.dest }}"
+  with_items: "{{ source_items }}"
+  tags:
+    - init
+    - ubuntu
+    - configs
+
+- name: Collect genesis
+  shell:
+    cmd: "{{ project_dir }}/build/mbcorecrd collect-gentxs --home {{ project_dir }}/build/home"
+    chdir: "{{ project_dir }}"
+  tags:
+    - init
+    - ubuntu
+
+- name: Run node in test mode (this task should be commented)
+  shell:
+    cmd: "nohup {{ project_dir }}/build/mbcorecrd start --home {{ project_dir }}/build/home &"
+    chdir: "{{ project_dir }}"
+  tags:
+    - init
+    - ubuntu
+    - test

@@ -1,0 +1,35 @@
+- name: apt-get update
+  apt:
+    update_cache: yes
+  tags:
+    - install
+    - ubuntu
+
+- name: apt install docker.io
+  apt:
+    name: docker.io
+    state: present
+    install_recommends: yes
+  tags:
+    - install
+    - ubuntu
+
+- name: systemctl docker
+  shell: systemctl start docker && systemctl enable docker
+  tags:
+    - install
+    - ubuntu
+
+- name: clean up docker
+  shell: docker system prune -f
+  tags:
+    - install
+    - ubuntu
+
+# - name: docker installation finished
+#   debug:
+#     msg:
+#     - "Playbook was run from folder {{ playbook_dir }}"
+#   tags:
+#     - install
+#     - ubuntu

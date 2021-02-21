@@ -39,3 +39,4 @@ frontend/.cache
 
 # Build
 build/**/*
+ansible/inventory
