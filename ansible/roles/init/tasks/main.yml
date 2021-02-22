@@ -6,6 +6,11 @@
     - init
     - ubuntu
 
+- name: Cleanup home folder
+  file:
+    state: absent
+    path: "{{ project_dir }}/build/home"
+
 - name: Init node
   shell:
     cmd: "{{ project_dir }}/build/mbcorecrd init {{ moniker }} --chain-id {{ chainid }} --overwrite --home {{ project_dir }}/build/home &"
@@ -24,13 +29,70 @@
     - ubuntu
     - configs
 
-- name: Collect genesis
+- name: Create genesis validator account
+  expect:
+    command: "{{ project_dir }}/build/mbcorecrd keys add mainuser --hd-path \"44'/118'/0'/0/0\" --home {{ project_dir }}/build/home --keyring-backend file --recover"
+    chdir: "{{ project_dir }}"
+    responses:
+      Enter\ your\ bip39\ mnemonic: "{{ mainuser_mnemonic }}"
+      Enter\ keyring\ passphrase: "{{ keyring_pass }}"
+      Re-enter\ keyring\ passphrase: "{{ keyring_pass }}"
+  no_log: true
+  tags:
+    - init
+    - ubnutu
+    - genesis
+  
+- name: Read genesis addr to varible
+  expect:
+    command: "{{ project_dir }}/build/mbcorecrd keys show mainuser -a --home {{ project_dir }}/build/home --keyring-backend file"
+    chdir: "{{ project_dir }}"
+    responses:
+      Enter\ keyring\ passphrase: "{{ keyring_pass }}"
+  no_log: true
+  register: validator_address
+  tags:
+    - init
+    - ubnutu
+    - genesis
+
+- name: Create genesis validator
   shell:
-    cmd: "{{ project_dir }}/build/mbcorecrd collect-gentxs --home {{ project_dir }}/build/home"
+    cmd: |
+        {{ project_dir }}/build/mbcorecrd add-genesis-account {{ validator_address.stdout_lines[1] }} \
+        1000token,100000000stake,20invitesuper,50invite0,50invite1,150invite2,150invite3 \
+        --home {{ project_dir }}/build/home
     chdir: "{{ project_dir }}"
   tags:
     - init
-    - ubuntu
+    - ubnutu
+    - genesis
+
+- name: Generate genesis transaction
+  expect:
+    command: |
+        {{ project_dir }}/build/mbcorecrd gentx mainuser --from mainuser 
+        --chain-id {{ chainid }} --amount 1000000stake 
+        --home {{ project_dir }}/build/home --keyring-backend file -y
+    chdir: "{{ project_dir }}"
+    responses:
+      Enter\ keyring\ passphrase: "{{ keyring_pass }}"
+  no_log: true
+  tags:
+    - init
+    - ubnutu
+    - genesis
+
+- name: Collect genesis
+  shell:
+    cmd: |
+        {{ project_dir }}/build/mbcorecrd collect-gentxs --home {{ project_dir }}/build/home 
+    chdir: "{{ project_dir }}"
+  no_log: false
+  tags:
+    - init
+    - ubnutu
+    - genesis
 
 - name: Run node in test mode (this task should be commented)
   shell:

@@ -7,17 +7,9 @@
   vars:
     - project_dir: /var/meta-cr/sources
     - source_items:
-      - src: config/gentx/
-        dest: config/gentx
       - src: config/app.toml
         dest: config/app.toml
       - src: config/config.toml
         dest: config/config.toml
-      - src: config/genesis.json
-        dest: config/genesis.json
-      - src: config/node_key.json
-        dest: config/node_key.json
-      - src: config/priv_validator_key.json
-        dest: config/priv_validator_key.json
 
       
