@@ -1,0 +1,6 @@
+[test] 
+testhost ansible_host=192.168.1.10 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222 ansible_user=vagrant ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+[staging]
+awshost ansible_host=3.123.142.224  ansible_user=ubuntu ansible_ssh_private_key_file=/home/viktor/.ssh/aws_vpn.pem
+
+

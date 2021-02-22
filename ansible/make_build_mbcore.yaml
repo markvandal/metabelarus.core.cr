@@ -1,0 +1,9 @@
+- hosts: testhost
+  tasks:
+    - name: Git checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/Viktor70/metabelarus.core.cr.git'
+        dest: ~/git/
+        version: work
+    - name: build container image
+      command: chdir=~/git/ /usr/bin/docker build -t core:latest .
