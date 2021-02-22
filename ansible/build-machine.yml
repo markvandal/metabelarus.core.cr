@@ -6,5 +6,8 @@
       - "{{ ansible_user }}"
   roles:
     - role: docker
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection
  
       

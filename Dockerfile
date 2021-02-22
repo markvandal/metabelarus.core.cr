@@ -30,4 +30,4 @@ COPY --from=build-env /build/ops/init.sh .
 EXPOSE 26656 26657 1317 9090
 
 # Run mbcore by default
-CMD ["init.sh"]
+CMD ["/bin/sh", "init.sh"]
