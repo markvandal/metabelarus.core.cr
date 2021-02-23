@@ -2,8 +2,8 @@
   tasks:
     - name: Git checkout
       ansible.builtin.git:
-        repo: 'https://github.com/markvandal/metabelarus.core.cr.git'
+        repo: 'https://github.com/Viktor70/metabelarus.core.cr.git'
         dest: ~/git/
-        version: ops
+        version: work
     - name: build container image
       command: chdir=~/git/ /usr/bin/docker build -t core:latest .
