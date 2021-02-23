@@ -16,7 +16,9 @@ ansible-playbook build-machine.yml
 ```
 ansible-playbook make_build_mbcore.yaml
 ```
-6. На удаленной машине можно протестировать
+6. Логинимся на удаленную машину и проверяем
 ```
-docker run -t core 
+docker run -d -p 26657:26657 -p 26656:26656 -p 1317:1317 -v mbcore:/root/.mbcorecr  core 
+curl 127.0.0.1:1317
 ```
+
