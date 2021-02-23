@@ -26,7 +26,7 @@ WORKDIR /root
 # Copy over binaries from the build-env
 COPY --from=build-env /build/mbcorecrd /usr/bin/mbcorecrd
 COPY --from=build-env /build/ops .
-EXPOSE 26656 26657 1317
+EXPOSE 26656 26657 1317 9090
 
 # Run mbcore by default
-CMD ["/bin/sh", "init.sh"]
+CMD ["/bin/sh", "/init.sh"]

@@ -24,7 +24,7 @@ sed -i  's/addr_book_strict = true/addr_book_strict = false/g' $HOME_NODE/config
 sed -i  's/allow_duplicate_ip = false/allow_duplicate_ip = true/g' $HOME_NODE/config/config.toml
 sed -i  's/create_empty_blocks_interval = "0s"/create_empty_blocks_interval = "60s"/g' $HOME_NODE/config/config.toml
 echo "Запускаю демона"
-mbcorcrd start
+mbcorecrd start
 
 
 
