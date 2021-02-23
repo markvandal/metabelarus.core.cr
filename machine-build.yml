@@ -1,0 +1,34 @@
+- name: Build node on a new machine
+  hosts:
+    - local
+  become: yes
+  roles:
+    - docker
+    - build
+  vars:
+    - project_dir: /var/meta-cr
+    - source_items:
+      - src: app/
+        dest: app
+      - src: cmd/
+        dest: cmd
+      - src: dev/
+        dest: dev
+      - src: internal/
+        dest: internal
+      - src: mb/
+        dest: mb
+      - src: proto/
+        dest: proto
+      - src: scripts/
+        dest: scripts
+      - src: third_party/
+        dest: third_party
+      - src: x/
+        dest: x
+      - src: go.mod
+        dest: go.mod
+      - src: go.sum
+        dest: go.sum
+      - src: Makefile
+        dest: Makefile

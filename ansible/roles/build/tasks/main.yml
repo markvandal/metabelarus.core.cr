@@ -1,0 +1,92 @@
+- name: create meta-id folder
+  file:
+    path: "{{ project_dir }}/sources"
+    state: directory
+  tags:
+    - install
+    - ubuntu
+
+- name: copy sources
+  copy:
+    src: "{{ playbook_dir }}/{{ item.src }}"
+    dest: "{{ project_dir }}/sources/{{ item.dest }}"
+  with_items: "{{ source_items }}"
+  tags:
+    - install
+    - ubuntu
+    - sources
+
+- name: create meta-id tmp folder
+  file:
+    path: "{{ project_dir }}/tmp"
+    state: directory
+  tags:
+    - install
+    - ubuntu
+    - download-go
+
+- name: download latest go
+  get_url: 
+    url: https://dl.google.com/go/go1.15.6.linux-amd64.tar.gz
+    dest: "{{ project_dir }}/tmp/go.tar.gz"
+  tags:
+    - install
+    - ubuntu
+    - download-go
+
+- name: Unpack go
+  unarchive:
+    src: "{{ project_dir }}/tmp/go.tar.gz"
+    dest: /usr/local
+    remote_src: yes
+  tags:
+    - install
+    - ubuntu
+    - download-go
+
+- name: Set go
+  copy:
+    src: /usr/local/go/bin/go
+    dest: /usr/bin/go
+    mode: '0755'
+    remote_src: yes
+  tags:
+    - install
+    - ubuntu
+    - download-go
+
+
+- name: modify .bashrc
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+    block: |
+      export GOROOT=/usr/local/go
+      export GOPATH=$HOME/go
+      export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+    marker: '# {mark} ANSIBLE MANAGED BLOCK - changes for golang'
+    insertafter: EOF
+    create: yes
+  tags:
+    - install
+    - ubuntu
+    - make
+
+- name: Set scripts permissions
+  file:
+    dest: "{{ project_dir }}/sources/dev"
+    mode: "0755"
+    recurse: yes
+  tags:
+    - install
+    - ubuntu
+    - make
+
+- name: Build mbcorecrd
+  shell:
+    cmd: "{{ project_dir }}/sources/dev/build.sh"
+    chdir: "{{ project_dir }}/sources"
+    executable: bash
+  tags:
+    - install
+    - ubuntu
+    - make
