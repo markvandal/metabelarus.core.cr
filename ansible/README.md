@@ -11,6 +11,7 @@ mv hosts.editme hosts
 ```
 ansible-playbook build-machine.yml
 ```
+## Создаем образ
 5. Создайте образ с бинарным файлом mbcorercd
 ```
 ansible-playbook make_build_mbcore.yaml
