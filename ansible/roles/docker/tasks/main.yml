@@ -1,35 +1,27 @@
-- name: apt-get update
-  apt:
-    update_cache: yes
-  tags:
-    - install
-    - ubuntu
+---
+- include_tasks: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
 
-- name: apt install docker.io
-  apt:
-    name: docker.io
-    state: present
-    install_recommends: yes
-  tags:
-    - install
-    - ubuntu
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: systemctl docker
-  shell: systemctl start docker && systemctl enable docker
-  tags:
-    - install
-    - ubuntu
+- name: Install Docker.
+  package:
+    name: "{{ docker_package }}"
+    state: "{{ docker_package_state }}"
+  notify: restart docker
 
-- name: clean up docker
-  shell: docker system prune -f
-  tags:
-    - install
-    - ubuntu
+- name: Ensure Docker is started and enabled at boot.
+  service:
+    name: docker
+    state: "{{ docker_service_state }}"
+    enabled: "{{ docker_service_enabled }}"
 
-# - name: docker installation finished
-#   debug:
-#     msg:
-#     - "Playbook was run from folder {{ playbook_dir }}"
-#   tags:
-#     - install
-#     - ubuntu
+- name: Ensure handlers are notified now to avoid firewall conflicts.
+  meta: flush_handlers
+
+- include_tasks: docker-compose.yml
+  when: docker_install_compose | bool
+
+- include_tasks: docker-users.yml
+  when: docker_users | length > 0

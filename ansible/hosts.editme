@@ -1,0 +1,4 @@
+# fill in the file according to the sample
+[test] 
+testhost ansible_host=ххх.ххх.ххх.ххх ansible_ssh_host=ххх.ххх.ххх.ххх ansible_ssh_port=хххх ansible_user=<user_name> ansible_ssh_private_key_file=/path/to/private_key
+
