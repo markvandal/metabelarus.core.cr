@@ -22,8 +22,7 @@ FROM alpine:edge
 # Install ca-certificates
 RUN apk add --update ca-certificates
 WORKDIR /root
-#set password by default
-ENV MY_PASSWD="qwerty1234"
+
 # Copy over binaries from the build-env
 COPY --from=build-env /build/mbcorecrd /usr/bin/mbcorecrd
 COPY --from=build-env /build/ops/init.sh .
