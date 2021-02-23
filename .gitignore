@@ -40,3 +40,5 @@ frontend/.cache
 # Build
 build/**/*
 ansible/inventory
+ansible/hosts
+
