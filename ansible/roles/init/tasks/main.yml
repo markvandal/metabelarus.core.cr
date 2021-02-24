@@ -9,23 +9,56 @@
 - name: Cleanup home folder
   file:
     state: absent
-    path: "{{ project_dir }}/build/home"
+    path: "{{ project_dir }}/build/{{ item }}"
+  with_items:
+    - validator
+    - sentery
+    - seed
+  tags:
+    - init
+    - ubuntu
+    - cleanup
 
 - name: Init node
   shell:
-    cmd: "{{ project_dir }}/build/mbcorecrd init {{ moniker }} --chain-id {{ chainid }} --overwrite --home {{ project_dir }}/build/home &"
+    cmd: |
+      {{ project_dir }}/build/mbcorecrd init {{ moniker }}.{{ item }} \
+      --chain-id {{ chainid }} --overwrite \
+      --home {{ project_dir }}/build/{{ item }}
     chdir: "{{ project_dir }}"
+  with_items:
+    - validator
+    - sentery
+    - seed
   tags:
     - init
     - ubuntu
 
 - name: Init chain node with configs
   template:
-    src: "{{ item }}"
-    dest: "{{ project_dir }}/build/home/config/{{ item }}"
+    src: "{{ item.file }}"
+    dest: "{{ project_dir }}/build/{{item.folder}}/config/{{ item.file }}"
+  vars:
+    template_node: "{{ item.vars }}"
   with_items: 
-    - app.toml
-    - config.toml
+    - file: app.toml
+      folder: validator
+      vars: "{{ validator_node }}"
+    - file: config.toml
+      folder: validator
+      vars: "{{ validator_node }}"
+    - file: app.toml
+      folder: sentery
+      vars: "{{ sentery_node }}"
+    - file: config.toml
+      folder: sentery
+      vars: "{{ sentery_node }}"
+    - file: app.toml
+      folder: seed
+      vars: "{{ seed_node }}"
+    - file: config.toml
+      folder: seed
+      vars: "{{ seed_node }}"
   tags:
     - init
     - ubuntu
@@ -33,7 +66,10 @@
 
 - name: Create genesis validator account
   expect:
-    command: "{{ project_dir }}/build/mbcorecrd keys add mainuser --hd-path \"44'/118'/0'/0/0\" --home {{ project_dir }}/build/home --keyring-backend file --recover"
+    command: |
+      {{ project_dir }}/build/mbcorecrd keys add mainuser 
+      --hd-path "44'/118'/0'/0/0" --home {{ project_dir }}/build/validator 
+      --keyring-backend file --recover
     chdir: "{{ project_dir }}"
     responses:
       Enter\ your\ bip39\ mnemonic: "{{ mainuser_mnemonic }}"
@@ -47,7 +83,9 @@
   
 - name: Read genesis addr to varible
   expect:
-    command: "{{ project_dir }}/build/mbcorecrd keys show mainuser -a --home {{ project_dir }}/build/home --keyring-backend file"
+    command: |
+      {{ project_dir }}/build/mbcorecrd keys show mainuser -a 
+      --home {{ project_dir }}/build/validator --keyring-backend file
     chdir: "{{ project_dir }}"
     responses:
       Enter\ keyring\ passphrase: "{{ keyring_pass }}"
@@ -63,7 +101,7 @@
     cmd: |
         {{ project_dir }}/build/mbcorecrd add-genesis-account {{ validator_address.stdout_lines[1] }} \
         1000token,100000000stake,20invitesuper,50invite0,50invite1,150invite2,150invite3 \
-        --home {{ project_dir }}/build/home
+        --home {{ project_dir }}/build/validator
     chdir: "{{ project_dir }}"
   tags:
     - init
@@ -75,7 +113,7 @@
     command: |
         {{ project_dir }}/build/mbcorecrd gentx mainuser --from mainuser 
         --chain-id {{ chainid }} --amount 1000000stake 
-        --home {{ project_dir }}/build/home --keyring-backend file -y
+        --home {{ project_dir }}/build/validator --keyring-backend file -y
     chdir: "{{ project_dir }}"
     responses:
       Enter\ keyring\ passphrase: "{{ keyring_pass }}"
@@ -88,9 +126,23 @@
 - name: Collect genesis
   shell:
     cmd: |
-        {{ project_dir }}/build/mbcorecrd collect-gentxs --home {{ project_dir }}/build/home 
+        {{ project_dir }}/build/mbcorecrd collect-gentxs \
+        --home {{ project_dir }}/build/validator 
     chdir: "{{ project_dir }}"
   no_log: false
+  tags:
+    - init
+    - ubnutu
+    - genesis
+
+- name: Copy genesis file to other nodes
+  copy:
+    src: "{{ project_dir }}/build/validator/config/genesis.json"
+    remote_src: yes
+    dest: "{{ project_dir }}/build/{{ item }}/config/genesis.json"
+  with_items:
+    - sentery
+    - seed
   tags:
     - init
     - ubnutu

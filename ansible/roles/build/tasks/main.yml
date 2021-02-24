@@ -124,7 +124,7 @@
     - make
 
 - name: Build mbcorecr docker image
-  community.docker.docker_image:
+  docker_image:
     name: mbcorecrnode:latest
     build:
       path: "{{ project_dir }}/sources"
