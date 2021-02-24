@@ -19,11 +19,13 @@
     - init
     - ubuntu
 
-- name: Init chain node with default configs
-  copy:
-    src: "{{ playbook_dir }}/build/{{ localhome }}/{{ item.src }}"
-    dest: "{{ project_dir }}/build/home/{{ item.dest }}"
-  with_items: "{{ source_items }}"
+- name: Init chain node with configs
+  template:
+    src: "{{ item }}"
+    dest: "{{ project_dir }}/build/home/config/{{ item }}"
+  with_items: 
+    - app.toml
+    - config.toml
   tags:
     - init
     - ubuntu
@@ -37,7 +39,7 @@
       Enter\ your\ bip39\ mnemonic: "{{ mainuser_mnemonic }}"
       Enter\ keyring\ passphrase: "{{ keyring_pass }}"
       Re-enter\ keyring\ passphrase: "{{ keyring_pass }}"
-  no_log: true
+  no_log: false
   tags:
     - init
     - ubnutu
@@ -93,12 +95,3 @@
     - init
     - ubnutu
     - genesis
-
-- name: Run node in test mode (this task should be commented)
-  shell:
-    cmd: "nohup {{ project_dir }}/build/mbcorecrd start --home {{ project_dir }}/build/home &"
-    chdir: "{{ project_dir }}"
-  tags:
-    - init
-    - ubuntu
-    - test

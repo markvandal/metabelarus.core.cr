@@ -2,25 +2,23 @@
 
 ## Готовим виртуальную машину
 1. Создайте виртуальную машину. Я тестировал на ubuntu-server 20.04. Сгенерируете ssh ключ.
-2. Переименуте файл hosts.editme в hosts
+2. Переименуте папку inventory.editme в inventory
 ```
-mv hosts.editme hosts
+mv inventory.editme inventory
 ```
 3. В файле hosts укажите все необходимые данные для доступа к виртуальной машине.
-4. Установите на машине Doker
+4. Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
 ```
-ansible-playbook build-machine.yml
+ansible-playbook machine-build.yml
 ```
-## Создаем образ
- Создаем образ. Бинарник в /usr/bin/
+## Производим генезис первого валидатора блокчейн
 ```
-ansible-playbook make_build_mbcore.yaml
+ansible-playbook node-init.yml
 ```
-## Запускаем контейнер
+## Запускаем контейнер с блокчейном
 Логинимся на удаленную машину и проверяем
 ```
-docker run -d -p 26657:26657 -p 26656:26656 -p 1317:1317 -v mbcore:/root/.mbcorecr  core 
-curl 127.0.0.1:1317
+ansible-playbook node-start.yml
 ```
 
 

@@ -1,3 +1,4 @@
+# Treat as an example
 - hosts: testhost
   tasks:
     - name: Git checkout

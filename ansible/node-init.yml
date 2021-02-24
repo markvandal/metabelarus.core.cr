@@ -1,0 +1,10 @@
+- name: Build node on a new machine
+  hosts:
+    - local
+    - test
+  become: yes
+  roles:
+    - init
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection

@@ -1,0 +1,17 @@
+template_node:
+  min_retain_blocks: 100
+  api_enable: "true"
+  grpc_enable: "true"
+  enabled_unsafe_cors: "false"
+  cors_allowed_origins: '["*"]'
+  fast_sync_version: "\"v2\""
+  addr_book_strict: "false"
+  allow_duplicate_ip: "true"
+  create_empty_blocks_interval: "\"1m0s\""
+  tcp_port: 1317
+  grpc_port: 9090
+  proxy_port: 26658
+  rpc_port: 26657
+  p2p_port: 26656
+  pprof_port: 6060
+project_dir: "/var/meta-cr/sources"

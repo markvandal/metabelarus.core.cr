@@ -1,3 +1,26 @@
+- name: prevent docker related crashes in some cases
+  apt:
+    name:
+      - gnupg2 
+      - pass 
+      - gpg
+      - python3-pip
+    state: present 
+    update_cache: yes
+  tags:
+    - install
+    - ubuntu
+    - docker
+
+- name: Install python packages
+  pip:
+    name:
+      - docker-py
+  tags:
+    - install
+    - ubuntu
+    - docker
+
 - name: create meta-id folder
   file:
     path: "{{ project_dir }}/sources"
@@ -6,15 +29,25 @@
     - install
     - ubuntu
 
-- name: copy sources
+- name: Copy sources
   copy:
-    src: "{{ playbook_dir }}/{{ item.src }}"
+    src: "{{ playbook_dir }}/../{{ item.src }}"
     dest: "{{ project_dir }}/sources/{{ item.dest }}"
   with_items: "{{ source_items }}"
   tags:
     - install
     - ubuntu
     - sources
+
+- name: Add docker file
+  template:
+    src: "Dockerfile"
+    dest: "{{ project_dir }}/sources/Dockerfile"
+  tags:
+    - install
+    - ubuntu
+    - sources
+    - docker
 
 - name: create meta-id tmp folder
   file:
@@ -55,7 +88,6 @@
     - ubuntu
     - download-go
 
-
 - name: modify .bashrc
   blockinfile:
     dest: "{{ ansible_env.HOME }}/.bashrc"
@@ -81,12 +113,25 @@
     - ubuntu
     - make
 
-- name: Build mbcorecrd
+- name: Build local (for machine) mbcorecrd
   shell:
     cmd: "{{ project_dir }}/sources/dev/build.sh"
     chdir: "{{ project_dir }}/sources"
     executable: bash
   tags:
     - install
+    - ubuntu
+    - make
+
+- name: Build mbcorecr docker image
+  community.docker.docker_image:
+    name: mbcorecrnode:latest
+    build:
+      path: "{{ project_dir }}/sources"
+      cache_from: 
+        - golang:alpine
+    source: build
+  tags:
+    - build
     - ubuntu
     - make

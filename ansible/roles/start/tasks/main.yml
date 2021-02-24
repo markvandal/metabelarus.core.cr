@@ -1,0 +1,9 @@
+- name: Start docker container with validator node
+  community.docker.docker_container:
+    name: mbcorecr-validator
+    image: mbcorecrnode:latest
+    restart: yes
+    output_logs: true
+    command: mbcorecrd start
+    volumes:
+      - "/{{ project_dir }}/build/home:/root/.mbcorecr"

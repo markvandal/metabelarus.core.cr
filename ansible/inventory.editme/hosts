@@ -1,0 +1,2 @@
+[test]
+testhost ansible_host=xxx.xxx.xxx.xxx

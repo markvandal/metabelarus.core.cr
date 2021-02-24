@@ -1,0 +1,13 @@
+- name: Start node on machine
+  hosts:
+    - local
+    - test
+  become: yes
+  roles:
+    - start
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection
+  vars:
+    docker_users:
+      - "{{ ansible_user }}"
