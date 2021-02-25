@@ -7,6 +7,8 @@
     command: mbcorecrd start
     volumes:
       - "/{{ project_dir }}/build/validator:/root/.mbcorecr"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
 
 - name: Get validator container info
   docker_container_info:
@@ -24,8 +26,14 @@
     restart: yes
     output_logs: true
     command: mbcorecrd start --p2p.persistent_peers "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:26656" --p2p.private_peer_ids "{{ validator_id.stdout }}" --p2p.unconditional_peer_ids "{{ validator_id.stdout }}"
+    ports:
+      - "{{ sentery_node.tcp_port }}:{{ sentery_node.tcp_port }}"
+      - "{{ sentery_node.p2p_port }}:{{ sentery_node.p2p_port }}"
+      - "{{ sentery_node.rpc_port }}:{{ sentery_node.rpc_port }}"
     volumes:
       - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
 
 - name: Get sentery container info
   docker_container_info:
@@ -45,3 +53,5 @@
     command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ sentery_info.container.NetworkSettings.IPAddress }}:26656" --p2p.unconditional_peer_ids "{{ sentery_id.stdout }}"
     volumes:
       - "/{{ project_dir }}/build/seed:/root/.mbcorecr"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"

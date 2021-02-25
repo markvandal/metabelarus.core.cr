@@ -15,7 +15,7 @@
 - name: Install python packages
   pip:
     name:
-      - docker-py
+      - docker
   tags:
     - install
     - ubuntu
@@ -28,6 +28,7 @@
   tags:
     - install
     - ubuntu
+    - sources
 
 - name: Copy sources
   copy:
@@ -101,7 +102,7 @@
   tags:
     - install
     - ubuntu
-    - make
+    - download-go
 
 - name: Set scripts permissions
   file:

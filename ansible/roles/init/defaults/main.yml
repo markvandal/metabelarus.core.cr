@@ -42,7 +42,7 @@ sentery_node:
   min_retain_blocks: 100
   api_enable: "true"
   grpc_enable: "true"
-  enabled_unsafe_cors: "false"
+  enabled_unsafe_cors: "true"
   cors_allowed_origins: '["*"]'
   fast_sync_version: "v2"
   addr_book_strict: "false"
