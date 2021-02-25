@@ -16,7 +16,7 @@ template_node:
   p2p_port: 26656
   pprof_port: 6060
   pex: "true"
-  seeds: ""
+  seeds: "{{ seeds }}"
   seed_mode: "false"
 validator_node:
   min_retain_blocks: 100
@@ -36,7 +36,7 @@ validator_node:
   p2p_port: 26656
   pprof_port: 6060
   pex: "false"
-  seeds: ""
+  seeds: "{{ seeds }}"
   seed_mode: "false"
 sentery_node:
   min_retain_blocks: 100
@@ -56,7 +56,7 @@ sentery_node:
   p2p_port: 26656
   pprof_port: 6060
   pex: "true"
-  seeds: ""
+  seeds: "{{ seeds }}"
   seed_mode: "false"
 seed_node:
   min_retain_blocks: 100
@@ -76,6 +76,6 @@ seed_node:
   p2p_port: 26656
   pprof_port: 6060
   pex: "true"
-  seeds: ""
+  seeds: "{{ seeds }}"
   seed_mode: "true"
 project_dir: "/var/meta-cr/sources"

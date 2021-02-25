@@ -13,17 +13,9 @@
     name: mbcorecr-validator
   register: validator_info
 
-# - name: Xxx
-#   debug:
-#     msg: "{{ validator_info.container.NetworkSettings.IPAddress }}"
-
-- name: Get node id
+- name: Get validator node id
   shell: docker exec -ti mbcorecr-validator sh -c "mbcorecrd tendermint show-node-id"
   register: validator_id
-
-# - name: Xxx1
-#   debug:
-#     msg: "{{ validator_id }}"
 
 - name: Start sentery container
   docker_container:
@@ -34,3 +26,22 @@
     command: mbcorecrd start --p2p.persistent_peers "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:26656" --p2p.private_peer_ids "{{ validator_id.stdout }}" --p2p.unconditional_peer_ids "{{ validator_id.stdout }}"
     volumes:
       - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
+
+- name: Get sentery container info
+  docker_container_info:
+    name: mbcorecr-sentery
+  register: sentery_info
+
+- name: Get sentery id
+  shell: docker exec -ti mbcorecr-sentery sh -c "mbcorecrd tendermint show-node-id"
+  register: sentery_id
+
+- name: Start seeder container
+  docker_container:
+    name: mbcorecr-seed
+    image: mbcorecrnode:latest
+    restart: yes
+    output_logs: true
+    command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ sentery_info.container.NetworkSettings.IPAddress }}:26656" --p2p.unconditional_peer_ids "{{ sentery_id.stdout }}"
+    volumes:
+      - "/{{ project_dir }}/build/seed:/root/.mbcorecr"
