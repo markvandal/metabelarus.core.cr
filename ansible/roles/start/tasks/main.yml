@@ -9,15 +9,30 @@
       - "/{{ project_dir }}/build/validator:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
+  tags:
+    - ubuntu
+    - start
+    - node
+    - validator
 
 - name: Get validator container info
   docker_container_info:
     name: mbcorecr-validator
   register: validator_info
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery
 
 - name: Get validator node id
   shell: docker exec -ti mbcorecr-validator sh -c "mbcorecrd tendermint show-node-id"
   register: validator_id
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery
 
 - name: Start sentery container
   docker_container:
@@ -34,15 +49,30 @@
       - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery
 
 - name: Get sentery container info
   docker_container_info:
     name: mbcorecr-sentery
   register: sentery_info
+  tags:
+    - ubuntu
+    - start
+    - node
+    - seed
 
 - name: Get sentery id
   shell: docker exec -ti mbcorecr-sentery sh -c "mbcorecrd tendermint show-node-id"
   register: sentery_id
+  tags:
+    - ubuntu
+    - start
+    - node
+    - seed
 
 - name: Start seeder container
   docker_container:
@@ -51,7 +81,27 @@
     restart: yes
     output_logs: true
     command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ sentery_info.container.NetworkSettings.IPAddress }}:26656" --p2p.unconditional_peer_ids "{{ sentery_id.stdout }}"
+    ports:
+      - "{{ seed_export.tcp_port }}:{{ seed_node.tcp_port }}"
+      - "{{ seed_export.p2p_port }}:{{ seed_node.p2p_port }}"
+      - "{{ seed_export.rpc_port }}:{{ seed_node.rpc_port }}"
     volumes:
       - "/{{ project_dir }}/build/seed:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
+  tags:
+    - ubuntu
+    - start
+    - node
+    - seed
+
+- name: Run certbot
+  shell: |
+      certbot certonly --webroot --noninteractive --agree-tos \
+      --email {{ cert_email }} -d {{ domain }}
+  tags:
+    - ubuntu
+    - start
+    - node
+    - seed
+    - certbot

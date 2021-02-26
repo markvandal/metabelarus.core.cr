@@ -4,6 +4,7 @@
     - test
   become: yes
   roles:
+    - certbot
     - docker
     - build
   tasks:

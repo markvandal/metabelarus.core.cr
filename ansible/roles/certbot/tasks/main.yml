@@ -1,0 +1,46 @@
+- name: Install Snap
+  apt:
+    name: snapd
+    state: present
+    update_cache: yes
+  tags:
+    - install
+    - ubuntu
+    - certbot
+
+- name: Update Snap
+  shell:
+    cmd: "snap install core; snap refresh core"
+  tags:
+    - install
+    - ubuntu
+    - certbot
+
+- name: Remove standard certbot
+  apt:
+    name: certbot
+    state: absent
+    update_cache: yes
+  tags:
+    - install
+    - ubuntu
+    - certbot
+
+- name: Install certbot
+  shell:
+    cmd: "snap install --classic certbot"
+  tags:
+    - install
+    - ubuntu
+    - certbot
+
+- name: Configure certbot
+  file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
+  tags:
+    - install
+    - ubuntu
+    - certbot
+
