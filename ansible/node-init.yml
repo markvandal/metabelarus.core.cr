@@ -2,6 +2,7 @@
   hosts:
     - local
     - test
+    - prod
   become: yes
   roles:
     - init
