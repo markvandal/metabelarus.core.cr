@@ -1,10 +1,11 @@
 - name: Build node on a new machine
   hosts:
-    - local
-    - test
+    - build
   become: yes
   roles:
-    - docker
+    - role: docker
+      tags:
+      - install
     - build
   tasks:
     - name: reset ssh connection

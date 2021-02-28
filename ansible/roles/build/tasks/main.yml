@@ -12,15 +12,27 @@
     - ubuntu
     - docker
 
-- name: Install python packages
+- name: Install python packages for 2.7 
   pip:
     name:
       - docker-py
+  when: 
+    python_version == 2.7
   tags:
     - install
     - ubuntu
     - docker
-
+    
+- name: Install python packages for 3.7
+  pip:
+    name:
+      - docker
+  when: 
+    python_version == 3.7
+  tags:
+    - install
+    - ubuntu
+    - docker
 - name: create meta-id folder
   file:
     path: "{{ project_dir }}/sources"
@@ -29,35 +41,51 @@
     - install
     - ubuntu
 
-- name: Copy sources
+- name: Copy sources local
   copy:
     src: "{{ playbook_dir }}/../{{ item.src }}"
     dest: "{{ project_dir }}/sources/{{ item.dest }}"
   with_items: "{{ source_items }}"
+  when:
+    get_sources_from == 'local'
   tags:
-    - install
     - ubuntu
     - sources
+    - make
+
+- name: Copy sourse from git
+  git:
+    repo: 'https://github.com/markvandal/metabelarus.core.cr.git'
+    dest: "{{ project_dir }}/sources/"
+    version: "{{ git_branch }}"
+    force: yes
+  when:
+    get_sources_from == 'git' 
+  tags:
+    - ubuntu
+    - sources
+    - make
+    - install
 
 - name: Add docker file
-  template:
+  copy:
     src: "Dockerfile"
     dest: "{{ project_dir }}/sources/Dockerfile"
   tags:
-    - install
     - ubuntu
     - sources
     - docker
+    - make
+    - install
 
 - name: create meta-id tmp folder
   file:
     path: "{{ project_dir }}/tmp"
     state: directory
   tags:
-    - install
     - ubuntu
     - download-go
-
+    - install
 - name: download latest go
   get_url: 
     url: https://dl.google.com/go/go1.15.6.linux-amd64.tar.gz
@@ -101,7 +129,6 @@
   tags:
     - install
     - ubuntu
-    - make
 
 - name: Set scripts permissions
   file:
@@ -111,15 +138,13 @@
   tags:
     - install
     - ubuntu
-    - make
-
+    
 - name: Build local (for machine) mbcorecrd
   shell:
     cmd: "{{ project_dir }}/sources/dev/build.sh"
     chdir: "{{ project_dir }}/sources"
     executable: bash
   tags:
-    - install
     - ubuntu
     - make
 
@@ -134,4 +159,3 @@
   tags:
     - build
     - ubuntu
-    - make

@@ -7,9 +7,13 @@
 mv inventory.editme inventory
 ```
 3. В файле hosts укажите все необходимые данные для доступа к виртуальной машине.
-4. Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
+4. Устанавливаем все необходимые пакеты зависимости 
 ```
-ansible-playbook machine-build.yml
+ansible-playbook --tags install machine-build.yml 
+```
+5. Билдим локальный прект
+```
+ansible-playbook --tags make machine-build.yml 
 ```
 ## Производим генезис первого валидатора блокчейн
 ```

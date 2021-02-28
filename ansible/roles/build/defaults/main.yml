@@ -1,4 +1,7 @@
 project_dir: /var/meta-cr
+python_version: 3.7 #2.7|3.7
+get_sources_from: git #git|local
+git_branch: ops
 source_items:
   - src: app/
     dest: app
