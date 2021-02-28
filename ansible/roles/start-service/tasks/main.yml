@@ -1,0 +1,15 @@
+---
+- name: copy service file
+  copy:
+    src: mbcorecrd.service
+    dest: /lib/systemd/system/mbcorecrd.service
+- name: reload systemctl manager configuration
+  ansible.builtin.systemd:
+    name: mbcorecrd.service
+    state: started
+    enabled: yes
+    daemon_reload: yes
+- name: Make sure a service is running
+  ansible.builtin.systemd:
+    state: started
+    name: mbcorecrd.service

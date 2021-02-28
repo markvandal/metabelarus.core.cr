@@ -1,0 +1,4 @@
+---
+buildhost: buildhost
+project_dir: /var/meta-cr
+python_version: 3.7 #2.7|3.7

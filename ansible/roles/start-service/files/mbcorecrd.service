@@ -1,0 +1,9 @@
+[Unit]
+Description=mbcore dervice
+
+[Service]
+Restart=always
+ExecStart=/var/meta-cr/sources/build/mbcorecrd --home /var/meta-cr/sources/build/home start
+
+[Install]
+WantedBy=multi-user.target

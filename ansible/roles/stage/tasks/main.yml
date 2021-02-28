@@ -1,0 +1,18 @@
+---
+- name: fetch mbcorecrd from build machine
+  fetch:
+    src: "{{ project_dir }}/sources/build/mbcorecrd"
+    dest: ./mbcorecrd
+    flat: true
+  delegate_to: "{{ buildhost }}"
+- name: Creates directory
+  file:
+    path: "{{ project_dir }}/sources/build"
+    state: directory
+  become: yes
+- name: copy mbcore to stage machine
+  copy:
+    src: ./mbcorecrd
+    dest: "{{ project_dir }}/sources/build/mbcorecrd"
+    mode: +x
+  become: yes

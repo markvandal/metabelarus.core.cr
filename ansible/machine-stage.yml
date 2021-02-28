@@ -1,0 +1,8 @@
+- hosts: stagehost
+  roles:
+    - stage
+    - role: init
+      become: yes
+    - role: start-service
+      become: yes
+
