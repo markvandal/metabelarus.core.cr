@@ -1,0 +1,58 @@
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+
+- name: Update node configs
+  template:
+    src: "{{ playbook_dir }}/templates/{{ item.file }}"
+    dest: "{{ project_dir }}/build/{{ item.folder }}/config/{{ item.file }}"
+  vars:
+    template_node: "{{ item.vars }}"
+  with_items: 
+    - file: app.toml
+      folder: validator
+      vars: "{{ validator_node }}"
+    - file: config.toml
+      folder: validator
+      vars: "{{ validator_node }}"
+    - file: app.toml
+      folder: sentery
+      vars: "{{ sentery_node }}"
+    - file: config.toml
+      folder: sentery
+      vars: "{{ sentery_node }}"
+    - file: app.toml
+      folder: seed
+      vars: "{{ seed_node }}"
+    - file: config.toml
+      folder: seed
+      vars: "{{ seed_node }}"
+  tags:
+    - update
+    - ubuntu
+    - configs
+
+- name: Setup sertificate
+  copy:
+    src: "/etc/letsencrypt/live/{{ domain }}/{{ item.cert }}"
+    remote_src: yes
+    dest: "{{ project_dir }}/build/{{ item.node }}/config/{{ item.cert }}"
+  with_items:
+    - node: validator
+      cert: cert.pem
+    - node: validator
+      cert: privkey.pem
+    - node: sentery
+      cert: cert.pem
+    - node: sentery
+      cert: privkey.pem
+    - node: seed
+      cert: cert.pem
+    - node: seed
+      cert: privkey.pem
+  tags:
+    - update
+    - ubuntu
+    - configs
+
+

@@ -1,3 +1,7 @@
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+
 - name: Start validator container
   docker_container:
     name: mbcorecr-validator
@@ -94,14 +98,3 @@
     - start
     - node
     - seed
-
-- name: Run certbot
-  shell: |
-      certbot certonly --webroot --noninteractive --agree-tos \
-      --email {{ cert_email }} -d {{ domain }}
-  tags:
-    - ubuntu
-    - start
-    - node
-    - seed
-    - certbot

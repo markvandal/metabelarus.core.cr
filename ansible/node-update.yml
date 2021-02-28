@@ -1,0 +1,11 @@
+- name: Update node on a new machine
+  hosts:
+    - local
+    - test
+    - prod
+  become: yes
+  roles:
+    - update
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection

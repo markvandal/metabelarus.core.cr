@@ -1,3 +1,7 @@
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+
 - name: Fake init node to avoid local bugs
   shell:
     cmd: "{{ project_dir }}/build/mbcorecrd init test --chain-id test --overwrite"
@@ -36,7 +40,7 @@
 
 - name: Init chain node with configs
   template:
-    src: "{{ item.file }}"
+    src: "{{ playbook_dir }}/templates/{{ item.file }}"
     dest: "{{ project_dir }}/build/{{item.folder}}/config/{{ item.file }}"
   vars:
     template_node: "{{ item.vars }}"
@@ -147,3 +151,12 @@
     - init
     - ubnutu
     - genesis
+
+- name: Run certbot
+  shell: |
+      certbot certonly --standalone --noninteractive --agree-tos \
+      --email {{ cert_email }} -d {{ domain }}
+  tags:
+    - ubuntu
+    - init
+    - certbot
