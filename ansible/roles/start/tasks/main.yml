@@ -50,7 +50,6 @@
     output_logs: true
     command: mbcorecrd start --p2p.persistent_peers "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:{{ validator_node.p2p_port }}" --p2p.private_peer_ids "{{ validator_id.stdout }}" --p2p.unconditional_peer_ids "{{ validator_id.stdout }}"
     ports:
-#      - "{{ sentery_node.tcp_port }}:{{ sentery_node.tcp_port }}"
       - "{{ sentery_node.p2p_port }}:{{ sentery_node.p2p_port }}"
       - "{{ sentery_node.rpc_port }}:{{ sentery_node.rpc_port }}"
     volumes:
@@ -102,28 +101,6 @@
     - start
     - node
     - seed
-
-# - name: Modify nginx.conf
-#   blockinfile:
-#     dest: "/etc/nginx/nginx.conf"
-#     block: |
-#       stream {
-#         server {
-#           listen {{ sentery_node.rpc_port }};
-#           proxy_pass stream_backend;
-#         }
-
-#         upstream stream_backend {
-#           server {{ sentery_info.container.NetworkSettings.IPAddress }}:{{ sentery_node.rpc_port }};
-#         }
-#       }
-#     marker: '# {mark} ANSIBLE MANAGED BLOCK - changes for mbcorecr'
-#     insertafter: EOF
-#     create: yes
-#   tags:
-#     - start
-#     - ubuntu
-#     - nginx
 
 - name: Copy nginx.https.conf
   template:
