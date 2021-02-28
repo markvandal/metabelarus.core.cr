@@ -34,7 +34,7 @@
 
 - name: Setup sertificate
   copy:
-    src: "/etc/letsencrypt/live/{{ domain }}/{{ item.cert }}"
+    src: "/etc/letsencrypt/live/{{ domain }}.tcp/{{ item.cert }}"
     remote_src: yes
     dest: "{{ project_dir }}/build/{{ item.node }}/config/{{ item.cert }}"
   with_items:

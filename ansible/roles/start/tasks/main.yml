@@ -2,6 +2,10 @@
   include_vars:
     file: "{{ playbook_dir }}/config.yml"
 
+- name: Add nginx variables
+  include_vars:
+    file: "{{ playbook_dir }}/roles/nginx/defaults/main.yml"
+
 - name: Start validator container
   docker_container:
     name: mbcorecr-validator
@@ -44,9 +48,9 @@
     image: mbcorecrnode:latest
     restart: yes
     output_logs: true
-    command: mbcorecrd start --p2p.persistent_peers "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:26656" --p2p.private_peer_ids "{{ validator_id.stdout }}" --p2p.unconditional_peer_ids "{{ validator_id.stdout }}"
+    command: mbcorecrd start --p2p.persistent_peers "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:{{ validator_node.p2p_port }}" --p2p.private_peer_ids "{{ validator_id.stdout }}" --p2p.unconditional_peer_ids "{{ validator_id.stdout }}"
     ports:
-      - "{{ sentery_node.tcp_port }}:{{ sentery_node.tcp_port }}"
+#      - "{{ sentery_node.tcp_port }}:{{ sentery_node.tcp_port }}"
       - "{{ sentery_node.p2p_port }}:{{ sentery_node.p2p_port }}"
       - "{{ sentery_node.rpc_port }}:{{ sentery_node.rpc_port }}"
     volumes:
@@ -84,7 +88,7 @@
     image: mbcorecrnode:latest
     restart: yes
     output_logs: true
-    command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ sentery_info.container.NetworkSettings.IPAddress }}:26656" --p2p.unconditional_peer_ids "{{ sentery_id.stdout }}"
+    command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ sentery_info.container.NetworkSettings.IPAddress }}:{{ sentery_node.p2p_port }}" --p2p.unconditional_peer_ids "{{ sentery_id.stdout }}"
     ports:
       - "{{ seed_export.tcp_port }}:{{ seed_node.tcp_port }}"
       - "{{ seed_export.p2p_port }}:{{ seed_node.p2p_port }}"
@@ -98,3 +102,43 @@
     - start
     - node
     - seed
+
+# - name: Modify nginx.conf
+#   blockinfile:
+#     dest: "/etc/nginx/nginx.conf"
+#     block: |
+#       stream {
+#         server {
+#           listen {{ sentery_node.rpc_port }};
+#           proxy_pass stream_backend;
+#         }
+
+#         upstream stream_backend {
+#           server {{ sentery_info.container.NetworkSettings.IPAddress }}:{{ sentery_node.rpc_port }};
+#         }
+#       }
+#     marker: '# {mark} ANSIBLE MANAGED BLOCK - changes for mbcorecr'
+#     insertafter: EOF
+#     create: yes
+#   tags:
+#     - start
+#     - ubuntu
+#     - nginx
+
+- name: Copy nginx.https.conf
+  template:
+    src: "{{ playbook_dir }}/roles/nginx/templates/nginx.https.conf"
+    dest: "/etc/nginx/sites-enabled/default"
+  tags:
+    - start
+    - ubuntu
+    - nginx
+
+- name: Restart nginx service
+  service:
+    name: nginx
+    state: restarted
+  tags:
+    - start
+    - ubuntu
+    - nginx

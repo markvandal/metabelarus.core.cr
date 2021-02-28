@@ -68,6 +68,29 @@
     - ubuntu
     - configs
 
+- name: Setup sertificate
+  copy:
+    src: "/etc/letsencrypt/live/{{ domain }}.tcp/{{ item.cert }}"
+    remote_src: yes
+    dest: "{{ project_dir }}/build/{{ item.node }}/config/{{ item.cert }}"
+  with_items:
+    - node: validator
+      cert: cert.pem
+    - node: validator
+      cert: privkey.pem
+    - node: sentery
+      cert: cert.pem
+    - node: sentery
+      cert: privkey.pem
+    - node: seed
+      cert: cert.pem
+    - node: seed
+      cert: privkey.pem
+  tags:
+    - init
+    - ubuntu
+    - configs
+
 - name: Create genesis validator account
   expect:
     command: |
@@ -151,12 +174,3 @@
     - init
     - ubnutu
     - genesis
-
-- name: Run certbot
-  shell: |
-      certbot certonly --standalone --noninteractive --agree-tos \
-      --email {{ cert_email }} -d {{ domain }}
-  tags:
-    - ubuntu
-    - init
-    - certbot

@@ -1,0 +1,46 @@
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+  tags:
+    - install
+    - ubuntu
+    - nginx
+
+- name: Install nginx
+  apt: 
+    name: nginx 
+    state: latest
+    update_cache: yes
+  tags: 
+    - install
+    - ubuntu
+    - nginx
+
+- name: Get certificate via certbot for nginx
+  shell: |
+      certbot certonly --nginx --noninteractive --agree-tos \
+      --email {{ cert_email }} -d {{ domain }}
+  tags:
+    - ubuntu
+    - build
+    - certbot
+    - nginx
+
+- name: Configure nginx.http.conf
+  template:
+    src: "nginx.http.conf"
+    dest: "/etc/nginx/sites-enabled/default"
+  tags:
+    - init
+    - ubuntu
+    - nginx
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started  
+  tags:
+    - init
+    - ubuntu
+    - nginx
+    
