@@ -26,10 +26,10 @@ type TimePoint struct {
 func CreateCurrentTime() *time.Time {
 	nowTime := time.Now()
 	utcTime := time.Date(
-		nowTime.Year(), nowTime.Month(), nowTime.Day(),
-		nowTime.Hour(),
-		nowTime.Minute(),
-		nowTime.Second(),
+		nowTime.UTC().Year(), nowTime.UTC().Month(), nowTime.UTC().Day(),
+		nowTime.UTC().Hour(),
+		nowTime.UTC().Minute(),
+		nowTime.UTC().Second(),
 		0, UTCLocation,
 	)
 
@@ -39,14 +39,14 @@ func CreateCurrentTime() *time.Time {
 func (msg *TimePoint) Validate() error {
 	highTime := time.Now().Add(time.Second)
 	highDate := time.Date(
-		highTime.Year(), highTime.Month(), highTime.Day(),
-		highTime.Hour(), highTime.Minute(), highTime.Second(),
+		highTime.UTC().Year(), highTime.UTC().Month(), highTime.UTC().Day(),
+		highTime.UTC().Hour(), highTime.UTC().Minute(), highTime.UTC().Second(),
 		0, UTCLocation,
 	)
 	lowTime := time.Now().Add(time.Duration(-10) * time.Minute)
 	lowDate := time.Date(
-		lowTime.Year(), lowTime.Month(), lowTime.Day(),
-		lowTime.Hour(), lowTime.Minute(), lowTime.Second(),
+		lowTime.UTC().Year(), lowTime.UTC().Month(), lowTime.UTC().Day(),
+		lowTime.UTC().Hour(), lowTime.UTC().Minute(), lowTime.UTC().Second(),
 		0, UTCLocation,
 	)
 
