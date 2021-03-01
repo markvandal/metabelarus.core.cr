@@ -20,19 +20,11 @@
   shell: |
       certbot certonly --nginx --noninteractive --agree-tos \
       --email {{ cert_email }} -d {{ domain }}
+  when: host_type == "public"
   tags:
     - ubuntu
     - build
     - certbot
-    - nginx
-
-- name: Configure nginx.http.conf
-  template:
-    src: "nginx.http.conf"
-    dest: "/etc/nginx/sites-enabled/default"
-  tags:
-    - init
-    - ubuntu
     - nginx
 
 - name: start nginx

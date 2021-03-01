@@ -50,6 +50,7 @@
       cert: cert.pem
     - node: seed
       cert: privkey.pem
+  when: host_type == "public"
   tags:
     - update
     - ubuntu

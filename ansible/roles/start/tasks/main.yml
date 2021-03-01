@@ -102,10 +102,21 @@
     - node
     - seed
 
+- name: Configure nginx.http.conf
+  template:
+    src: "{{ playbook_dir }}/roles/nginx/templates/nginx.http.conf"
+    dest: "/etc/nginx/sites-enabled/default"
+  when: host_type == "local"
+  tags:
+    - init
+    - ubuntu
+    - nginx
+
 - name: Copy nginx.https.conf
   template:
     src: "{{ playbook_dir }}/roles/nginx/templates/nginx.https.conf"
     dest: "/etc/nginx/sites-enabled/default"
+  when: host_type == "public"
   tags:
     - start
     - ubuntu

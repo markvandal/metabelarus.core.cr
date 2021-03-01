@@ -141,6 +141,7 @@
   shell: |
       certbot certonly --standalone --noninteractive --agree-tos \
       --email {{ cert_email }} -d {{ domain }} --cert-name {{ domain }}.tcp
+  when: host_type == "public"
   tags:
     - ubuntu
     - build

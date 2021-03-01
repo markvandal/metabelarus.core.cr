@@ -19,7 +19,7 @@ validator_node:
   pex: "false"
   seeds: "{{ seeds }}"
   seed_mode: "false"
-  ssl: true
+  ssl: "{{ host_type == 'public' }}"
 sentery_node:
   caption: "sentery"
   min_retain_blocks: 100
@@ -41,7 +41,7 @@ sentery_node:
   pex: "true"
   seeds: "{{ seeds }}"
   seed_mode: "false"
-  ssl: true
+  ssl: "{{ host_type == 'public' }}"
 seed_node:
   caption: "seed"
   min_retain_blocks: 100
@@ -63,7 +63,7 @@ seed_node:
   pex: "true"
   seeds: "{{ seeds }}"
   seed_mode: "true"
-  ssl: true
+  ssl: "{{ host_type == 'public' }}"
 seed_export:
   tcp_port: 1417
   rpc_port: 26757
