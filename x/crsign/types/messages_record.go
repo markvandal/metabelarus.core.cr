@@ -95,13 +95,15 @@ func (msg *MsgCreateRecord) ValidateBasic() error {
 		return err
 	}
 
-	created := mbutils.TimePoint{msg.CreationDt}
-
-	if err := created.Validate(); err != nil {
-		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
-	}
-
 	return nil
+
+	// created := mbutils.TimePoint{msg.CreationDt}
+
+	// if err := created.Validate(); err != nil {
+	// 	return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	// }
+
+	// return nil
 }
 
 var _ sdk.Msg = &MsgUpdateRecord{}
@@ -159,13 +161,15 @@ func (msg *MsgUpdateRecord) ValidateBasic() error {
 		return err
 	}
 
-	created := mbutils.TimePoint{msg.UpdateDt}
-
-	if err := created.Validate(); err != nil {
-		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
-	}
-
 	return nil
+
+	// created := mbutils.TimePoint{msg.UpdateDt}
+
+	// if err := created.Validate(); err != nil {
+	// 	return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	// }
+
+	// return nil
 }
 
 var _ sdk.Msg = &MsgDeleteRecord{}
@@ -199,11 +203,11 @@ func (msg *MsgDeleteRecord) GetSignBytes() []byte {
 }
 
 func (msg *MsgDeleteRecord) ValidateBasic() error {
-	created := mbutils.TimePoint{msg.DeletionDt}
+	// created := mbutils.TimePoint{msg.DeletionDt}
 
-	if err := created.Validate(); err != nil {
-		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
-	}
+	// if err := created.Validate(); err != nil {
+	// 	return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	// }
 
 	_, err := sdk.AccAddressFromBech32(msg.Deleter)
 	if err != nil {

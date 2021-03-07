@@ -1,6 +1,8 @@
 - name: Add global variables
   include_vars:
     file: "{{ playbook_dir }}/config.yml"
+  tags:
+    - configs
 
 - name: Fake init node to avoid local bugs
   shell:
@@ -44,6 +46,7 @@
     dest: "{{ project_dir }}/build/{{item.folder}}/config/{{ item.file }}"
   vars:
     template_node: "{{ item.vars }}"
+    template_port: "{{ seed_export.p2p_port if item.folder == 'seed' else sentery_node.p2p_port }}"
   with_items: 
     - file: app.toml
       folder: validator
@@ -128,7 +131,7 @@
   shell:
     cmd: |
         {{ project_dir }}/build/mbcorecrd add-genesis-account {{ validator_address.stdout_lines[1] }} \
-        1000token,100000000stake,20invitesuper,50invite0,50invite1,150invite2,150invite3 \
+        1000000000stake,20invitesuper,50invite0,50invite1,150invite2,150invite3 \
         --home {{ project_dir }}/build/validator
     chdir: "{{ project_dir }}"
   tags:

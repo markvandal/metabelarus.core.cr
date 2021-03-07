@@ -1,0 +1,17 @@
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+
+- name: Setup genesis file
+  copy:
+    src: "{{ playbook_dir }}/fetched/{{ source_host }}/genesis.json"
+    dest: "{{ project_dir }}/build/{{ item }}/config/genesis.json"
+  with_items:
+    - validator
+    - sentery
+    - seed
+  tags:
+    - ubuntu
+    - add
+    - node
+    - genesis

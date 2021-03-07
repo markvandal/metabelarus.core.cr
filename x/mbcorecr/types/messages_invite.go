@@ -64,13 +64,15 @@ func (msg *MsgCreateInvite) ValidateBasic() error {
 		return err
 	}
 
-	created := mbutils.TimePoint{msg.CreationDt}
-
-	if err := created.Validate(); err != nil {
-		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
-	}
-
 	return nil
+
+	// created := mbutils.TimePoint{msg.CreationDt}
+
+	// if err := created.Validate(); err != nil {
+	// 	return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	// }
+
+	// return nil
 }
 
 var _ sdk.Msg = &MsgAcceptInvite{}
@@ -129,11 +131,13 @@ func (msg *MsgAcceptInvite) ValidateBasic() error {
 		return err
 	}
 
-	created := mbutils.TimePoint{msg.AcceptanceDt}
-
-	if err := created.Validate(); err != nil {
-		return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
-	}
-
 	return nil
+
+	// created := mbutils.TimePoint{msg.AcceptanceDt}
+
+	// if err := created.Validate(); err != nil {
+	// 	return sdkerrors.Wrapf(ErrDateIssue, "invalid message date (%s)", err)
+	// }
+
+	// return nil
 }

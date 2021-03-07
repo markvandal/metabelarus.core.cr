@@ -1,0 +1,14 @@
+- name: Download nodes deatils from the machine
+  hosts:
+    - local
+    - test
+    - prod
+  become: yes
+  roles:
+    - info
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection
+  vars:
+    docker_users:
+      - "{{ ansible_user }}"

@@ -1,0 +1,9 @@
+validator:
+  id: "{{ validator_id.stdout }}"
+  peer: "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:{{ validator_node.p2p_port }}"
+senetery:
+  id: "{{ sentery_id.stdout }}"
+  peer: "{{ sentery_id.stdout }}@{{ domain }}:{{ sentery_node.p2p_port }}"
+seed:
+  id: "{{ seed_id.stdout }}"
+  peer: "{{ seed_id.stdout }}@{{ domain }}:{{ seed_export.p2p_port }}"

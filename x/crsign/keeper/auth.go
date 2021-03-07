@@ -6,7 +6,6 @@ import (
 	"github.com/metabelarus/mbcorecr/x/crsign/types"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	mbutils "github.com/metabelarus/mbcorecr/mb/utils"
 )
 
 func (k Keeper) CreateAuth(ctx sdk.Context, auth types.Auth) {
@@ -53,13 +52,13 @@ func (k Keeper) CheckAuthorization(ctx sdk.Context, service string, identity str
 		)
 	}
 
-	now := mbutils.CreateCurrentTime()
-	if now.After(*auth.AvailabilityDt) {
-		return sdkerrors.Wrap(
-			types.ErrAuthDuration,
-			"Provider authentication is expired",
-		)
-	}
+	// now := mbutils.CreateCurrentTime()
+	// if now.After(*auth.AvailabilityDt) {
+	// 	return sdkerrors.Wrap(
+	// 		types.ErrAuthDuration,
+	// 		"Provider authentication is expired",
+	// 	)
+	// }
 
 	return nil
 }

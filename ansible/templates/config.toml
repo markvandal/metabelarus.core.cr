@@ -178,7 +178,7 @@ laddr = "tcp://0.0.0.0:{{ template_node.p2p_port }}"
 # If empty, will use the same port as the laddr,
 # and will introspect on the listener or use UPnP
 # to figure out the address.
-external_address = ""
+external_address = "{{ domain }}:{{ template_port }}"
 
 # Comma separated list of seed nodes to connect to
 seeds = "{{ template_node.seeds }}"

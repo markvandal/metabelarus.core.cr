@@ -1,0 +1,11 @@
+- name: Configure node on a new machine to be added in existing network
+  hosts:
+    - local
+    - test
+    - prod
+  become: yes
+  roles:
+    - add
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection

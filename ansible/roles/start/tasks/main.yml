@@ -2,6 +2,11 @@
   include_vars:
     file: "{{ playbook_dir }}/config.yml"
 
+- name: Add source host variables
+  include_vars:
+    file: "{{ playbook_dir }}/fetched/{{ source_host }}/info.yml"
+  when: source_host != ""
+
 - name: Add nginx variables
   include_vars:
     file: "{{ playbook_dir }}/roles/nginx/defaults/main.yml"
@@ -17,6 +22,7 @@
       - "/{{ project_dir }}/build/validator:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
+  when: source_host == ""
   tags:
     - ubuntu
     - start
@@ -27,6 +33,7 @@
   docker_container_info:
     name: mbcorecr-validator
   register: validator_info
+  when: source_host == ""
   tags:
     - ubuntu
     - start
@@ -36,13 +43,14 @@
 - name: Get validator node id
   shell: docker exec -ti mbcorecr-validator sh -c "mbcorecrd tendermint show-node-id"
   register: validator_id
+  when: source_host == ""
   tags:
     - ubuntu
     - start
     - node
     - sentery
 
-- name: Start sentery container
+- name: Start sentery container (as sentery)
   docker_container:
     name: mbcorecr-sentery
     image: mbcorecrnode:latest
@@ -56,6 +64,28 @@
       - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
+  when: source_host == ""
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery
+
+- name: Start sentery container (as fullnode)
+  docker_container:
+    name: mbcorecr-sentery
+    image: mbcorecrnode:latest
+    restart: yes
+    output_logs: true
+    command: mbcorecrd start
+    ports:
+      - "{{ sentery_node.p2p_port }}:{{ sentery_node.p2p_port }}"
+      - "{{ sentery_node.rpc_port }}:{{ sentery_node.rpc_port }}"
+    volumes:
+      - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+  when: source_host != ""
   tags:
     - ubuntu
     - start
@@ -87,7 +117,7 @@
     image: mbcorecrnode:latest
     restart: yes
     output_logs: true
-    command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ sentery_info.container.NetworkSettings.IPAddress }}:{{ sentery_node.p2p_port }}" --p2p.unconditional_peer_ids "{{ sentery_id.stdout }}"
+    command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ domain }}:{{ sentery_node.p2p_port }}" --p2p.unconditional_peer_ids "{{ sentery_id.stdout }}"
     ports:
       - "{{ seed_export.tcp_port }}:{{ seed_node.tcp_port }}"
       - "{{ seed_export.p2p_port }}:{{ seed_node.p2p_port }}"
@@ -96,6 +126,7 @@
       - "/{{ project_dir }}/build/seed:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
+  when: domain != "localhost" 
   tags:
     - ubuntu
     - start
