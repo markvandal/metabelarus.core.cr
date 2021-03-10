@@ -1,15 +1,36 @@
 - name: Add global variables
   include_vars:
     file: "{{ playbook_dir }}/config.yml"
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery
+    - seed
+    - validator
 
 - name: Add source host variables
   include_vars:
     file: "{{ playbook_dir }}/fetched/{{ source_host }}/info.yml"
   when: source_host != ""
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery
+    - seed
+    - validator
 
 - name: Add nginx variables
   include_vars:
     file: "{{ playbook_dir }}/roles/nginx/defaults/main.yml"
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery
+    - seed
+    - validator
 
 - name: Start validator container
   docker_container:

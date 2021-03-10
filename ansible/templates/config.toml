@@ -15,7 +15,7 @@
 proxy_app = "tcp://127.0.0.1:{{ template_node.proxy_port }}"
 
 # A custom human readable name for this node
-moniker = "testnode"
+moniker = "{{ moniker }}.{{ template_alias }}"
 
 # If this node is many blocks behind the tip of the chain, FastSync
 # allows them to catchup quickly by downloading blocks in parallel

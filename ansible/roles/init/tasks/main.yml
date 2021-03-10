@@ -47,6 +47,7 @@
   vars:
     template_node: "{{ item.vars }}"
     template_port: "{{ seed_export.p2p_port if item.folder == 'seed' else sentery_node.p2p_port }}"
+    template_alias: "{{ item.folder }}"
   with_items: 
     - file: app.toml
       folder: validator

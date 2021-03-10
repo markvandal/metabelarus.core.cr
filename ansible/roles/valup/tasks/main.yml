@@ -1,0 +1,85 @@
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+  tags:
+    - ubuntu
+    - valup
+    - node
+    - sentery
+    - seed
+    - validator
+
+- name: Get sentery container info
+  docker_container_info:
+    name: mbcorecr-sentery
+  register: sentery_info
+  tags:
+    - ubuntu
+    - valup
+    - node
+    - validator
+
+- name: Get sentery id
+  shell: docker exec -ti mbcorecr-sentery sh -c "mbcorecrd tendermint show-node-id"
+  register: sentery_id
+  tags:
+    - ubuntu
+    - valup
+    - node
+    - validator
+
+- name: Start validator container
+  docker_container:
+    name: mbcorecr-validator
+    image: mbcorecrnode:latest
+    restart: yes
+    output_logs: true
+    command: mbcorecrd start --p2p.persistent_peers "{{ sentery_id.stdout }}@{{ sentery_info.container.NetworkSettings.IPAddress }}:{{ sentery_node.p2p_port }}"
+    volumes:
+      - "/{{ project_dir }}/build/validator:/root/.mbcorecr"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+  tags:
+    - ubuntu
+    - valup
+    - node
+    - validator
+
+- name: Get validator container info
+  docker_container_info:
+    name: mbcorecr-validator
+  register: validator_info
+  tags:
+    - ubuntu
+    - valup
+    - node
+    - sentery
+
+- name: Get validator node id
+  shell: docker exec -ti mbcorecr-validator sh -c "mbcorecrd tendermint show-node-id"
+  register: validator_id
+  tags:
+    - ubuntu
+    - valup
+    - node
+    - sentery
+
+- name: Start sentery container (as sentery)
+  docker_container:
+    name: mbcorecr-sentery
+    image: mbcorecrnode:latest
+    restart: yes
+    output_logs: true
+    command: mbcorecrd start --p2p.persistent_peers "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:{{ validator_node.p2p_port }}" --p2p.private_peer_ids "{{ validator_id.stdout }}" --p2p.unconditional_peer_ids "{{ validator_id.stdout }}"
+    ports:
+      - "{{ sentery_node.p2p_port }}:{{ sentery_node.p2p_port }}"
+      - "{{ sentery_node.rpc_port }}:{{ sentery_node.rpc_port }}"
+    volumes:
+      - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+  tags:
+    - ubuntu
+    - start
+    - node
+    - sentery

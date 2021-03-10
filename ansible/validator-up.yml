@@ -1,0 +1,15 @@
+- name: Start validator machine in the existing netwrok
+  hosts:
+    - local
+    - test
+    - prod
+  become: yes
+  roles:
+    - start
+    - valup
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection
+  vars:
+    docker_users:
+      - "{{ ansible_user }}"
