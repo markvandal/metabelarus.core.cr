@@ -1,0 +1,11 @@
+- name: Build node on a new machine
+  hosts:
+    - local
+    - test
+    - prod
+  become: yes
+  roles:
+    - valinit
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection

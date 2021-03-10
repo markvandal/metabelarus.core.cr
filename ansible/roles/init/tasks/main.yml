@@ -107,7 +107,7 @@
       Enter\ your\ bip39\ mnemonic: "{{ mainuser_mnemonic }}"
       Enter\ keyring\ passphrase: "{{ keyring_pass }}"
       Re-enter\ keyring\ passphrase: "{{ keyring_pass }}"
-  no_log: false
+  no_log: true
   tags:
     - init
     - ubnutu
@@ -144,7 +144,7 @@
   expect:
     command: |
         {{ project_dir }}/build/mbcorecrd gentx mainuser --from mainuser 
-        --chain-id {{ chainid }} --amount 1000000stake 
+        --chain-id {{ chainid }} --amount {{ amount_to_delegate }}
         --home {{ project_dir }}/build/validator --keyring-backend file -y
     chdir: "{{ project_dir }}"
     responses:

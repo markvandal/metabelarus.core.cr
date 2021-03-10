@@ -1,0 +1,50 @@
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+  tags:
+    - valinit
+    - ubnutu
+    - configs
+
+- name: Add main user creation script
+  template:
+    src: "mainuser.sh"
+    dest: "{{ project_dir }}/build/validator/mainuser.sh"
+    mode: '755'
+  tags:
+    - valinit
+    - ubnutu
+    - register
+
+- name: Register validator account
+  expect:
+    command: |
+      docker exec -ti mbcorecr-validator sh -c "/root/.mbcorecr/mainuser.sh"
+    responses:
+      Enter\ your\ bip39\ mnemonic: "{{ mainuser_mnemonic }}"
+      Enter\ keyring\ passphrase: "{{ keyring_pass }}"
+      Re-enter\ keyring\ passphrase: "{{ keyring_pass }}"
+  no_log: true
+  tags:
+    - valinit
+    - ubnutu
+    - register
+
+- name: Generate validator
+  expect:
+    command: |
+      docker exec -ti mbcorecr-validator sh -c "mbcorecrd tx staking create-validator 
+      --amount {{ amount_to_delegate }} --from mainuser 
+      --moniker {{ moniker }} --pubkey $(mbcorecrd tendermint show-validator) 
+      -y --keyring-backend file --chain-id {{ chainid }}
+      --commission-max-change-rate 0.010000000000000000 
+      --commission-max-rate 0.200000000000000000 
+      --commission-rate 0.100000000000000000 
+      --min-self-delegation 1"
+    responses:
+      Enter\ keyring\ passphrase: "{{ keyring_pass }}"
+  no_log: true
+  tags:
+    - valinit
+    - ubnutu
+    - create
