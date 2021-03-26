@@ -30,7 +30,6 @@
     - ubnutu
     - register
 
-
 - name: Add main validator creation script
   template:
     src: "create.sh"

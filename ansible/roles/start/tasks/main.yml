@@ -43,7 +43,7 @@
       - "/{{ project_dir }}/build/validator:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-  when: source_host == ""
+  when: start_validator
   tags:
     - ubuntu
     - start
@@ -54,7 +54,7 @@
   docker_container_info:
     name: mbcorecr-validator
   register: validator_info
-  when: source_host == ""
+  when: start_validator
   tags:
     - ubuntu
     - start
@@ -64,7 +64,7 @@
 - name: Get validator node id
   shell: docker exec -ti mbcorecr-validator sh -c "mbcorecrd tendermint show-node-id"
   register: validator_id
-  when: source_host == ""
+  when: start_validator
   tags:
     - ubuntu
     - start
@@ -85,7 +85,7 @@
       - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-  when: source_host == ""
+  when: start_validator
   tags:
     - ubuntu
     - start
@@ -106,7 +106,7 @@
       - "/{{ project_dir }}/build/sentery:/root/.mbcorecr"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-  when: source_host != ""
+  when: start_validator == False
   tags:
     - ubuntu
     - start

@@ -11,3 +11,4 @@ domain: "node-mark.cr.meta-belarus.org"
 host_type: "local" # "public"
 source_host: "folder name with the genesis file in the fetched directory"
 amount_to_delegate: "1000000stake"
+start_validator: false
