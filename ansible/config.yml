@@ -22,7 +22,7 @@ validator_node:
   ssl: false
 sentery_node:
   caption: "sentery"
-  min_retain_blocks: 100
+  min_retain_blocks: 0
   api_enable: "true"
   grpc_enable: "true"
   enabled_unsafe_cors: "true"

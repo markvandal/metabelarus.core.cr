@@ -14,12 +14,12 @@ minimum-gas-prices = ""
 # nothing: all historic states will be saved, nothing will be deleted (i.e. archiving node)
 # everything: all saved states will be deleted, storing only the current state; pruning at 10 block intervals
 # custom: allow pruning options to be manually specified through 'pruning-keep-recent', 'pruning-keep-every', and 'pruning-interval'
-pruning = "default"
+pruning = "custom"
 
 # These are applied if and only if the pruning strategy is custom.
-pruning-keep-recent = "0"
-pruning-keep-every = "0"
-pruning-interval = "0"
+pruning-keep-recent = "50"
+pruning-keep-every = "1000"
+pruning-interval = "100"
 
 # HaltHeight contains a non-zero block height at which a node will gracefully
 # halt and shutdown that can be used to assist upgrades and testing.
@@ -104,7 +104,7 @@ global-labels = [
 enable = {{ template_node.api_enable }}
 
 # Swagger defines if swagger documentation should automatically be registered.
-swagger = false
+swagger = true
 
 # Address defines the API server to listen on.
 address = "tcp://0.0.0.0:{{ template_node.tcp_port }}"
@@ -146,7 +146,7 @@ address = "0.0.0.0:{{ template_node.grpc_port }}"
 
 # snapshot-interval specifies the block interval at which local state sync snapshots are
 # taken (0 to disable). Must be a multiple of pruning-keep-every.
-snapshot-interval = 0
+snapshot-interval = 1000
 
 # snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all).
 snapshot-keep-recent = 2

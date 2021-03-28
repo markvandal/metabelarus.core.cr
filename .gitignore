@@ -41,4 +41,5 @@ frontend/.cache
 build/**/*
 ansible/inventory
 ansible/hosts
-ansible/fetched
+ansible/fetched/*
+!ansible/fetched/mark

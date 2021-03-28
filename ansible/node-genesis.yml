@@ -1,0 +1,14 @@
+- name: Genesis node on machine
+  hosts:
+    - local
+    - test
+    - prod
+  become: yes
+  roles:
+    - genesis
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection
+  vars:
+    docker_users:
+      - "{{ ansible_user }}"

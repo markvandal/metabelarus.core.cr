@@ -1,12 +1,11 @@
-- name: Start validator machine in the existing netwrok
+- name: Start root node on machine
   hosts:
     - local
     - test
     - prod
   become: yes
   roles:
-    - start
-    - valup
+    - root
   tasks:
     - name: reset ssh connection
       meta: reset_connection
