@@ -44,6 +44,7 @@
   docker_container_info:
     name: mbcorecr-seed
   register: seed_info
+  ignore_errors: yes
   tags:
     - ubuntu
     - info
@@ -53,6 +54,7 @@
 - name: Get seed id
   shell: docker exec -ti mbcorecr-seed sh -c "mbcorecrd tendermint show-node-id"
   register: seed_id
+  ignore_errors: yes
   tags:
     - ubuntu
     - info

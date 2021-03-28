@@ -17,9 +17,9 @@ minimum-gas-prices = ""
 pruning = "custom"
 
 # These are applied if and only if the pruning strategy is custom.
-pruning-keep-recent = "50"
-pruning-keep-every = "1000"
-pruning-interval = "100"
+pruning-keep-recent = "{{ template_node.pruning.recent }}"
+pruning-keep-every = "{{ template_node.pruning.every }}"
+pruning-interval = "{{ template_node.pruning.interval }}"
 
 # HaltHeight contains a non-zero block height at which a node will gracefully
 # halt and shutdown that can be used to assist upgrades and testing.
@@ -146,7 +146,7 @@ address = "0.0.0.0:{{ template_node.grpc_port }}"
 
 # snapshot-interval specifies the block interval at which local state sync snapshots are
 # taken (0 to disable). Must be a multiple of pruning-keep-every.
-snapshot-interval = 1000
+snapshot-interval = {{ template_node.pruning.every }}
 
 # snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all).
 snapshot-keep-recent = 2
