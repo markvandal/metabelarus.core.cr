@@ -1,42 +1,30 @@
-# Как запустить тестовую версию mbcorecr
-
+# Как запустить ноду с блокчейном (fullnode - не валидатор)
 ## Готовим виртуальную машину
 1. Создайте виртуальную машину. Мы тестировали на ubuntu-server 20.04. Сгенерируете ssh ключ.
-2. Скопируйте папку inventory.editme в inventory
+2. Перейдите под консолью в папаку ansiable (в папке куда вы склонировали репозиторий с проектом)
+3. Скопируйте папку inventory.editme в inventory
 ```
 cp -fr inventory.editme inventory
 ```
 3. В файле inventory/hosts укажите ip аддресс виртуальной машины и alias хоста.
-   1. Создайте файл inventory/host_vars/[alias].yml
-   2. Настройте согласно своим предпочтениям
-   3. Убедитесь что host_type - стоит local, если вы не хотите использовать certbot для автоматического подключения ssl сертификатов.
-4. Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
+4. Создаём файл `inventory/host_vars/[host_alias].yml` на основе `testhost.yml`
+5. Конфигуриреуем `inventory/host_vars/[host_alias].yml`
+   2. chainid: metabelarus.core.cr
+   3. moniker - придумайте уникальный позывной (желательно проконсультироваться с тем кто помогает вам с запуском) 
+   4. seeds: "`d6d5f2085565073badf1c811386d96fe72d78029@node-mark.cr.meta-belarus.org:26756`"
+   5. mainuser_mnemonic: Вводим мнемонику своего аккаунта
+   6.  source_host: "mark" — или другое название если вы получили его у того кто вас консультирует с запуском
+      1. Если отличается source_host, получите файл `genesis.json` и `info.yml` создайте папку с именем из переменной source_host 
+      2. Положите `genesis.json` и `info.yml` в папку `fetched/[source_host]/`
+   7. domain: доменное имя которое настроена на ваш сервис
+   8. host_type: "public"
+6.  Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
 ```
 ansible-playbook machine-build.yml
 ```
-## Производим генезис первого валидатора блокчейн
-```
-ansible-playbook node-init.yml
-ansible-playbook node-genesis.yml
-```
-## Запускаем контейнеры с блокчейном
-```
-ansible-playbook root-start.yml
-```
-
-# Как запустить ноду с блокчейном (fullnode - не валидатор)
 ## Вариант с доменом
-1. Проведите настройку согласно пунктам 1-4 раздела (до пункта machine-build включительно). [Как запустить тестовую версию mbcorecr/Готовим виртуальную машину](#готовим-виртуальную-машину)
-2. Не забудьте указать домен и host_type: "public" в `inventory/host_vars/p[host_alias].yml`
-3. Chain id: metabelarus.core.cr
-4. Moniker - придумайте уникальный позывной (желательно проконсультироваться с тем кто помогает вам с запуском) 
-5. Seeds: "`d6d5f2085565073badf1c811386d96fe72d78029@node-mark.cr.meta-belarus.org:26756`"
-6. Mainuser_mnemonic: Вводим мнемонику своего аккаунта
-7. Source_host: "mark" — или другое название если вы получили его у того кто вас консультирует с запуском
-   1. Если отличается source_host, получите файл `genesis.json` и `info.yml` создайте папку с именем из переменной source_host 
-   2. Положите `genesis.json` и `info.yml` в папку `fetched/[source_host]/`
-8.  Domain: доменное имя которое настроена на ваш сервис
-9.  Запускаем инициализацию без генезиса
+
+8. Запускаем инициализацию
 ```
 ansible-playbook node-init.yml
 ```
@@ -64,4 +52,31 @@ ansible-playbook validator-init.yml
 4. Запустите
 ```
 ansible-playbook node-start.yml
+```
+
+# Как запустить тестовую версию mbcorecr
+
+## Готовим виртуальную машину
+1. Создайте виртуальную машину. Мы тестировали на ubuntu-server 20.04. Сгенерируете ssh ключ.
+2. Перейдите под консолью в папаку ansiable (в папке куда вы склонировали репозиторий с проектом)
+3. Скопируйте папку inventory.editme в inventory
+```
+cp -fr inventory.editme inventory
+```
+3. В файле inventory/hosts укажите ip аддресс виртуальной машины и alias хоста.
+   1. Создайте файл inventory/host_vars/[alias].yml
+   2. Настройте согласно своим предпочтениям
+   3. Убедитесь что host_type - стоит local, если вы не хотите использовать certbot для автоматического подключения ssl сертификатов.
+4. Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
+```
+ansible-playbook machine-build.yml
+```
+## Производим генезис первого валидатора блокчейн
+```
+ansible-playbook node-init.yml
+ansible-playbook node-genesis.yml
+```
+## Запускаем контейнеры с блокчейном
+```
+ansible-playbook root-start.yml
 ```
