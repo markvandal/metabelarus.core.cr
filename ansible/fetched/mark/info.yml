@@ -1,9 +1,9 @@
 validator:
-  id: "f064bc14a04afc3a2ca871c9ad92fa112843a144"
-  peer: "f064bc14a04afc3a2ca871c9ad92fa112843a144@172.17.0.2:26656"
+  id: "82e79b3402191088cc048aa26be7e1169385ae39"
+  peer: "82e79b3402191088cc048aa26be7e1169385ae39@172.17.0.2:26656"
 senetery:
-  id: "717c64731e9454114a4b02cffa6aff5564a01b66"
-  peer: "717c64731e9454114a4b02cffa6aff5564a01b66@node-mark.cr.meta-belarus.org:26656"
+  id: "c96565d411d04fec6abbec9499938bc99aac8572"
+  peer: "c96565d411d04fec6abbec9499938bc99aac8572@node-mark.cr.meta-belarus.org:26656"
 seed:
-  id: "13e91a7a0109526a4a95663fea4c6de943d12fa8"
-  peer: "13e91a7a0109526a4a95663fea4c6de943d12fa8@node-mark.cr.meta-belarus.org:26756"
+  id: "d6d5f2085565073badf1c811386d96fe72d78029"
+  peer: "d6d5f2085565073badf1c811386d96fe72d78029@node-mark.cr.meta-belarus.org:26756"
