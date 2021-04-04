@@ -1,0 +1,37 @@
+version: '3'
+services:
+  influxdb:
+    image: quay.io/influxdb/influxdb:v2.0.4
+    volumes:
+      # Mount for influxdb data directory and configuration
+      - influxdbv2:/.influxdbv2
+    ports:
+      - "8086:8086"
+# Use the influx cli to set up an influxdb instance. 
+  influxdb_cli:
+    links:
+      - influxdb
+    image: quay.io/influxdb/influxdb:v2.0.4
+# Use these same configurations parameters in your telegraf configuration, mytelegraf.conf.
+    entrypoint: /bin/sh
+    command: /root/init/init.sh
+      # Wait for the influxd service in the influxdb container has fully bootstrapped before trying to setup an influxdb instance with the influxdb_cli service. 
+    volumes:
+      - ./init/:/root/init/
+    depends_on:
+      - influxdb
+  telegraf:
+    image: telegraf:1.18
+    links:
+      - influxdb
+    volumes:
+      # Mount for telegraf config
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/rootfs/sys:ro
+      - /proc:/rootfs/proc:ro
+      - /etc:/rootfs/etc:ro
+    depends_on:
+      - influxdb_cli
+volumes:
+  influxdbv2:

@@ -1,0 +1,24 @@
+---
+- name: copy files
+  copy:
+    src: .
+    dest: ~/influxdb/    
+- name: copy telegraf.conf
+  template:
+    src: telegraf.j2
+    dest: ~/influxdb/telegraf.conf
+- name: copy init.sh
+  template:
+    src: init.j2
+    dest: ~/influxdb/init/init.sh
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: ~/influxdb/
+    state: absent
+
+- name: Create and start services
+  docker_compose:
+    project_src: influxdb
+    state: present
+    
