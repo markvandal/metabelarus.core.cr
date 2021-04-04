@@ -6,9 +6,10 @@
 ```
 cp -fr inventory.editme inventory
 ```
-3. В файле inventory/hosts укажите ip аддресс виртуальной машины и alias хоста.
-4. Создаём файл `inventory/host_vars/[host_alias].yml` на основе `testhost.yml`
-5. Конфигуриреуем `inventory/host_vars/[host_alias].yml`
+4. В файле inventory/hosts укажите ip аддресс виртуальной машины и alias хоста:
+   1. Например `mbcr ansible_host=139.177.179.141`, где `mbcr` - alias, где ip адресс - это адресс машины где разворачиваются ноды.
+5. Создаём файл `inventory/host_vars/[host_alias].yml` на основе `testhost.yml`, например: `inventory/host_vars/mbcr.yml`
+6. Конфигуриреуем `inventory/host_vars/[host_alias].yml`
    1. chainid: metabelarus.core.cr
    2. moniker - придумайте уникальный позывной (желательно проконсультироваться с тем кто помогает вам с запуском) 
    3. seeds: "`d6d5f2085565073badf1c811386d96fe72d78029@node-mark.cr.meta-belarus.org:26756`"
@@ -18,24 +19,24 @@ cp -fr inventory.editme inventory
       2. Положите `genesis.json` и `info.yml` в папку `fetched/[source_host]/`
    6. domain: доменное имя которое настроена на ваш сервис
    7. host_type: "public"
-6. Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
+7. Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
 ```
 ansible-playbook machine-build.yml
 ```
 ## Вариант с доменом
-7. Запускаем инициализацию
+8. Запускаем инициализацию
 ```
 ansible-playbook node-init.yml
 ```
-8. Запустите скрипт для установки генезиса
+9. Запустите скрипт для установки генезиса
 ```
 ansible-playbook node-add.yml
 ```
-9. Запускаем ноду
+10. Запускаем ноду
 ```
 ansible-playbook node-start.yml
 ```
-10. Ждём пока она выровняется по высоте с сетью
+11. Ждём пока она выровняется по высоте с сетью
 ## Вариант без домена
 Делаем всё тоже самое, что и для случая с доменом. Но:
 1. Domain: указваем "localhost"
