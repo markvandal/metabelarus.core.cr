@@ -8,6 +8,7 @@ cp -fr inventory.editme inventory
 ```
 4. В файле inventory/hosts укажите ip аддресс виртуальной машины и alias хоста:
    1. Например `mbcr ansible_host=139.177.179.141`, где `mbcr` - alias, где ip адресс - это адресс машины где разворачиваются ноды.
+   2. Для того чтобы воспользоваться скриптами необходимо устновить свой ssh ключ на сервер. Для того чтобы к нему можно было подключаться, не вводя пароль.
 5. Создаём файл `inventory/host_vars/[host_alias].yml` на основе `testhost.yml`, например: `inventory/host_vars/mbcr.yml`
 6. Конфигуриреуем `inventory/host_vars/[host_alias].yml`
    1. chainid: metabelarus.core.cr
@@ -19,6 +20,7 @@ cp -fr inventory.editme inventory
       2. Положите `genesis.json` и `info.yml` в папку `fetched/[source_host]/`
    6. domain: доменное имя которое настроена на ваш сервис
    7. host_type: "public"
+   8. Если вы не установлили ssh ключ на сервер, добавьте в файл переменные ansible_user и ansible_password, и укажите там логин и пароль для доступа к серверу.
 7. Устанавливаем все необходимые зависимости и билдим на виртуалке приложение
 ```
 ansible-playbook machine-build.yml
