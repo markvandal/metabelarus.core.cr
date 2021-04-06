@@ -15,7 +15,6 @@ func listRequestHandler(clientCtx client.Context) http.HandlerFunc {
 		// rest.WriteErrorResponse(w, http.StatusNotFound, "lololo g")
 		res, height, err := clientCtx.QueryWithData(fmt.Sprintf("custom/%s/list-request", types.QuerierRoute), nil)
 		if err != nil {
-			// rest.WriteErrorResponse(w, http.StatusNotFound, "ololo")
 			rest.WriteErrorResponse(w, http.StatusNotFound, types.QuerierRoute+"__>"+err.Error())
 			return
 		}
