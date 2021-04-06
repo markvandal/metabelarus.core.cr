@@ -36,7 +36,7 @@ func CmdCreateRequest() *cobra.Command {
 
 			requestType, ok := types.RequestType_value[argsRequestType]
 			if !ok {
-				return fmt.Errorf("Unknown RequiestType: %s.", argsRequestType)
+				return fmt.Errorf("Unknown RequestType: %s.", argsRequestType)
 			}
 
 			status, ok := types.Status_value[argsStatus]
@@ -92,7 +92,7 @@ func CmdUpdateRequest() *cobra.Command {
 
 			requestType, ok := types.RequestType_value[argsRequestType]
 			if !ok {
-				return fmt.Errorf("Unknown RequiestType: %s.", argsRequestType)
+				return fmt.Errorf("Unknown RequestType: %s.", argsRequestType)
 			}
 
 			status, ok := types.Status_value[argsStatus]

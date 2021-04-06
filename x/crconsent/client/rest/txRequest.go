@@ -55,7 +55,7 @@ func createRequestHandler(clientCtx client.Context) http.HandlerFunc {
 
 		requestType, ok := types.RequestType_value[req.RequestType]
 		if !ok {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("Unknown RequiestType: %s.", req.RequestType))
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("Unknown RequestType: %s.", req.RequestType))
 			return
 		}
 
@@ -138,7 +138,7 @@ func updateRequestHandler(clientCtx client.Context) http.HandlerFunc {
 
 		requestType, ok := types.RequestType_value[req.RequestType]
 		if !ok {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("Unknown RequiestType: %s.", req.RequestType))
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("Unknown RequestType: %s.", req.RequestType))
 			return
 		}
 
