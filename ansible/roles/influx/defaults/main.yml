@@ -1,8 +1,8 @@
 ---
 # defaults file for influx
-influx_token: WtklzfDL7pTfgc4O79jgLPeZpEx62yoj7f2m_K0NcTyOylNvjAMUtDialLLv0wMPAiwWCCe3UyFs6XWH3Vbi5w==
-influx_organisation: mbcore
-influx_bucket: mbcorebuket
-influx_tendermint: http://mbcore.cf:26660
-influx_user_name: carel
-influx_user_password: 4682fthb
+influx_token: 
+influx_organisation: 
+influx_bucket: 
+influx_tendermint: 
+influx_user_name: 
+influx_user_password: 

@@ -1,0 +1,38 @@
+---
+- name: fail on token is not define
+  assert:
+    that:
+      - influx_token != ""
+    fail_msg: "You have to use random base64 string for api token. Use service like this: https://generate.plus/en/base64"
+
+- name: fail on organisation is not define
+  assert:
+    that:
+      - influx_organisation != ""
+    fail_msg: "You have to define organisation name"
+
+- name: fail on bucket is not define
+  assert:
+    that:
+      - influx_bucket != ""
+    fail_msg: "You have to define influx_bucket name"
+
+- name: fail on tendermint ip is not define
+  assert:
+    that:
+      - influx_tendermint != ""
+    fail_msg: " define tendermint host like http://localhost:26660"
+
+- name: fail on user name is not define
+  assert:
+    that:
+      - influx_user_name != ""
+    fail_msg: "You have to define influx_user_name"
+
+- name: fail on user name is not define
+  assert:
+    that:
+      - influx_user_password != ""
+    fail_msg: "You have to define influx_user_password"
+
+
