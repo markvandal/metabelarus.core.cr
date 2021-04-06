@@ -1,0 +1,19 @@
+#!/bin/sh
+#wait for inluxdb
+set -e
+  
+until (influx ping --host 'http://influxdb:8086' > /dev/null); do
+  >&2 echo "inluxdb is unavailable - sleeping"
+  sleep 2
+done
+  
+>&2 echo "Influxdb is up - executing command"
+influx setup --bucket "{{ influx_bucket }}" \
+-t "{{ influx_token }}" \
+--org "{{ influx_organisation }}" \
+--username="{{ influx_user_name }}" \
+--password="{{ influx_user_password }}" \
+--host=http://influxdb:8086 \
+-f
+
+#influx apply --file /root/init/dashboard.yml --force true

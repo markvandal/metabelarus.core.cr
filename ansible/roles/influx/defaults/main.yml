@@ -1,0 +1,8 @@
+---
+# defaults file for influx
+influx_token: 
+influx_organisation: 
+influx_bucket: 
+influx_tendermint: 
+influx_user_name: 
+influx_user_password: 
