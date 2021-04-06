@@ -1,24 +1,36 @@
----
+- name: Add global variables
+  include_vars:
+    file: "{{ playbook_dir }}/config.yml"
+
+- name: prevent docker related crashes in some cases
+  apt:
+    name:
+      - docker-compose
+    state: present 
+    update_cache: yes
+
 - name: copy files
   copy:
     src: .
-    dest: ~/influxdb/    
+    dest: "{{ project_dir }}/influxdb/"
+
 - name: copy telegraf.conf
   template:
     src: telegraf.j2
-    dest: ~/influxdb/telegraf.conf
+    dest: "{{ project_dir }}/influxdb/telegraf.conf"
+
 - name: copy init.sh
   template:
     src: init.j2
-    dest: ~/influxdb/init/init.sh
+    dest: "{{ project_dir }}/influxdb/init/init.sh"
 
 - name: Tear down existing services
   docker_compose:
-    project_src: ~/influxdb/
+    project_src: "{{ project_dir }}/influxdb/"
     state: absent
 
 - name: Create and start services
   docker_compose:
-    project_src: influxdb
+    project_src: "{{ project_dir }}/influxdb"
     state: present
     

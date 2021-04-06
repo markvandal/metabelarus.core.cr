@@ -1,0 +1,14 @@
+- name: Up influx monitoring
+  hosts:
+    - local
+    - test
+    - prod
+  become: yes
+  roles:
+    - influx
+  tasks:
+    - name: reset ssh connection
+      meta: reset_connection
+  vars:
+    docker_users:
+      - "{{ ansible_user }}"

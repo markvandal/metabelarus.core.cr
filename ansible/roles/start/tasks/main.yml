@@ -39,6 +39,8 @@
     restart: yes
     output_logs: true
     command: mbcorecrd start
+    exposed_ports:
+      - 26660
     ports:
       - "{{ sentery_node.p2p_port }}:{{ sentery_node.p2p_port }}"
       - "{{ sentery_node.rpc_port }}:{{ sentery_node.rpc_port }}"
@@ -136,6 +138,8 @@
     restart: yes
     output_logs: true
     command: mbcorecrd start --p2p.persistent_peers "{{ validator_id.stdout }}@{{ validator_info.container.NetworkSettings.IPAddress }}:{{ validator_node.p2p_port }}" --p2p.private_peer_ids "{{ validator_id.stdout }}" --p2p.unconditional_peer_ids "{{ validator_id.stdout }}"
+    exposed_ports:
+      - 26660
     ports:
       - "{{ sentery_node.p2p_port }}:{{ sentery_node.p2p_port }}"
       - "{{ sentery_node.rpc_port }}:{{ sentery_node.rpc_port }}"

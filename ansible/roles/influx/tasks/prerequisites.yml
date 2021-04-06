@@ -17,12 +17,6 @@
       - influx_bucket != ""
     fail_msg: "You have to define influx_bucket name"
 
-- name: fail on tendermint ip is not define
-  assert:
-    that:
-      - influx_tendermint != ""
-    fail_msg: " define tendermint host like http://localhost:26660"
-
 - name: fail on user name is not define
   assert:
     that:
@@ -35,4 +29,11 @@
       - influx_user_password != ""
     fail_msg: "You have to define influx_user_password"
 
+- name: Get sentery node adderss to connect to tendermint
+  docker_container_info:
+    name: mbcorecr-sentery
+  register: sentery_info
 
+- name: Set sentery tenderimnt address
+  set_fact:
+    influx_tendermint: "http://{{ sentery_info.container.NetworkSettings.IPAddress }}:26660"
