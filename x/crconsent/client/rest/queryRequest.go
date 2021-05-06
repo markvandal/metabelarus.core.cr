@@ -12,10 +12,9 @@ import (
 
 func listRequestHandler(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// rest.WriteErrorResponse(w, http.StatusNotFound, "lololo g")
 		res, height, err := clientCtx.QueryWithData(fmt.Sprintf("custom/%s/list-request", types.QuerierRoute), nil)
 		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusNotFound, types.QuerierRoute+"__>"+err.Error())
+			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
 		}
 

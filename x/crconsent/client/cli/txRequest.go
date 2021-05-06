@@ -14,7 +14,7 @@ import (
 
 func CmdCreateRequest() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-request [initiator] [recipient] [requestType] [status] [value] [memo] [promoUrl] [creationDt] [finalDt]",
+		Use:   "create-request [initiator] [recipient] [requestType: INVITE_PACK, ..] [value] [memo] [promoUrl]",
 		Short: "Creates a new request",
 		Args:  cobra.ExactArgs(9),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -27,6 +27,8 @@ func CmdCreateRequest() *cobra.Command {
 			argsPromoUrl := string(args[6])
 			argsCreationDt := string(args[7])
 			argsFinalDt := string(args[8])
+
+			// todo [creationDt] [finalDt] [status]
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
