@@ -1,0 +1,8 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crconsent;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crconsent/types";
+
+// GenesisState defines the crconsent module's genesis state.
+message GenesisState {
+}

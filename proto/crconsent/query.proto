@@ -1,0 +1,39 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crconsent;
+
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+// this line is used by starport scaffolding # 1
+import "crconsent/request.proto";
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crconsent/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // this line is used by starport scaffolding # 2
+	rpc Request(QueryGetRequestRequest) returns (QueryGetRequestResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crconsent/request/{id}";
+	}
+	rpc RequestAll(QueryAllRequestRequest) returns (QueryAllRequestResponse) {
+		option (google.api.http).get = "/metabelarus/mbcorecr/crconsent/request";
+	}
+
+}
+
+// this line is used by starport scaffolding # 3
+message QueryGetRequestRequest {
+	string id = 1;
+}
+
+message QueryGetRequestResponse {
+	Request Request = 1;
+}
+
+message QueryAllRequestRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllRequestResponse {
+	repeated Request Request = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

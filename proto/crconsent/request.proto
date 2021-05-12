@@ -1,0 +1,107 @@
+syntax = "proto3";
+package metabelarus.mbcorecr.crconsent;
+
+option go_package = "github.com/metabelarus/mbcorecr/x/crconsent/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+enum ServicePermissions {
+  
+  // Access to unlock records in passport
+  ALLOW_RECORD_UNLOCK = 0;
+
+  // Access to delete records from passport
+  ALLOW_RECORD_DELETE = 1;
+
+  // Access to generate new invite
+  ALLOW_INVITE_GENERATION = 2;
+
+  // Access to issue passport refresh 
+  ALLOW_REFRESH_GENERATION = 3;
+
+  // Write access to services passport without auth
+  ALLOW_SERVICES_WRITE = 4;
+
+  // Write access to cietizens passport without auth
+  ALLOW_CITIZEN_WRITE = 5;
+
+  // Write access to residents passport without auth
+  ALLOW_RESIDENT_WRITE = 6;
+}
+
+
+enum RequestType {
+  INVITE_PACK = 0;
+  APPROVE_PACK = 1;
+//  ServicePermissions SERVICE_PERMISSIONS = 1;
+}
+
+enum Status {
+  ISSUED = 0;
+  REJECTED = 1;
+  ACCEPTED =2;
+}
+ 
+message Request {
+
+  // Request creator id
+  string creator = 1;
+
+  //
+  string id = 2;
+
+  //
+  string initiator = 3; 
+
+  // Request recipient id
+  string recipient = 4; 
+
+  // Type of request
+  RequestType requestType = 5; 
+
+  // Request status
+  Status status = 6; 
+
+  //
+  int32 value = 7; 
+
+  //
+  string memo = 8; 
+  
+  // Link to request external description
+  string promoUrl = 9; 
+
+  // Date request created
+  google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true];
+
+  // Request expiration date 
+  google.protobuf.Timestamp finalDt = 11 [(gogoproto.stdtime) = true]; 
+}
+
+message MsgCreateRequest {
+  string creator = 1;
+  string initiator = 2; 
+  string recipient = 3; 
+  RequestType requestType = 4; 
+  Status status = 5; 
+  int32 value = 6; 
+  string memo = 7; 
+  string promoUrl = 8; 
+  google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp finalDt = 11 [(gogoproto.stdtime) = true]; 
+}
+
+message MsgUpdateRequest {
+  string creator = 1;
+  string id = 2;
+  string initiator = 3; 
+  string recipient = 4; 
+  RequestType requestType = 5; 
+  Status status = 6; 
+  int32 value = 7; 
+  string memo = 8; 
+  string promoUrl = 9; 
+  google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp finalDt = 11 [(gogoproto.stdtime) = true]; 
+}
