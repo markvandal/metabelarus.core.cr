@@ -25,10 +25,8 @@ func CmdCreateRequest() *cobra.Command {
 			argsValue, _ := strconv.ParseInt(args[4], 10, 64)
 			argsMemo := string(args[5])
 			argsPromoUrl := string(args[6])
-			argsCreationDt := string(args[7])
-			argsFinalDt := string(args[8])
 
-			// todo [creationDt] [finalDt] [status]
+			// todo [status]
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -54,9 +52,7 @@ func CmdCreateRequest() *cobra.Command {
 				types.Status(status),
 				int32(argsValue),
 				string(argsMemo),
-				string(argsPromoUrl),
-				string(argsCreationDt),
-				string(argsFinalDt))
+				string(argsPromoUrl))
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -71,7 +67,7 @@ func CmdCreateRequest() *cobra.Command {
 
 func CmdUpdateRequest() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-request [id] [initiator] [recipient] [requestType] [status] [value] [memo] [promoUrl] [creationDt] [finalDt]",
+		Use:   "update-request [id] [initiator] [recipient] [requestType] [status] [value] [memo] [promoUrl]",
 		Short: "Update a request",
 		Args:  cobra.ExactArgs(10),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -83,8 +79,6 @@ func CmdUpdateRequest() *cobra.Command {
 			argsValue, _ := strconv.ParseInt(args[5], 10, 64)
 			argsMemo := string(args[6])
 			argsPromoUrl := string(args[7])
-			argsCreationDt := string(args[8])
-			argsFinalDt := string(args[9])
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -111,36 +105,7 @@ func CmdUpdateRequest() *cobra.Command {
 				types.Status(status),
 				int32(argsValue),
 				string(argsMemo),
-				string(argsPromoUrl),
-				string(argsCreationDt),
-				string(argsFinalDt))
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdDeleteRequest() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "delete-request [id] [initiator] [recipient] [requestType] [status] [value] [memo] [promoUrl] [creationDt] [finalDt]",
-		Short: "Delete a request by id",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			id := args[0]
-
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgDeleteRequest(clientCtx.GetFromAddress().String(), id)
+				string(argsPromoUrl))
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

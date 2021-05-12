@@ -30,6 +30,5 @@ func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 4
 	r.HandleFunc("/crconsent/requests", createRequestHandler(clientCtx)).Methods("POST")
 	r.HandleFunc("/crconsent/requests/{id}", updateRequestHandler(clientCtx)).Methods("POST")
-	// r.HandleFunc("/crconsent/requests/{id}", deleteRequestHandler(clientCtx)).Methods("POST")
 
 }

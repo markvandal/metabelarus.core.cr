@@ -36,6 +36,18 @@ func CreateCurrentTime() *time.Time {
 	return &utcTime
 }
 
+const (
+	Day = time.Hour * 24
+)
+
+func CreateFutureTime() *time.Time {
+	now := CreateCurrentTime()
+
+	futureTime := now.Add(Day * 10)
+
+	return &futureTime
+}
+
 func (msg *TimePoint) Validate() error {
 	highTime := time.Now().Add(time.Second)
 	highDate := time.Date(

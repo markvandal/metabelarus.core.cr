@@ -4,6 +4,7 @@ package metabelarus.mbcorecr.crconsent;
 option go_package = "github.com/metabelarus/mbcorecr/x/crconsent/types";
 
 import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
 
 enum ServicePermissions {
   
@@ -31,8 +32,9 @@ enum ServicePermissions {
 
 
 enum RequestType {
-  INVITE_PACK = 0; 
-  ServicePermissions SERVICE_PERMISSIONS = 1;
+  INVITE_PACK = 0;
+  APPROVE_PACK = 1;
+//  ServicePermissions SERVICE_PERMISSIONS = 1;
 }
 
 enum Status {
@@ -71,7 +73,7 @@ message Request {
   string promoUrl = 9; 
 
   // Date request created
-  google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true]; 
+  google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true];
 
   // Request expiration date 
   google.protobuf.Timestamp finalDt = 11 [(gogoproto.stdtime) = true]; 

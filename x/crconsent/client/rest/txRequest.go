@@ -26,8 +26,6 @@ type createRequestRequest struct {
 	Value       string       `json:"value"`
 	Memo        string       `json:"memo"`
 	PromoUrl    string       `json:"promoUrl"`
-	CreationDt  string       `json:"creationDt"`
-	FinalDt     string       `json:"finalDt"`
 }
 
 func createRequestHandler(clientCtx client.Context) http.HandlerFunc {
@@ -76,10 +74,6 @@ func createRequestHandler(clientCtx client.Context) http.HandlerFunc {
 
 		parsedPromoUrl := req.PromoUrl
 
-		parsedCreationDt := req.CreationDt
-
-		parsedFinalDt := req.FinalDt
-
 		msg := types.NewMsgCreateRequest(
 			req.Creator,
 			parsedInitiator,
@@ -89,8 +83,6 @@ func createRequestHandler(clientCtx client.Context) http.HandlerFunc {
 			parsedValue,
 			parsedMemo,
 			parsedPromoUrl,
-			parsedCreationDt,
-			parsedFinalDt,
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
@@ -107,8 +99,6 @@ type updateRequestRequest struct {
 	Value       string       `json:"value"`
 	Memo        string       `json:"memo"`
 	PromoUrl    string       `json:"promoUrl"`
-	CreationDt  string       `json:"creationDt"`
-	FinalDt     string       `json:"finalDt"`
 }
 
 func updateRequestHandler(clientCtx client.Context) http.HandlerFunc {
@@ -159,10 +149,6 @@ func updateRequestHandler(clientCtx client.Context) http.HandlerFunc {
 
 		parsedPromoUrl := req.PromoUrl
 
-		parsedCreationDt := req.CreationDt
-
-		parsedFinalDt := req.FinalDt
-
 		msg := types.NewMsgUpdateRequest(
 			req.Creator,
 			id,
@@ -173,45 +159,8 @@ func updateRequestHandler(clientCtx client.Context) http.HandlerFunc {
 			parsedValue,
 			parsedMemo,
 			parsedPromoUrl,
-			parsedCreationDt,
-			parsedFinalDt,
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}
 }
-
-// type deleteRequestRequest struct {
-// 	BaseReq rest.BaseReq `json:"base_req"`
-// 	Creator string       `json:"creator"`
-// }
-
-// func deleteRequestHandler(clientCtx client.Context) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		id := mux.Vars(r)["id"]
-
-// 		var req deleteRequestRequest
-// 		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-// 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
-// 			return
-// 		}
-
-// 		baseReq := req.BaseReq.Sanitize()
-// 		if !baseReq.ValidateBasic(w) {
-// 			return
-// 		}
-
-// 		_, err := sdk.AccAddressFromBech32(req.Creator)
-// 		if err != nil {
-// 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-// 			return
-// 		}
-
-// 		msg := types.NewMsgDeleteRequest(
-// 			req.Creator,
-// 			id,
-// 		)
-
-// 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-// 	}
-// }
