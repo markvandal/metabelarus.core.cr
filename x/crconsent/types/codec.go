@@ -10,7 +10,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
 cdc.RegisterConcrete(&MsgCreateRequest{}, "crconsent/CreateRequest", nil)
 cdc.RegisterConcrete(&MsgUpdateRequest{}, "crconsent/UpdateRequest", nil)
-cdc.RegisterConcrete(&MsgDeleteRequest{}, "crconsent/DeleteRequest", nil)
 
 } 
 
@@ -19,7 +18,6 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 registry.RegisterImplementations((*sdk.Msg)(nil),
 	&MsgCreateRequest{},
 	&MsgUpdateRequest{},
-	&MsgDeleteRequest{},
 )
 }
 

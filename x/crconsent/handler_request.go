@@ -36,16 +36,3 @@ func handleMsgUpdateRequest(ctx sdk.Context, k keeper.Keeper, msg *types.MsgUpda
 
 	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }
-
-func handleMsgDeleteRequest(ctx sdk.Context, k keeper.Keeper, msg *types.MsgDeleteRequest) (*sdk.Result, error) {
-    if !k.HasRequest(ctx, msg.Id) {                                                                                                                                                                    
-        return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, msg.Id)                                                                                                                                
-    }                                                                                                                                                                                                  
-    if msg.Creator != k.GetRequestOwner(ctx, msg.Id) {
-        return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Incorrect owner")                                                                                                                       
-    } 
-
-	k.DeleteRequest(ctx, msg.Id)
-
-	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
-}

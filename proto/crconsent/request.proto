@@ -105,8 +105,3 @@ message MsgUpdateRequest {
   google.protobuf.Timestamp creationDt = 10 [(gogoproto.stdtime) = true]; 
   google.protobuf.Timestamp finalDt = 11 [(gogoproto.stdtime) = true]; 
 }
-
-message MsgDeleteRequest {
-  string creator = 1;
-  string id = 2;
-}

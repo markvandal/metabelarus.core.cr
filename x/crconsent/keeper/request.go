@@ -84,12 +84,6 @@ func (k Keeper) GetRequestOwner(ctx sdk.Context, key string) string {
     return k.GetRequest(ctx, key).Creator
 }
 
-// DeleteRequest deletes a request
-func (k Keeper) DeleteRequest(ctx sdk.Context, key string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RequestKey))
-	store.Delete(types.KeyPrefix(types.RequestKey + key))
-}
-
 func (k Keeper) GetAllRequest(ctx sdk.Context) (msgs []types.Request) {
     store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RequestKey))
 	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.RequestKey))
