@@ -1,6 +1,8 @@
 - name: Add global variables
   include_vars:
     file: "{{ playbook_dir }}/config.yml"
+  tags:
+    - certs
 
 - name: Update node configs
   template:
@@ -57,5 +59,6 @@
     - update
     - ubuntu
     - configs
+    - certs
 
 
